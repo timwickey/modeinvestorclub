@@ -60,7 +60,7 @@ class _SignUpFormState extends State<SignUpForm> {
             padding: const EdgeInsets.all(8),
             child: TextFormField(
               controller: _firstNameTextController,
-              decoration: const InputDecoration(hintText: 'First name'),
+              decoration: const InputDecoration(hintText: 'First Name'),
             ),
           ),
           Padding(
