@@ -1,4 +1,4 @@
-package com.example.signin_example
+package com.example.modeinvestorclub
 
 import io.flutter.embedding.android.FlutterActivity
 

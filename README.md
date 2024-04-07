@@ -1,4 +1,4 @@
-# signin_example
+# Mode Investor Club
 
 A new Flutter project.
 
