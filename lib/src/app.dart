@@ -6,6 +6,7 @@ import 'screens/scaffold.dart';
 import 'screens/settings.dart';
 import 'screens/sign_in.dart';
 import 'widgets/fade_transition_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class InvestorClub extends StatefulWidget {
   const InvestorClub({super.key});
@@ -17,6 +18,8 @@ class InvestorClub extends StatefulWidget {
 ThemeData _buildDarkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
+    scaffoldBackgroundColor:
+        Colors.transparent, // Makes scaffold background default to transparent
     // Add your custom dark theme colors here
     // For example:
     // primaryColor: Colors.grey[800],
@@ -40,7 +43,26 @@ class _InvestorClubState extends State<InvestorClub> {
         }
         return ModeAuthScope(
           notifier: auth,
-          child: child,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.blueGrey
+                            .shade800, // Adjust these colors to match your theme
+                        Colors.black, // Adjust these colors to match your theme
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              child, // This is your original child from MaterialApp.router
+            ],
+          ),
         );
       },
       routerConfig: GoRouter(
