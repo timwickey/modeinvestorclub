@@ -4,10 +4,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:window_size/window_size.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // Import the package
 
 import 'src/app.dart';
 
-void main() {
+void main() async {
   // Use package:url_strategy until this pull request is released:
   // https://github.com/flutter/flutter/pull/77103
 
@@ -20,6 +21,9 @@ void main() {
   setPathUrlStrategy();
 
   setupWindow();
+
+  // databaseConnection();
+  await dotenv.load(fileName: ".env.development.local"); // Load the .env file
   runApp(const InvestorClub());
 }
 

@@ -7,6 +7,7 @@ import 'screens/settings.dart';
 import 'screens/sign_in.dart';
 import 'widgets/fade_transition_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'backend.dart';
 
 class InvestorClub extends StatefulWidget {
   const InvestorClub({super.key});
@@ -29,6 +30,23 @@ ThemeData _buildDarkTheme() {
 
 class _InvestorClubState extends State<InvestorClub> {
   final ModeAuth auth = ModeAuth();
+  late BackEnd _backEnd;
+  late Future<List<ApiResponse>> _apiResponse;
+  bool _isInitialized = false; // To track if initialization is complete
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the Future with the fetch function
+    _apiResponse = fetchApiData(
+        'https://nodejs-serverless-connector.vercel.app/api/hello');
+    _backEnd = BackEnd();
+    _backEnd.init().then((_) {
+      setState(() {
+        _isInitialized = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

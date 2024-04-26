@@ -44,6 +44,8 @@ dependencies:
   adaptive_navigation: ^0.0.10
   flutter_svg: ^2.0.10+1
   postgres: ^3.2.0
+  flutter_dotenv: ^5.1.0
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,7 @@ flutter:
   assets:
     - images/
     - images/websiteglobe.webp
+    - .env.development.local
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
