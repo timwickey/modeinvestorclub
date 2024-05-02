@@ -38,7 +38,8 @@ class BackEnd {
 
 // Define a class to represent the data you expect from the API
 class ApiResponse {
-  final String id;
+  // interger type
+  final int id;
   final String firstName;
 
   // Constructor
@@ -55,11 +56,17 @@ class ApiResponse {
 
 // Define a function to call the API
 Future<List<ApiResponse>> fetchApiData(String endpointUrl) async {
+  // Ensure endpointUrl is a valid String
+  if (endpointUrl.isEmpty) {
+    throw ArgumentError('Endpoint URL must be a non-empty string.');
+  }
+  Uri uri = Uri.parse(endpointUrl);
+
   // Make an HTTP GET request to the specified endpoint
   final client = createHttpClient();
-  final response = await client.get(Uri.parse(endpointUrl));
+  final response = await client.get(uri);
 
-  print(response);
+  print(response.body);
 
   if (response.statusCode == 200) {
     // Check if the request was successful
