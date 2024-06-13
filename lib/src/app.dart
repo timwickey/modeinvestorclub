@@ -38,7 +38,7 @@ class _InvestorClubState extends State<InvestorClub> {
   void initState() {
     super.initState();
     // Initialize the Future with the fetch function
-    _apiResponse = fetchApiData(
+    _apiResponse = asyncCallApiData(
         'https://nodejs-serverless-connector.vercel.app/api/hello');
     _backEnd = BackEnd();
     _backEnd.init().then((_) {
@@ -158,7 +158,7 @@ class _InvestorClubState extends State<InvestorClub> {
                     onSignIn: (value) async {
                       final router = GoRouter.of(context);
                       await ModeAuth.of(context)
-                          .signIn(value.username, value.password);
+                          .signIn(value.email, value.password);
                       router.go('/news');
                     },
                   );

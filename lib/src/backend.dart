@@ -54,17 +54,33 @@ class ApiResponse {
   }
 }
 
-// Define a function to call the API
-Future<List<ApiResponse>> fetchApiData(String endpointUrl) async {
+Future<List<ApiResponse>> asyncCallApiData(String endpointUrl,
+    {String method = 'GET', Map<String, String>? body}) async {
   // Ensure endpointUrl is a valid String
   if (endpointUrl.isEmpty) {
     throw ArgumentError('Endpoint URL must be a non-empty string.');
   }
-  Uri uri = Uri.parse(endpointUrl);
 
-  // Make an HTTP GET request to the specified endpoint
-  final client = createHttpClient();
-  final response = await client.get(uri);
+  // Ensure method is either 'GET' or 'POST'
+  if (method != 'GET' && method != 'POST') {
+    throw ArgumentError('Method must be either "GET" or "POST".');
+  }
+
+  Uri uri = Uri.parse(endpointUrl);
+  final client = http.Client();
+  http.Response response;
+
+  if (method == 'GET') {
+    // Make an HTTP GET request to the specified endpoint
+    response = await client.get(uri);
+  } else {
+    // Make an HTTP POST request to the specified endpoint
+    response = await client.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+  }
 
   print(response.body);
 

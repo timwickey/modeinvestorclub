@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../backend.dart';
 
 class Credentials {
-  final String username;
+  final String email;
   final String password;
 
-  Credentials(this.username, this.password);
+  Credentials(this.email, this.password);
 }
 
 class SignInScreen extends StatefulWidget {
@@ -20,7 +23,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
@@ -37,8 +40,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   Text('Sign in',
                       style: Theme.of(context).textTheme.headlineMedium),
                   TextField(
-                    decoration: const InputDecoration(labelText: 'Username'),
-                    controller: _usernameController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                    controller: _emailController,
                   ),
                   TextField(
                     decoration: const InputDecoration(labelText: 'Password'),
@@ -48,11 +51,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextButton(
-                      onPressed: () async {
-                        widget.onSignIn(Credentials(
-                            _usernameController.value.text,
-                            _passwordController.value.text));
-                      },
+                      onPressed: _signIn,
                       child: const Text('Sign in'),
                     ),
                   ),
@@ -62,4 +61,36 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       );
+
+  Future<void> _signIn() async {
+    final email = _emailController.value.text;
+    final password = _passwordController.value.text;
+
+    // Construct the payload
+    final credentials = {
+      'email': email,
+      'password': password,
+    };
+
+    late Future<List<ApiResponse>> _apiResponse;
+    String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
+    Map<String, String> body = {'email': email, 'password': password};
+    List<ApiResponse> response =
+        await asyncCallApiData(url, method: 'POST', body: body);
+
+    // Check the response status and handle accordingly
+    if (response.isNotEmpty) {
+      // Call the onSignIn callback with the credentials
+      widget.onSignIn(Credentials(email, password));
+      // Handle success (e.g., navigate to another screen, show success message, etc.)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login successful')),
+      );
+    } else {
+      // Handle error (e.g., show error message)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed')),
+      );
+    }
+  }
 }
