@@ -63,34 +63,37 @@ class _SignInScreenState extends State<SignInScreen> {
       );
 
   Future<void> _signIn() async {
-    final email = _emailController.value.text;
-    final password = _passwordController.value.text;
-
-    // Construct the payload
-    final credentials = {
-      'email': email,
-      'password': password,
-    };
-
     late Future<List<ApiResponse>> _apiResponse;
-    String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
-    Map<String, String> body = {'email': email, 'password': password};
-    List<ApiResponse> response =
-        await asyncCallApiData(url, method: 'POST', body: body);
+    _apiResponse = asyncCallApiData(
+        'https://nodejs-serverless-connector.vercel.app/api/hello');
+    //   final email = _emailController.value.text;
+    //   final password = _passwordController.value.text;
 
-    // Check the response status and handle accordingly
-    if (response.isNotEmpty) {
-      // Call the onSignIn callback with the credentials
-      widget.onSignIn(Credentials(email, password));
-      // Handle success (e.g., navigate to another screen, show success message, etc.)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login successful')),
-      );
-    } else {
-      // Handle error (e.g., show error message)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed')),
-      );
-    }
+    //   // Construct the payload
+    //   final credentials = {
+    //     'email': email,
+    //     'password': password,
+    //   };
+
+    //   late Future<List<ApiResponse>> _apiResponse;
+    //   String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
+    //   Map<String, String> body = {'email': email, 'password': password};
+    //   List<ApiResponse> response =
+    //       await asyncCallApiData(url, method: 'POST', body: body);
+
+    //   // Check the response status and handle accordingly
+    //   if (response.isNotEmpty) {
+    //     // Call the onSignIn callback with the credentials
+    //     widget.onSignIn(Credentials(email, password));
+    //     // Handle success (e.g., navigate to another screen, show success message, etc.)
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text('Login successful')),
+    //     );
+    //   } else {
+    //     // Handle error (e.g., show error message)
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text('Login failed')),
+    //     );
+    //   }
   }
 }
