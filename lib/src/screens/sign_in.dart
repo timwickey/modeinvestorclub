@@ -82,6 +82,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     // Check the response status and handle accordingly
     if (response.isNotEmpty) {
+      print(response);
       // Call the onSignIn callback with the credentials
       widget.onSignIn(Credentials(email, password));
       // Handle success (e.g., navigate to another screen, show success message, etc.)
