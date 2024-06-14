@@ -31,15 +31,13 @@ ThemeData _buildDarkTheme() {
 class _InvestorClubState extends State<InvestorClub> {
   final ModeAuth auth = ModeAuth();
   late BackEnd _backEnd;
-  late Future<List<ApiResponse>> _apiResponse;
   bool _isInitialized = false; // To track if initialization is complete
 
   @override
   void initState() {
     super.initState();
     // Initialize the Future with the fetch function
-    _apiResponse = asyncCallApiData(
-        'https://nodejs-serverless-connector.vercel.app/api/hello');
+
     _backEnd = BackEnd();
     _backEnd.init().then((_) {
       setState(() {
