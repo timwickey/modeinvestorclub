@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:url_launcher/link.dart';
-
-import '../auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,12 +14,38 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Align(
               alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: const Card(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                    child: HomeContent(),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 38.0),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth > 600) {
+                        // Wide screen: one card 1/4 width, the other 3/4 width
+                        return Row(
+                          children: [
+                            Container(
+                              width: constraints.maxWidth * 0.25,
+                              child: const TwentyCustomCard(),
+                            ),
+                            SizedBox(width: 20),
+                            Container(
+                              width: constraints.maxWidth * 0.75,
+                              child: const CustomCard(),
+                            ),
+                          ],
+                        );
+                      } else {
+                        // Mobile screen: both cards full width
+                        return Column(
+                          children: const [
+                            CustomCard(),
+                            SizedBox(height: 20),
+                            TwentyCustomCard(),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
               ),
@@ -33,118 +55,84 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 }
 
-class HomeContent extends StatelessWidget {
-  const HomeContent({
+class CustomCard extends StatelessWidget {
+  const CustomCard({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Container(
-            height: 200,
-            width: 800,
-            child: Row(
-              children: [
-                // 1/4 Section
-                Container(
-                  width: 200, // 1/4 of 800
-                  color: Colors.grey[200],
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+          child: Column(
+            children: [
+              Container(
+                height: 200,
+                color: const Color.fromARGB(255, 185, 182, 182),
+                child: Row(
+                  children: [
+                    // 1/4 Section
+                    Container(
+                      width: 200, // 1/4 of 800
+                      color: const Color.fromARGB(255, 179, 31, 31),
+                    ),
+                    // 3/4 Section
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                      ),
+                    ),
+                  ],
                 ),
-                // 3/4 Section
-                Container(
-                  width: 600, // 3/4 of 800
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.person),
-                          SizedBox(width: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Tim Wickey'),
-                              Text('123 Home Address'),
-                            ],
-                          ),
-                          Spacer(),
-                          TextButton(
-                            onPressed: () {
-                              // Your onPressed logic here
-                            },
-                            child: const Text('View Shares'),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                      Text(
-                        '37,456 shares owned',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      Spacer(),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          'Mode Mobile, INC\nClass AAA Common Stock',
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ...[
-            Text(
-              'Settings',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            FilledButton(
-              onPressed: () {
-                ModeAuth.of(context).signOut();
-              },
-              child: const Text('Sign out'),
-            ),
-            const Text('Example using the Link widget:'),
-            Link(
-              uri: Uri.parse('/books/all/book/0'),
-              builder: (context, followLink) => TextButton(
-                onPressed: followLink,
-                child: const Text('/books/all/book/0'),
               ),
-            ),
-            const Text('Example using GoRouter.of(context).go():'),
-            TextButton(
-              child: const Text('/books/all/book/0'),
-              onPressed: () {
-                GoRouter.of(context).go('/books/all/book/0');
-              },
-            ),
-          ].map((w) => Padding(padding: const EdgeInsets.all(8), child: w)),
-          const Text('Displays a dialog on the root Navigator:'),
-          TextButton(
-            onPressed: () => showDialog<String>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Alert!'),
-                content: const Text('The alert description goes here.'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            ),
-            child: const Text('Show Dialog'),
+            ],
           ),
-        ],
+        ),
       );
+}
+
+class TwentyCustomCard extends StatelessWidget {
+  const TwentyCustomCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) => Card(
+        child: Container(
+          height: 200, // Set the height of the container
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Get \$20 in Shares',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'For every qualified member you invite! Terms apply.',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const Spacer(), // Use Spacer to push the button to the bottom
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Add your onPressed logic here
+                  },
+                  child: const Text('Invite + Earn'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      body: HomeScreen(),
+    ),
+  ));
 }
