@@ -26,12 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Container(
                               width: constraints.maxWidth * 0.25,
+                              height: 200,
                               child: const TwentyCustomCard(),
                             ),
-                            SizedBox(width: 20),
+                            SizedBox(width: 8),
                             Container(
-                              width: constraints.maxWidth * 0.75,
-                              child: const CustomCard(),
+                              width: constraints.maxWidth * 0.75 - 8,
+                              height: 200,
+                              child: const ProfileCard(),
                             ),
                           ],
                         );
@@ -39,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Mobile screen: both cards full width
                         return Column(
                           children: const [
-                            CustomCard(),
+                            ProfileCard(),
                             SizedBox(height: 20),
                             TwentyCustomCard(),
                           ],
@@ -55,37 +57,83 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 }
 
-class CustomCard extends StatelessWidget {
-  const CustomCard({
+class ProfileWidget extends StatelessWidget {
+  const ProfileWidget({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            child: Row(
+              children: [
+                // Profile circle
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                      'https://via.placeholder.com/150'), // Replace with actual image URL
+                ),
+                const SizedBox(width: 16),
+                // Name and address
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Your Name',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Your Address',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+}
+
+class ProfileCard extends StatelessWidget {
+  const ProfileCard({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) => Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-          child: Column(
-            children: [
-              Container(
-                height: 200,
-                color: const Color.fromARGB(255, 185, 182, 182),
-                child: Row(
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            child: Column(
+              children: [
+                const ProfileWidget(),
+                const Divider(thickness: 1),
+                // Upper row (2/5 of the total height)
+                Row(
                   children: [
-                    // 1/4 Section
-                    Container(
-                      width: 200, // 1/4 of 800
-                      color: const Color.fromARGB(255, 179, 31, 31),
-                    ),
-                    // 3/4 Section
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                      ),
+                    Text(
+                      'Get \$20 in Shares',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
-              ),
-            ],
+                const Divider(thickness: 1),
+                // Lower row (3/5 of the total height)
+                Row(
+                  children: [
+                    Text(
+                      'For every qualified member you invite! Terms apply.',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -97,33 +145,36 @@ class TwentyCustomCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Card(
-        child: Container(
-          height: 200, // Set the height of the container
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Get \$20 in Shares',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'For every qualified member you invite! Terms apply.',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const Spacer(), // Use Spacer to push the button to the bottom
-              Align(
-                alignment: Alignment.bottomRight,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Add your onPressed logic here
-                  },
-                  child: const Text('Invite + Earn'),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          child: Container(
+            height: 200, // Set the height of the container
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Get \$20 in Shares',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-            ],
+                const SizedBox(height: 8),
+                Text(
+                  'For every qualified member you invite! Terms apply.',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const Spacer(), // Use Spacer to push the button to the bottom
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed logic here
+                    },
+                    child: const Text('Invite + Earn'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
