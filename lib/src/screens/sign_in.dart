@@ -30,7 +30,11 @@ class _SignInScreenState extends State<SignInScreen> {
     final password = _passwordController.value.text;
 
     String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
-    Map<String, String> body = {'email': email, 'password': password};
+    // Map<String, String> body = {'email': email, 'password': password};
+    Map<String, String> body = {
+      'email': 'tim.wickey@modemobile.com',
+      'password': 'ilovet'
+    };
     ApiResult<ApiResponse> result =
         await asyncCallApiData(url, method: 'POST', body: body);
 
@@ -106,6 +110,8 @@ class ApiResponse {
   final String email;
   final String message;
   final String token;
+  // create a list of investments
+  List<dynamic> investments = [];
 
   ApiResponse({
     required this.id,
@@ -114,6 +120,7 @@ class ApiResponse {
     required this.email,
     required this.message,
     required this.token,
+    required this.investments,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
@@ -124,6 +131,7 @@ class ApiResponse {
       email: json['user']['email'],
       message: json['message'],
       token: json['token'],
+      investments: json['investments'],
     );
   }
 }

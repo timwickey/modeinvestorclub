@@ -4,14 +4,14 @@ import 'package:url_launcher/link.dart';
 
 import '../auth.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
@@ -23,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: const Card(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                    child: SettingsContent(),
+                    child: HomeContent(),
                   ),
                 ),
               ),
@@ -33,14 +33,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
 }
 
-class SettingsContent extends StatelessWidget {
-  const SettingsContent({
+class HomeContent extends StatelessWidget {
+  const HomeContent({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) => Column(
         children: [
+          Container(
+            height: 200,
+            width: 800,
+            child: Row(
+              children: [
+                // 1/4 Section
+                Container(
+                  width: 200, // 1/4 of 800
+                  color: Colors.grey[200],
+                ),
+                // 3/4 Section
+                Container(
+                  width: 600, // 3/4 of 800
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.person),
+                          SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Tim Wickey'),
+                              Text('123 Home Address'),
+                            ],
+                          ),
+                          Spacer(),
+                          TextButton(
+                            onPressed: () {
+                              // Your onPressed logic here
+                            },
+                            child: const Text('View Shares'),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      Text(
+                        '37,456 shares owned',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      Spacer(),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          'Mode Mobile, INC\nClass AAA Common Stock',
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           ...[
             Text(
               'Settings',
@@ -88,7 +144,7 @@ class SettingsContent extends StatelessWidget {
               ),
             ),
             child: const Text('Show Dialog'),
-          )
+          ),
         ],
       );
 }

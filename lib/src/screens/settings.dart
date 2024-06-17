@@ -50,14 +50,14 @@ class SettingsContent extends StatelessWidget {
               onPressed: () {
                 ModeAuth.of(context).signOut();
               },
-              child: const Text('Sign out'),
+              child: const Text('Signsss out'),
             ),
             const Text('Example using the Link widget:'),
             Link(
-              uri: Uri.parse('/news'),
+              uri: Uri.parse('/home'),
               builder: (context, followLink) => TextButton(
                 onPressed: followLink,
-                child: const Text('/news'),
+                child: const Text('/home'),
               ),
             ),
             const Text('Example using GoRouter.of(context).go():'),

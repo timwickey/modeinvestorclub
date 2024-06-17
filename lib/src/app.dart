@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import 'auth.dart';
 import 'screens/scaffold.dart';
+import 'screens/home.dart';
+import 'screens/deals.dart';
+import 'screens/events.dart';
 import 'screens/settings.dart';
 import 'screens/sign_in.dart';
 import 'widgets/fade_transition_page.dart';
@@ -97,7 +100,7 @@ class _InvestorClubState extends State<InvestorClub> {
             builder: (context, state, child) {
               return WebsiteScaffold(
                 selectedIndex: switch (state.uri.path) {
-                  var p when p.startsWith('/news') => 0,
+                  var p when p.startsWith('/home') => 0,
                   var p when p.startsWith('/deals') => 1,
                   var p when p.startsWith('/events') => 2,
                   var p when p.startsWith('/settings') => 3,
@@ -108,11 +111,11 @@ class _InvestorClubState extends State<InvestorClub> {
             },
             routes: [
               GoRoute(
-                path: '/news',
+                path: '/home',
                 pageBuilder: (context, state) {
                   return FadeTransitionPage<dynamic>(
                     key: state.pageKey,
-                    child: const SettingsScreen(),
+                    child: const HomeScreen(),
                   );
                 },
               ),
@@ -121,7 +124,7 @@ class _InvestorClubState extends State<InvestorClub> {
                 pageBuilder: (context, state) {
                   return FadeTransitionPage<dynamic>(
                     key: state.pageKey,
-                    child: const SettingsScreen(),
+                    child: const DealsScreen(),
                   );
                 },
               ),
@@ -130,7 +133,7 @@ class _InvestorClubState extends State<InvestorClub> {
                 pageBuilder: (context, state) {
                   return FadeTransitionPage<dynamic>(
                     key: state.pageKey,
-                    child: const SettingsScreen(),
+                    child: const EventsScreen(),
                   );
                 },
               ),
@@ -157,7 +160,7 @@ class _InvestorClubState extends State<InvestorClub> {
                       final router = GoRouter.of(context);
                       await ModeAuth.of(context)
                           .signIn(value.email, value.password);
-                      router.go('/news');
+                      router.go('/home');
                     },
                   );
                 },

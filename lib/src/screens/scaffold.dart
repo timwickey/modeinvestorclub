@@ -21,14 +21,14 @@ class WebsiteScaffold extends StatelessWidget {
         selectedIndex: selectedIndex,
         body: child,
         onDestinationSelected: (idx) {
-          if (idx == 0) goRouter.go('/news');
+          if (idx == 0) goRouter.go('/home');
           if (idx == 1) goRouter.go('/deals');
           if (idx == 2) goRouter.go('/events');
           if (idx == 3) goRouter.go('/settings');
         },
         destinations: const [
           AdaptiveScaffoldDestination(
-            title: 'News',
+            title: 'Home',
             icon: Icons.book,
           ),
           AdaptiveScaffoldDestination(

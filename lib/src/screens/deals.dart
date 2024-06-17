@@ -4,14 +4,14 @@ import 'package:url_launcher/link.dart';
 
 import '../auth.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+class DealsScreen extends StatefulWidget {
+  const DealsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<DealsScreen> createState() => _DealsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _DealsScreenState extends State<DealsScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
@@ -23,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: const Card(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                    child: SettingsContent(),
+                    child: DealsContent(),
                   ),
                 ),
               ),
@@ -33,8 +33,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
 }
 
-class SettingsContent extends StatelessWidget {
-  const SettingsContent({
+class DealsContent extends StatelessWidget {
+  const DealsContent({
     super.key,
   });
 
