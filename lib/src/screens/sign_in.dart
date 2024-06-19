@@ -58,7 +58,6 @@ class _SignInScreenState extends State<SignInScreen> {
     } else {
       // Handle error
       String error = result.error!;
-      print('Error: $error');
       // Handle error (e.g., show error message)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login failed: $error')),
