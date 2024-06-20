@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,7 +10,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 // declare a constant
-const widgetheight = 300.0;
+const widgetHeight = 350.0;
+const borderThickness = .5;
+const borderColor = Colors.white;
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -23,19 +27,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   constraints: const BoxConstraints(maxWidth: 1200),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      if (constraints.maxWidth > 600) {
+                      if (constraints.maxWidth > 800) {
                         // Wide screen: one card 1/4 width, the other 3/4 width
                         return Row(
                           children: [
                             SizedBox(
                               width: constraints.maxWidth * 0.25,
-                              height: widgetheight,
+                              height: widgetHeight,
                               child: const TwentyCustomCard(),
                             ),
                             SizedBox(width: 8),
                             SizedBox(
                               width: constraints.maxWidth * 0.75 - 8,
-                              height: widgetheight,
+                              height: widgetHeight,
                               child: const ProfileCard(),
                             ),
                           ],
@@ -69,19 +73,21 @@ class SharesWidget extends StatelessWidget {
         child:
 
             // Name and address
-            Container(
-          color: Colors.red,
+            Padding(
+          padding: const EdgeInsets.only(left: 50.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '37,456',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontSize: 60.0),
               ),
-              const SizedBox(height: 10),
               Text(
                 'Shares Owned',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
@@ -98,22 +104,31 @@ class ShareClassWidget extends StatelessWidget {
         child:
 
             // Name and address
-            Container(
-          color: Colors.red,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
+            Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
                 'Mode Mobile, INC',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: Colors.grey.shade400),
               ),
-              const SizedBox(height: 10),
-              Text(
+            ),
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
                 'Class AAA Common Stock',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Colors.grey.shade400),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 }
@@ -243,58 +258,60 @@ class ProfileCard extends StatelessWidget {
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
-            side: BorderSide(
-              color: Colors.white,
-              width: 0.5,
+            side: const BorderSide(
+              color: borderColor,
+              width: borderThickness,
             ),
           ),
           child: Column(
             children: [
-              Expanded(
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Container(
-                        color: const Color.fromARGB(255, 79, 28, 24),
-                        child: Center(child: ProfileWidget()),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: const Color.fromARGB(255, 9, 14, 10),
-                        child: Center(
-                          child: FancyButton(
-                              text: "VIEW SHARES →",
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text('View Shares Button pressed')),
-                                );
-                              }),
-                        ),
-                      ),
+                    const ProfileWidget(),
+                    Spacer(),
+                    FancyButton(
+                      text: "VIEW SHARES →",
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('View Shares Button pressed'),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
-              Divider(thickness: .5),
+              const Divider(thickness: borderThickness, color: borderColor),
               Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        color: const Color.fromARGB(255, 10, 14, 16),
-                        child: Center(child: SharesWidget()),
-                      ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Expanded(
+                    child: const Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SharesWidget(),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              ShareClassWidget(),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: Container(
-                        color: const Color.fromARGB(255, 32, 30, 14),
-                        child: Center(child: ShareClassWidget()),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
