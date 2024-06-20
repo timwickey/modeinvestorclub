@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               width: constraints.maxWidth * 0.25,
                               height: widgetHeight,
-                              child: const TwentyCustomCard(),
+                              child: const ReferralCard(),
                             ),
                             SizedBox(width: 8),
                             SizedBox(
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: const [
                             ProfileCard(),
                             SizedBox(height: 20),
-                            TwentyCustomCard(),
+                            ReferralCard(),
                           ],
                         );
                       }
@@ -192,15 +192,17 @@ class ProfileWidget extends StatelessWidget {
       );
 }
 
-class FancyButton extends StatelessWidget {
+class SquaredButton extends StatelessWidget {
   final String text;
+  final Icon icon;
   final VoidCallback? onPressed;
   final double maxHeight;
   final double maxWidth;
 
-  const FancyButton({
+  const SquaredButton({
     super.key,
     required this.text,
+    required this.icon,
     required this.onPressed,
     this.maxHeight = 60.0,
     this.maxWidth = 200.0,
@@ -216,28 +218,99 @@ class FancyButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.pink.shade400, Colors.orange],
+            colors: [Colors.pink.shade500, Colors.orange],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(maxHeight / 6),
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onPressed,
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(maxHeight / 6),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              child: Center(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 8), // Space between text and icon
+                  icon,
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RoundedButton extends StatelessWidget {
+  final String text;
+  final Icon icon;
+  final VoidCallback? onPressed;
+  final double maxHeight;
+  final double maxWidth;
+
+  const RoundedButton({
+    super.key,
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+    this.maxHeight = 40.0,
+    this.maxWidth = 200.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: maxHeight,
+        maxWidth: maxWidth,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade500, Colors.orange],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(maxHeight / 2),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onPressed,
+            borderRadius: BorderRadius.circular(maxHeight / 2),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8), // Space between text and icon
+                  icon,
+                ],
               ),
             ),
           ),
@@ -271,8 +344,9 @@ class ProfileCard extends StatelessWidget {
                   children: [
                     const ProfileWidget(),
                     Spacer(),
-                    FancyButton(
-                      text: "VIEW SHARES →",
+                    SquaredButton(
+                      text: "VIEW SHARES",
+                      icon: const Icon(Icons.arrow_right_alt),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -320,8 +394,8 @@ class ProfileCard extends StatelessWidget {
       );
 }
 
-class TwentyCustomCard extends StatelessWidget {
-  const TwentyCustomCard({
+class ReferralCard extends StatelessWidget {
+  const ReferralCard({
     super.key,
   });
 
@@ -329,32 +403,58 @@ class TwentyCustomCard extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(
+              color: borderColor,
+              width: borderThickness,
+            ),
+          ),
           child: Container(
             height: 200, // Set the height of the container
             padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  Colors.orange.withOpacity(0.3),
+                ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Get \$20 in Shares',
-                  style: Theme.of(context).textTheme.titleLarge,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Get \$20 in Shares',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'For every qualified member you invite! Terms apply.',
-                  style: Theme.of(context).textTheme.titleMedium,
+                const SizedBox(height: 26),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'For every qualified member you invite! Terms apply.',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
                 const Spacer(), // Use Spacer to push the button to the bottom
                 Align(
-                  alignment: Alignment.bottomRight,
-                  child: FancyButton(
+                    alignment: Alignment.bottomCenter,
+                    child: RoundedButton(
                       text: "Invite + Earn",
+                      icon: Icon(Icons.group_add, color: Colors.white),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Invite + Earn')),
+                          const SnackBar(
+                              content: Text('Invite + Earn Button Pressed')),
                         );
-                      }),
-                ),
+                      },
+                    )),
               ],
             ),
           ),
