@@ -429,17 +429,37 @@ class ReferralCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    'Get \$20 in Shares',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Get ',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        TextSpan(
+                          text: '\$20',
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                        ),
+                        TextSpan(
+                          text: ' in Shares',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 26),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    'For every qualified member you invite! Terms apply.',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15),
+                    child: Text(
+                      'For every qualified member you invite! Terms apply.',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                 ),
                 const Spacer(), // Use Spacer to push the button to the bottom
@@ -455,6 +475,7 @@ class ReferralCard extends StatelessWidget {
                         );
                       },
                     )),
+                const SizedBox(height: 25),
               ],
             ),
           ),
