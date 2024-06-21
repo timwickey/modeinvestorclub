@@ -46,11 +46,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       } else {
                         // Mobile screen: both cards full width
-                        return Column(
-                          children: const [
-                            ProfileCard(),
-                            SizedBox(height: 20),
-                            ReferralCard(),
+                        return const Column(
+                          children: [
+                            SizedBox(
+                              height: widgetHeight,
+                              child: ProfileCard(),
+                            ),
+                            SizedBox(width: 8),
+                            SizedBox(
+                              height: widgetHeight * .65,
+                              child: ReferralCard(),
+                            ),
                           ],
                         );
                       }
@@ -454,12 +460,9 @@ class ReferralCard extends StatelessWidget {
                 const SizedBox(height: 26),
                 Align(
                   alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Text(
-                      'For every qualified member you invite! Terms apply.',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  child: Text(
+                    'For every qualified member you invite! Terms apply.',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 const Spacer(), // Use Spacer to push the button to the bottom
