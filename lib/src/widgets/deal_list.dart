@@ -56,8 +56,8 @@ class DealList extends StatelessWidget {
                             ),
                           ),
                           child: Container(
-                            width: 200, // Set the width of each card
-                            height: 200, // Set the height of the container
+                            width: 340, // Set the width of each card
+                            height: 240, // Set the height of the container
                             padding: const EdgeInsets.symmetric(
                                 vertical: 18, horizontal: 12),
                             decoration: BoxDecoration(
@@ -74,20 +74,7 @@ class DealList extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  deal.title,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  deal.title,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
+                                DealWidget(deal: deal),
                                 Spacer(),
                                 Align(
                                   alignment: Alignment.bottomRight,
@@ -113,4 +100,69 @@ class DealList extends StatelessWidget {
       ],
     );
   }
+}
+
+class DealWidget extends StatelessWidget {
+  final Deal deal;
+  const DealWidget({
+    required this.deal,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: ClipOval(
+                child: deal.image != null
+                    ? Image.network(
+                        deal.image!,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(
+                        Icons.local_offer,
+                        size: 40,
+                        color: Colors.blue,
+                      ),
+              ),
+            ),
+            const SizedBox(
+                width: 16), // Add some spacing between the avatar and text
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    deal.title,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    deal.partnerName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w200),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 }

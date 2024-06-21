@@ -13,20 +13,35 @@ class HomeScreen extends StatefulWidget {
 
 // create a temporary list of deals
 List<Deal> deals = [
-  Deal(1, 'Deal 1', 'https://via.placeholder.com/150', 'Partner 1', 0.0, 19.99,
-      'https://example.com/deal1'),
-  Deal(2, 'Deal 2', 'https://via.placeholder.com/150', 'Partner 2', 0.0, 29.99,
-      'https://example.com/deal2'),
-  Deal(3, 'Deal 3', 'https://via.placeholder.com/150', 'Partner 3', 0.0, 39.99,
-      'https://example.com/deal3'),
-  // Deal(4, 'Deal 4', 'https://via.placeholder.com/150', 'Partner 4', 0.0, 49.99,
-  //     'https://example.com/deal4'),
-  // Deal(5, 'Deal 5', 'https://via.placeholder.com/150', 'Partner 5', 0.0, 59.99,
-  //     'https://example.com/deal5'),
-  // Deal(6, 'Deal 6', 'https://via.placeholder.com/150', 'Partner 6', 0.0, 69.99,
-  //     'https://example.com/deal6'),
-  // Deal(7, 'Deal 7', 'https://via.placeholder.com/150', 'Partner 7', 0.0, 79.99,
-  //     'https://example.com/deal7'),
+  Deal(
+    id: 1,
+    title: 'Great Deal',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    price: 50.0,
+    originalPrice: 100.0,
+    url: 'https://example.com',
+  ),
+  Deal(
+    id: 2,
+    title: 'Another Great Deal',
+    image:
+        'https://via.placeholder.com/150', // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    price: 50.0,
+    originalPrice: 100.0,
+    url: 'https://example.com',
+  ),
+  Deal(
+    id: 3,
+    title: 'Deal 3',
+    image:
+        'https://via.placeholder.com/150', // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    price: 50.0,
+    originalPrice: 100.0,
+    url: 'https://example.com',
+  ),
 ];
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -74,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       } else {
                         // Mobile screen: both cards full width
-                        return const Column(
+                        return Column(
                           children: [
                             SizedBox(
                               height: widgetHeight,
@@ -85,6 +100,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: widgetHeight * .65,
                               child: ReferralCard(),
                             ),
+                            // we will have to display this as a single column of deals. TODO;
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: widgetHeight,
+                                  child: DealList(deals: deals),
+                                ),
+                              ],
+                            )
                           ],
                         );
                       }
