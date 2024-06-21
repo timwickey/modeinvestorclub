@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../data/deal.dart';
+import '../widgets/deal_list.dart';
+import '../data/globals.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -7,10 +11,23 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-// declare a constant
-const widgetHeight = 350.0;
-const borderThickness = .5;
-const borderColor = Colors.white;
+// create a temporary list of deals
+List<Deal> deals = [
+  Deal(1, 'Deal 1', 'https://via.placeholder.com/150', 'Partner 1', 0.0, 19.99,
+      'https://example.com/deal1'),
+  Deal(2, 'Deal 2', 'https://via.placeholder.com/150', 'Partner 2', 0.0, 29.99,
+      'https://example.com/deal2'),
+  Deal(3, 'Deal 3', 'https://via.placeholder.com/150', 'Partner 3', 0.0, 39.99,
+      'https://example.com/deal3'),
+  // Deal(4, 'Deal 4', 'https://via.placeholder.com/150', 'Partner 4', 0.0, 49.99,
+  //     'https://example.com/deal4'),
+  // Deal(5, 'Deal 5', 'https://via.placeholder.com/150', 'Partner 5', 0.0, 59.99,
+  //     'https://example.com/deal5'),
+  // Deal(6, 'Deal 6', 'https://via.placeholder.com/150', 'Partner 6', 0.0, 69.99,
+  //     'https://example.com/deal6'),
+  // Deal(7, 'Deal 7', 'https://via.placeholder.com/150', 'Partner 7', 0.0, 79.99,
+  //     'https://example.com/deal7'),
+];
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -22,24 +39,37 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 38.0),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1200),
+                  constraints: const BoxConstraints(maxWidth: pageWidth),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       if (constraints.maxWidth > 800) {
                         // Wide screen: one card 1/4 width, the other 3/4 width
-                        return Row(
+                        return Column(
                           children: [
-                            SizedBox(
-                              width: constraints.maxWidth * 0.25,
-                              height: widgetHeight,
-                              child: const ReferralCard(),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: constraints.maxWidth * 0.25,
+                                  height: widgetHeight,
+                                  child: const ReferralCard(),
+                                ),
+                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: constraints.maxWidth * 0.75 - 8,
+                                  height: widgetHeight,
+                                  child: const ProfileCard(),
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 8),
-                            SizedBox(
-                              width: constraints.maxWidth * 0.75 - 8,
-                              height: widgetHeight,
-                              child: const ProfileCard(),
-                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: constraints.maxWidth,
+                                  height: widgetHeight,
+                                  child: DealList(deals: deals),
+                                ),
+                              ],
+                            )
                           ],
                         );
                       } else {

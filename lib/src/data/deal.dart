@@ -1,11 +1,12 @@
-import 'investor.dart';
-
 class Deal {
   final int id;
   final String title;
-  final Author author;
-  final bool isPopular;
-  final bool isNew;
+  final String dealImage;
+  final String partnerName;
+  final double price;
+  final double originalPrice;
+  final String dealUrl;
 
-  Deal(this.id, this.title, this.isPopular, this.isNew, this.author);
+  Deal(this.id, this.title, this.dealImage, this.partnerName, this.price,
+      this.originalPrice, this.dealUrl);
 }
