@@ -39,10 +39,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
     String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
     // Map<String, String> body = {'email': email, 'password': password};
-    Map<String, String> body = {
-      'email': 'tim.wickey@modemobile.com',
-      'password': 'ilovet'
-    };
+    // Map<String, String> body = {
+    //   'email': 'tim.wickey@modemobile.com',
+    //   'password': 'ilovet'
+    // };
+    Map<String, String> body = {'email': email, 'password': password};
     ApiResult<ApiResponse> result =
         await asyncCallApiData(url, method: 'POST', body: body);
 
