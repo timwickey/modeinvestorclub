@@ -95,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Container(
                   constraints: BoxConstraints.loose(const Size(600, 600)),
                   child: Text(
-                    "We’re committed to making our investors’ experience truly rewarding. That’s why we created Mode's Investor Club with thousands of dollars in savings and value.",
+                    "Welcome to the Mode Investor Club Portal! Discover exclusive events, special deals, and real-time investment tracking all in one place.",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
@@ -143,7 +143,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 const SizedBox(height: 32),
                 Text(
-                    "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, login with those credentials.",
+                    "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, please use those credentials to log in.",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium),
               ],
