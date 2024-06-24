@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../data/globals.dart';
 import '../widgets/ui.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Credentials {
   final String email;
@@ -69,52 +70,74 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Colors.transparent,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: borderColor,
-                  width: borderThickness,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'images/mode-investor-club-logo.svg',
+                  height: 100, // Adjust the height as needed
                 ),
-              ),
-              child: Container(
-                constraints: BoxConstraints.loose(const Size(600, 600)),
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Sign in',
-                        style: Theme.of(context).textTheme.headlineMedium),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      controller: _emailController,
-                    ),
-                    TextField(
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      obscureText: true,
-                      controller: _passwordController,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
-                        child: RoundedButton(
-                          text: "Sign in",
-                          icon: Icon(Icons.login, color: Colors.white),
-                          color: transparentButton,
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('Invite + Earn Button Pressed')),
-                            );
-                          },
-                        )),
-                  ],
+                const SizedBox(height: 32),
+                Container(
+                  constraints: BoxConstraints.loose(const Size(600, 600)),
+                  child: Text(
+                    "We’re committed to making our investors’ experience truly rewarding. That’s why we created Mode's Investor Club with thousands of dollars in savings and value.",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 32),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(
+                      color: borderColor,
+                      width: borderThickness,
+                    ),
+                  ),
+                  child: Container(
+                    constraints: BoxConstraints.loose(const Size(600, 600)),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Sign in',
+                            style: Theme.of(context).textTheme.headlineMedium),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'Email'),
+                          controller: _emailController,
+                        ),
+                        TextField(
+                          decoration:
+                              const InputDecoration(labelText: 'Password'),
+                          obscureText: true,
+                          controller: _passwordController,
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 32.0, bottom: 16.0),
+                          child: RoundedButton(
+                            text: "Sign in",
+                            icon: Icon(Icons.login, color: Colors.white),
+                            color: transparentButton,
+                            onPressed: _signIn, // Call the _signIn method
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                    "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, login with those credentials.",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ],
             ),
           ),
         ),
