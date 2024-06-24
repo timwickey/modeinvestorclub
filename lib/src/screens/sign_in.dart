@@ -27,8 +27,13 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false; // To track the loading state
 
   Future<void> _signIn() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
@@ -42,6 +47,10 @@ class _SignInScreenState extends State<SignInScreen> {
         await asyncCallApiData(url, method: 'POST', body: body);
 
     if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
 
     if (result.data != null) {
       // Handle successful response
@@ -118,16 +127,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           obscureText: true,
                           controller: _passwordController,
                         ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 32.0, bottom: 16.0),
-                          child: RoundedButton(
-                            text: "Sign in",
-                            icon: Icon(Icons.login, color: Colors.white),
-                            color: transparentButton,
-                            onPressed: _signIn, // Call the _signIn method
-                          ),
-                        ),
+                        const SizedBox(height: 32),
+                        _isLoading
+                            ? CircularProgressIndicator()
+                            : RoundedButton(
+                                text: "Sign in",
+                                icon: Icon(Icons.login, color: Colors.white),
+                                color: transparentButton,
+                                onPressed: _signIn, // Call the _signIn method
+                              ),
                       ],
                     ),
                   ),
