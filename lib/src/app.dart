@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'auth.dart';
 import 'screens/scaffold.dart';
@@ -9,7 +10,6 @@ import 'screens/events.dart';
 import 'screens/settings.dart';
 import 'screens/sign_in.dart';
 import 'widgets/fade_transition_page.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'backend.dart';
 
 class InvestorClub extends StatefulWidget {
@@ -24,10 +24,6 @@ ThemeData _buildDarkTheme() {
     brightness: Brightness.dark,
     scaffoldBackgroundColor:
         Colors.transparent, // Makes scaffold background default to transparent
-    // Add your custom dark theme colors here
-    // For example:
-    // primaryColor: Colors.grey[800],
-    // accentColor: Colors.blueGrey[600],
   );
 }
 
@@ -40,7 +36,6 @@ class _InvestorClubState extends State<InvestorClub> {
   void initState() {
     super.initState();
     // Initialize the Future with the fetch function
-
     _backEnd = BackEnd();
     _backEnd.init().then((_) {
       setState(() {
@@ -65,17 +60,23 @@ class _InvestorClubState extends State<InvestorClub> {
           child: Stack(
             children: [
               Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.blueGrey
-                            .shade800, // Adjust these colors to match your theme
-                        Colors.black, // Adjust these colors to match your theme
-                      ],
-                    ),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5), // Adjust opacity to darken
+                    BlendMode.darken,
+                  ),
+                  child: Image.asset(
+                    'images/websiteglobe.webp',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: Opacity(
+                  opacity: 0.5, // Adjust the opacity value as needed
+                  child: SvgPicture.asset(
+                    'images/websitegradient.svg',
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

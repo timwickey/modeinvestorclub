@@ -35,6 +35,9 @@ class SquaredButton extends StatelessWidget {
             end: Alignment.centerRight,
           ),
           borderRadius: BorderRadius.circular(maxHeight / 6),
+          border: Border.all(
+              color: color['borderColor']!,
+              width: buttonBorderThickness), // Add border color
         ),
         child: Material(
           color: Colors.transparent,
@@ -101,6 +104,9 @@ class RoundedButton extends StatelessWidget {
             end: Alignment.centerRight,
           ),
           borderRadius: BorderRadius.circular(maxHeight / 2),
+          border: Border.all(
+              color: color['borderColor']!,
+              width: buttonBorderThickness), // Add border color
         ),
         child: Material(
           color: Colors.transparent,
