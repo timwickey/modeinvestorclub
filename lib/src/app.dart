@@ -88,7 +88,7 @@ class _InvestorClubState extends State<InvestorClub> {
       routerConfig: GoRouter(
         refreshListenable: auth,
         debugLogDiagnostics: true,
-        initialLocation: '/sign-in',
+        initialLocation: '/',
         redirect: (context, state) {
           final signedIn = ModeAuth.of(context).signedIn;
           if (state.uri.toString() != '/sign-in' && !signedIn) {
