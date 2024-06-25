@@ -26,8 +26,7 @@ List<Deal> deals = [
   Deal(
     id: 2,
     title: 'Another Great Deal',
-    image:
-        'https://via.placeholder.com/150', // Replace with null to test the icon fallback
+    image: null, // Replace with null to test the icon fallback
     partnerName: 'Partner Name',
     price: 50.0,
     originalPrice: 100.0,
@@ -36,8 +35,7 @@ List<Deal> deals = [
   Deal(
     id: 3,
     title: 'Deal 3',
-    image:
-        'https://via.placeholder.com/150', // Replace with null to test the icon fallback
+    image: null, // Replace with null to test the icon fallback
     partnerName: 'Partner Name',
     price: 50.0,
     originalPrice: 100.0,
@@ -290,33 +288,29 @@ class ProfileCard extends StatelessWidget {
                 ),
               ),
               const Divider(thickness: borderThickness, color: borderColor),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Expanded(
-                    child: const Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SharesWidget(),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              ShareClassWidget(),
-                            ],
-                          ),
-                        ),
-                      ],
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SharesWidget(),
+                        ],
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ShareClassWidget(),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
