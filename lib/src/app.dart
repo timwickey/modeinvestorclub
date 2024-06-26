@@ -9,6 +9,7 @@ import 'screens/deals.dart';
 import 'screens/events.dart';
 import 'screens/settings.dart';
 import 'screens/sign_in.dart';
+import 'screens/not_found.dart';
 import 'widgets/fade_transition_page.dart';
 import 'backend.dart';
 
@@ -22,20 +23,18 @@ class InvestorClub extends StatefulWidget {
 ThemeData _buildDarkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor:
-        Colors.transparent, // Makes scaffold background default to transparent
+    scaffoldBackgroundColor: Colors.transparent,
   );
 }
 
 class _InvestorClubState extends State<InvestorClub> {
   final ModeAuth auth = ModeAuth();
   late BackEnd _backEnd;
-  bool _isInitialized = false; // To track if initialization is complete
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the Future with the fetch function
     _backEnd = BackEnd();
     _backEnd.init().then((_) {
       setState(() {
@@ -48,9 +47,9 @@ class _InvestorClubState extends State<InvestorClub> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Mode Investor Club',
-      theme: _buildDarkTheme(), // Setting the theme to dark
-      darkTheme: _buildDarkTheme(), // Setting the dark theme
-      themeMode: ThemeMode.dark, // Setting the theme mode to dark
+      theme: _buildDarkTheme(),
+      darkTheme: _buildDarkTheme(),
+      themeMode: ThemeMode.dark,
       builder: (context, child) {
         if (child == null) {
           throw ('No child in .router constructor builder');
@@ -62,7 +61,7 @@ class _InvestorClubState extends State<InvestorClub> {
               Positioned.fill(
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.5), // Adjust opacity to darken
+                    Colors.black.withOpacity(0.5),
                     BlendMode.darken,
                   ),
                   child: Image.asset(
@@ -73,14 +72,14 @@ class _InvestorClubState extends State<InvestorClub> {
               ),
               Positioned.fill(
                 child: Opacity(
-                  opacity: 0.5, // Adjust the opacity value as needed
+                  opacity: 0.5,
                   child: SvgPicture.asset(
                     'images/websitegradient.svg',
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              child, // This is your original child from MaterialApp.router
+              child,
             ],
           ),
         );
@@ -95,6 +94,12 @@ class _InvestorClubState extends State<InvestorClub> {
             return '/sign-in';
           }
           return null;
+        },
+        errorPageBuilder: (context, state) {
+          return MaterialPage<void>(
+            key: state.pageKey,
+            child: const NotFoundScreen(),
+          );
         },
         routes: [
           ShellRoute(
@@ -152,8 +157,6 @@ class _InvestorClubState extends State<InvestorClub> {
           GoRoute(
             path: '/sign-in',
             builder: (context, state) {
-              // Use a builder to get the correct BuildContext
-              // TODO (johnpryan): remove when https://github.com/flutter/flutter/issues/108177 lands
               return Builder(
                 builder: (context) {
                   return SignInScreen(
