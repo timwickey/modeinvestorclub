@@ -164,6 +164,7 @@ class ShareClassWidget extends StatelessWidget {
             Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 60),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
