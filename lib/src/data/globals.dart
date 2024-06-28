@@ -5,12 +5,14 @@ const borderThickness = .5;
 const buttonBorderThickness = 1.0;
 const borderColor = Colors.white70;
 const pageWidth = 1200.0;
+const leftGradient = Color.fromARGB(255, 233, 30, 99);
+const rightGradient = Colors.orange;
 
 // Define the color map for buttons
 const Map<String, Color> colorButton = {
   'borderColor': Colors.transparent,
-  'leftColor': Color.fromARGB(255, 233, 30, 99),
-  'rightColor': Colors.orange,
+  'leftColor': leftGradient,
+  'rightColor': rightGradient,
 };
 const Map<String, Color> transparentButton = {
   'borderColor': Colors.white,

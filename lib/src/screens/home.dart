@@ -20,7 +20,7 @@ List<Deal> deals = [
     image: null, // Replace with null to test the icon fallback
     partnerName: 'Partner Name',
     price: 50.0,
-    originalPrice: 100.0,
+    originalPrice: 99,
     url: 'https://example.com',
   ),
   Deal(
@@ -29,7 +29,7 @@ List<Deal> deals = [
     image: null, // Replace with null to test the icon fallback
     partnerName: 'Partner Name',
     price: 50.0,
-    originalPrice: 100.0,
+    originalPrice: 499,
     url: 'https://example.com',
   ),
   Deal(
@@ -38,7 +38,7 @@ List<Deal> deals = [
     image: null, // Replace with null to test the icon fallback
     partnerName: 'Partner Name',
     price: 50.0,
-    originalPrice: 100.0,
+    originalPrice: 50,
     url: 'https://example.com',
   ),
 ];
