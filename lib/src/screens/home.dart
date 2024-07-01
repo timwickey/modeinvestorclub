@@ -100,13 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: ReferralCardMobile(),
                             ),
                             // we will have to display this as a single column of deals. TODO;
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: widgetHeightMobile,
-                                  child: DealList(deals: deals),
-                                ),
-                              ],
+                            SizedBox(
+                              height: widgetHeightMobile,
+                              child: DealList(deals: deals),
                             )
                           ],
                         );
@@ -245,7 +241,7 @@ class ShareClassWidgetMobile extends StatelessWidget {
                     ?.copyWith(color: Colors.grey.shade400),
               ),
             ),
-            const SizedBox(height:  ),
+            const SizedBox(height: 5),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
