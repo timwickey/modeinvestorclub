@@ -91,19 +91,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Column(
                           children: [
                             SizedBox(
-                              height: widgetHeight,
-                              child: ProfileCard(),
+                              height: widgetHeightMobile,
+                              child: ProfileCardMobile(),
                             ),
                             SizedBox(width: 8),
                             SizedBox(
-                              height: widgetHeight * .65,
-                              child: ReferralCard(),
+                              height: widgetHeightMobile * .75,
+                              child: ReferralCardMobile(),
                             ),
                             // we will have to display this as a single column of deals. TODO;
                             Row(
                               children: [
                                 SizedBox(
-                                  height: widgetHeight,
+                                  height: widgetHeightMobile,
                                   child: DealList(deals: deals),
                                 ),
                               ],
@@ -152,6 +152,37 @@ class SharesWidget extends StatelessWidget {
       );
 }
 
+class SharesWidgetMobile extends StatelessWidget {
+  const SharesWidgetMobile({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) => Card(
+        child:
+
+            // Name and address
+            Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '37,456',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontSize: 40.0),
+              ),
+              Text(
+                'Shares Owned',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
 class ShareClassWidget extends StatelessWidget {
   const ShareClassWidget({
     super.key,
@@ -176,6 +207,45 @@ class ShareClassWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Class AAA Common Stock',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Colors.grey.shade400),
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+class ShareClassWidgetMobile extends StatelessWidget {
+  const ShareClassWidgetMobile({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) => Card(
+        child:
+
+            // Name and address
+            Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Mode Mobile, INC',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: Colors.grey.shade400),
+              ),
+            ),
+            const SizedBox(height:  ),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -320,6 +390,76 @@ class ProfileCard extends StatelessWidget {
       );
 }
 
+class ProfileCardMobile extends StatelessWidget {
+  const ProfileCardMobile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(
+              color: borderColor,
+              width: borderThickness,
+            ),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Row(
+                  children: [
+                    const ProfileWidget(),
+                    Spacer(),
+                    SquaredButton(
+                      text: "VIEW SHARES",
+                      icon: const Icon(Icons.arrow_right_alt),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('View Shares Button pressed'),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(thickness: borderThickness, color: borderColor),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SharesWidgetMobile(),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ShareClassWidgetMobile(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
 class ReferralCard extends StatelessWidget {
   const ReferralCard({
     super.key,
@@ -400,6 +540,93 @@ class ReferralCard extends StatelessWidget {
                       },
                     )),
                 const SizedBox(height: 25),
+              ],
+            ),
+          ),
+        ),
+      );
+}
+
+class ReferralCardMobile extends StatelessWidget {
+  const ReferralCardMobile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(
+              color: borderColor,
+              width: borderThickness,
+            ),
+          ),
+          child: Container(
+            height: 200, // Set the height of the container
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  Colors.orange.withOpacity(0.3),
+                ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Get ',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        TextSpan(
+                          text: '\$20',
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                        ),
+                        TextSpan(
+                          text: ' in Shares',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'For every qualified member you invite! Terms apply.',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                const Spacer(), // Use Spacer to push the button to the bottom
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: RoundedButton(
+                      text: "Invite + Earn",
+                      icon: Icon(Icons.group_add, color: Colors.white),
+                      color: colorButton,
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Invite + Earn Button Pressed')),
+                        );
+                      },
+                    )),
+                const SizedBox(height: 10),
               ],
             ),
           ),
