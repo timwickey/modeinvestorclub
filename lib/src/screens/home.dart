@@ -92,18 +92,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             SizedBox(
                               height: widgetHeightMobile,
-                              child: ProfileCardMobile(),
+                              child: const ProfileCardMobile(),
                             ),
-                            SizedBox(width: 8),
-                            SizedBox(
-                              height: widgetHeightMobile * .75,
-                              child: ReferralCardMobile(),
-                            ),
-                            // we will have to display this as a single column of deals. TODO;
+                            SizedBox(height: 8),
                             SizedBox(
                               height: widgetHeightMobile,
+                              child: const ReferralCardMobile(),
+                            ),
+                            SizedBox(height: 8),
+                            SizedBox(
+                              height: 1000,
                               child: DealList(deals: deals),
-                            )
+                            ),
                           ],
                         );
                       }
