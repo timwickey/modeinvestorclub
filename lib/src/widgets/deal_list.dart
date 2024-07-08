@@ -44,8 +44,8 @@ class DealList extends StatelessWidget {
                 builder: (context, constraints) {
                   return Center(
                     child: Wrap(
-                      spacing: 16.0,
-                      runSpacing: 16.0,
+                      spacing: dealSpacing,
+                      runSpacing: dealSpacing,
                       alignment: WrapAlignment.center,
                       children: deals.map((deal) {
                         return Card(
@@ -57,8 +57,9 @@ class DealList extends StatelessWidget {
                             ),
                           ),
                           child: Container(
-                            width: 340, // Set the width of each card
-                            height: 240, // Set the height of the container
+                            width: dealWidth, // Set the width of each card
+                            height:
+                                dealHeight, // Set the height of the container
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12.0),
                               gradient: LinearGradient(

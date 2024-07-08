@@ -56,6 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   constraints: const BoxConstraints(maxWidth: pageWidth),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
+                      // calculate how much space is needed for the deals so we know how big to make the widget (for scrolling)
+                      // we can fit 1 deal card within dealWidth
+                      int numberOfDealsperRow =
+                          (constraints.maxWidth / (dealWidth + dealSpacing))
+                              .floor();
+                      int numberOfRows =
+                          (deals.length / numberOfDealsperRow).ceil();
+                      double dealTotalHeight =
+                          numberOfRows * (dealHeight + dealSpacing);
+                      // add the space needed for the header of the deals widget and the footerbar
+                      dealTotalHeight += 100.0;
+
                       if (constraints.maxWidth > 800) {
                         // Wide screen: one card 1/4 width, the other 3/4 width
                         return Column(
@@ -79,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth,
-                                  height: widgetHeight,
+                                  height: dealTotalHeight,
                                   child: DealList(deals: deals),
                                 ),
                               ],
@@ -101,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 8),
                             SizedBox(
-                              height: 1000,
+                              height: dealTotalHeight,
                               child: DealList(deals: deals),
                             ),
                           ],
