@@ -127,8 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth,
-                                  height: dealTotalHeight,
-                                  child: DealList(deals: deals),
+                                  height: 440,
+                                  child: EventList(events: events),
                                 ),
                               ],
                             ),
@@ -136,11 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth,
-                                  height: 600,
-                                  child: EventList(events: events),
+                                  height: dealTotalHeight,
+                                  child: DealList(deals: deals),
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         );
                       } else {
@@ -155,6 +155,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: widgetHeightMobile,
                               child: const ReferralCardMobile(),
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: constraints.maxWidth,
+                                  height: 440,
+                                  child: EventList(events: events),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 8),
                             SizedBox(

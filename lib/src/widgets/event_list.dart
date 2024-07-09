@@ -20,7 +20,8 @@ class EventList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 20.0, left: 40.0, right: 40.0),
+          padding: const EdgeInsets.only(
+              top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
@@ -84,7 +85,15 @@ class EventList extends StatelessWidget {
                         // const Divider(thickness: 1.0, color: Colors.grey),
                       ],
                     );
-                  }).toList(),
+                  }).toList()
+                    ..add(const Column(
+                      children: [
+                        Divider(
+                          thickness: 1.0,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    )), // Add the last divider immediately after the rows
                 );
               },
             ),
