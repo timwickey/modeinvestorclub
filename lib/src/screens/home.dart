@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../data/deal.dart';
+import '../data/event.dart';
 import '../widgets/deal_list.dart';
+import '../widgets/event_list.dart';
 import '../data/globals.dart';
 import '../widgets/ui.dart';
 
@@ -39,6 +41,40 @@ List<Deal> deals = [
     partnerName: 'Partner Name',
     price: 50.0,
     originalPrice: 50,
+    url: 'https://example.com',
+  ),
+];
+
+// create a list of events
+List<Event> events = [
+  Event(
+    id: 1,
+    title: 'Event 1',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    date: DateTime.now().add(const Duration(days: 10)),
+    time: DateTime.now(),
+    description: 'Description',
+    url: 'https://example.com',
+  ),
+  Event(
+    id: 2,
+    title: 'Event 2',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    date: DateTime.now().add(const Duration(days: 24)),
+    time: DateTime.now(),
+    description: 'Description',
+    url: 'https://example.com',
+  ),
+  Event(
+    id: 3,
+    title: 'Event 3',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    date: DateTime.now().add(const Duration(days: 32)),
+    time: DateTime.now(),
+    description: 'Description',
     url: 'https://example.com',
   ),
 ];
@@ -93,6 +129,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: constraints.maxWidth,
                                   height: dealTotalHeight,
                                   child: DealList(deals: deals),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: constraints.maxWidth,
+                                  height: 600,
+                                  child: EventList(events: events),
                                 ),
                               ],
                             )
