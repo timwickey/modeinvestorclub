@@ -2,7 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/link.dart';
 
+import '../data/event.dart';
+import '../widgets/event_list.dart';
+import '../data/globals.dart';
+
 import '../auth.dart';
+
+// create a list of events
+List<Event> events = [
+  Event(
+    id: 1,
+    title: 'Event 1',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    date: DateTime.now().add(const Duration(days: 10)),
+    time: DateTime.now(),
+    description: 'Description',
+    url: 'https://example.com',
+  ),
+  Event(
+    id: 2,
+    title: 'Event 2',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    date: DateTime.now().add(const Duration(days: 24)),
+    time: DateTime.now(),
+    description: 'Description',
+    url: 'https://example.com',
+  ),
+  Event(
+    id: 3,
+    title: 'Event 3',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    date: DateTime.now().add(const Duration(days: 32)),
+    time: DateTime.now(),
+    description: 'Description',
+    url: 'https://example.com',
+  ),
+];
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -18,77 +56,46 @@ class _EventsScreenState extends State<EventsScreen> {
           child: SingleChildScrollView(
             child: Align(
               alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: const Card(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                    child: EventsContent(),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 38.0),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: pageWidth),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // calculate how much space is needed for the events so we know how big to make the widget (for scrolling)
+                      double eventTotalHeight = events.length * 150.0;
+                      // add the space needed for the header of the events widget and the footerbar
+                      eventTotalHeight += 100.0;
+
+                      if (constraints.maxWidth > 800) {
+                        // Wide screen
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: constraints.maxWidth,
+                              height: eventTotalHeight,
+                              child: EventList(events: events),
+                            ),
+                          ],
+                        );
+                      } else {
+                        // Mobile screen
+                        return Column(
+                          children: [
+                            SizedBox(height: 8),
+                            SizedBox(
+                              height: eventTotalHeight,
+                              child: EventList(events: events),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
               ),
             ),
           ),
         ),
-      );
-}
-
-class EventsContent extends StatelessWidget {
-  const EventsContent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          ...[
-            Text(
-              'Settings',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            FilledButton(
-              onPressed: () {
-                ModeAuth.of(context).signOut();
-              },
-              child: const Text('Sign out'),
-            ),
-            const Text('Example using the Link widget:'),
-            Link(
-              uri: Uri.parse('/books/all/book/0'),
-              builder: (context, followLink) => TextButton(
-                onPressed: followLink,
-                child: const Text('/books/all/book/0'),
-              ),
-            ),
-            const Text('Example using GoRouter.of(context).go():'),
-            TextButton(
-              child: const Text('/books/all/book/0'),
-              onPressed: () {
-                GoRouter.of(context).go('/books/all/book/0');
-              },
-            ),
-          ].map((w) => Padding(padding: const EdgeInsets.all(8), child: w)),
-          const Text('Displays a dialog on the root Navigator:'),
-          TextButton(
-            onPressed: () => showDialog<String>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Alert!'),
-                content: const Text('The alert description goes here.'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            ),
-            child: const Text('Show Dialog'),
-          )
-        ],
       );
 }

@@ -1,8 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/link.dart';
+import '../data/deal.dart';
+import '../widgets/deal_list.dart';
+import '../data/globals.dart';
 
 import '../auth.dart';
+
+List<Deal> deals = [
+  Deal(
+    id: 1,
+    title: 'Great Deal',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    price: 50.0,
+    originalPrice: 99,
+    url: 'https://example.com',
+  ),
+  Deal(
+    id: 2,
+    title: 'Another Great Deal',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    price: 50.0,
+    originalPrice: 499,
+    url: 'https://example.com',
+  ),
+  Deal(
+    id: 3,
+    title: 'Deal 3',
+    image: null, // Replace with null to test the icon fallback
+    partnerName: 'Partner Name',
+    price: 50.0,
+    originalPrice: 50,
+    url: 'https://example.com',
+  ),
+];
 
 class DealsScreen extends StatefulWidget {
   const DealsScreen({super.key});
@@ -18,77 +51,53 @@ class _DealsScreenState extends State<DealsScreen> {
           child: SingleChildScrollView(
             child: Align(
               alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: const Card(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                    child: DealsContent(),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 38.0),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: pageWidth),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // calculate how much space is needed for the deals so we know how big to make the widget (for scrolling)
+                      // we can fit 1 deal card within dealWidth
+                      int numberOfDealsperRow =
+                          (constraints.maxWidth / (dealWidth + dealSpacing))
+                              .floor();
+                      int numberOfRows =
+                          (deals.length / numberOfDealsperRow).ceil();
+                      double dealTotalHeight =
+                          numberOfRows * (dealHeight + dealSpacing);
+                      // add the space needed for the header of the deals widget and the footerbar
+                      dealTotalHeight += 100.0;
+
+                      if (constraints.maxWidth > 800) {
+                        // Wide screen
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: constraints.maxWidth,
+                              height: dealTotalHeight,
+                              child: DealList(deals: deals),
+                            ),
+                          ],
+                        );
+                      } else {
+                        // Mobile screen
+                        return Column(
+                          children: [
+                            SizedBox(height: 8),
+                            SizedBox(
+                              height: dealTotalHeight,
+                              child: DealList(deals: deals),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
               ),
             ),
           ),
         ),
-      );
-}
-
-class DealsContent extends StatelessWidget {
-  const DealsContent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          ...[
-            Text(
-              'Settings',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            FilledButton(
-              onPressed: () {
-                ModeAuth.of(context).signOut();
-              },
-              child: const Text('Sign out'),
-            ),
-            const Text('Example using the Link widget:'),
-            Link(
-              uri: Uri.parse('/books/all/book/0'),
-              builder: (context, followLink) => TextButton(
-                onPressed: followLink,
-                child: const Text('/books/all/book/0'),
-              ),
-            ),
-            const Text('Example using GoRouter.of(context).go():'),
-            TextButton(
-              child: const Text('/books/all/book/0'),
-              onPressed: () {
-                GoRouter.of(context).go('/books/all/book/0');
-              },
-            ),
-          ].map((w) => Padding(padding: const EdgeInsets.all(8), child: w)),
-          const Text('Displays a dialog on the root Navigator:'),
-          TextButton(
-            onPressed: () => showDialog<String>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Alert!'),
-                content: const Text('The alert description goes here.'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            ),
-            child: const Text('Show Dialog'),
-          )
-        ],
       );
 }
