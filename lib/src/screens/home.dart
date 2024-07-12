@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modeinvestorclub/src/backend.dart';
 
 import '../data/deal.dart';
 import '../data/event.dart';
@@ -8,7 +9,9 @@ import '../data/globals.dart';
 import '../widgets/ui.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final ApiResponse? user;
+
+  const HomeScreen({required this.user, super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -119,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth * 0.75 - 8,
                                   height: widgetHeight,
-                                  child: const ProfileCard(),
+                                  child: ProfileCard(user: widget.user),
                                 ),
                               ],
                             ),
@@ -149,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             SizedBox(
                               height: widgetHeightMobile,
-                              child: const ProfileCardMobile(),
+                              child: ProfileCardMobile(user: widget.user),
                             ),
                             SizedBox(height: 8),
                             SizedBox(
@@ -324,7 +327,10 @@ class ShareClassWidgetMobile extends StatelessWidget {
 }
 
 class ProfileWidget extends StatelessWidget {
+  final ApiResponse? user;
+
   const ProfileWidget({
+    required this.user,
     super.key,
   });
 
@@ -360,7 +366,7 @@ class ProfileWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Your Name',
+                    '${user?.firstName} ${user?.lastName}',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -383,7 +389,10 @@ class ProfileWidget extends StatelessWidget {
 }
 
 class ProfileCard extends StatelessWidget {
+  final ApiResponse? user;
+
   const ProfileCard({
+    required this.user,
     super.key,
   });
 
@@ -404,7 +413,7 @@ class ProfileCard extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    const ProfileWidget(),
+                    ProfileWidget(user: user),
                     Spacer(),
                     SquaredButton(
                       text: "VIEW SHARES",
@@ -453,7 +462,10 @@ class ProfileCard extends StatelessWidget {
 }
 
 class ProfileCardMobile extends StatelessWidget {
+  final ApiResponse? user;
+
   const ProfileCardMobile({
+    required this.user,
     super.key,
   });
 
@@ -474,7 +486,7 @@ class ProfileCardMobile extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Row(
                   children: [
-                    const ProfileWidget(),
+                    ProfileWidget(user: user),
                     Spacer(),
                     SquaredButton(
                       text: "VIEW SHARES",
@@ -699,7 +711,17 @@ class ReferralCardMobile extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: Scaffold(
-      body: HomeScreen(),
+      body: HomeScreen(
+        user: ApiResponse(
+          id: 1,
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          message: 'Welcome to Mode Investor Club',
+          token: 'token',
+          investments: [],
+        ),
+      ),
     ),
   ));
 }

@@ -31,6 +31,7 @@ class _InvestorClubState extends State<InvestorClub> {
   final ModeAuth auth = ModeAuth();
   late BackEnd _backEnd;
   bool _isInitialized = false;
+  ApiResponse? _user;
 
   @override
   void initState() {
@@ -121,7 +122,9 @@ class _InvestorClubState extends State<InvestorClub> {
                 pageBuilder: (context, state) {
                   return FadeTransitionPage<dynamic>(
                     key: state.pageKey,
-                    child: const HomeScreen(),
+                    child: HomeScreen(
+                      user: auth.user,
+                    ),
                   );
                 },
               ),
@@ -160,10 +163,12 @@ class _InvestorClubState extends State<InvestorClub> {
               return Builder(
                 builder: (context) {
                   return SignInScreen(
-                    onSignIn: (value) async {
+                    onSignIn: (user) async {
                       final router = GoRouter.of(context);
-                      await ModeAuth.of(context)
-                          .signIn(value.email, value.password);
+                      await ModeAuth.of(context).signIn(user);
+                      setState(() {
+                        _user = user;
+                      });
                       router.go('/home');
                     },
                   );

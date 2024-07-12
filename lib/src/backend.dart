@@ -44,8 +44,9 @@ class ApiResponse {
   final String email;
   final String message;
   final String token;
+  // create a list of investments
+  List<dynamic> investments = [];
 
-  // Constructor
   ApiResponse({
     required this.id,
     required this.firstName,
@@ -53,18 +54,18 @@ class ApiResponse {
     required this.email,
     required this.message,
     required this.token,
+    required this.investments,
   });
 
-  // A factory method to create an ApiResponse from a JSON object
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
     return ApiResponse(
-      id: json['user']
-          ['id'], // Adjust the field names to match your API response
+      id: json['user']['id'],
       firstName: json['user']['firstname'],
       lastName: json['user']['lastname'],
       email: json['user']['email'],
       message: json['message'],
       token: json['token'],
+      investments: json['investments'],
     );
   }
 }

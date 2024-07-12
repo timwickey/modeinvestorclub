@@ -1,23 +1,29 @@
 import 'package:flutter/widgets.dart';
+import 'package:modeinvestorclub/src/backend.dart';
 
 /// A mock authentication service
 class ModeAuth extends ChangeNotifier {
   bool _signedIn = false;
 
   bool get signedIn => _signedIn;
+  late ApiResponse? _user;
+
+  ApiResponse? get user => _user;
 
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     // Sign out.
     _signedIn = false;
+    _user = null;
     notifyListeners();
   }
 
-  Future<bool> signIn(String username, String password) async {
+  Future<bool> signIn(ApiResponse user) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
 
     // Sign in. Allow any password.
     _signedIn = true;
+    _user = user;
     notifyListeners();
     return _signedIn;
   }

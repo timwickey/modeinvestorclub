@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../data/globals.dart';
 import '../widgets/ui.dart';
+import '../backend.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Credentials {
@@ -13,7 +14,7 @@ class Credentials {
 }
 
 class SignInScreen extends StatefulWidget {
-  final ValueChanged<Credentials> onSignIn;
+  final ValueChanged<ApiResponse> onSignIn;
 
   const SignInScreen({
     required this.onSignIn,
@@ -63,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
       print('Email: ${data.email}');
 
       // Call the onSignIn callback with the credentials
-      widget.onSignIn(Credentials(email, password));
+      widget.onSignIn(data);
       // Handle success (e.g., navigate to another screen, show success message, etc.)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful')),
@@ -151,39 +152,6 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       );
-}
-
-class ApiResponse {
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String message;
-  final String token;
-  // create a list of investments
-  List<dynamic> investments = [];
-
-  ApiResponse({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.message,
-    required this.token,
-    required this.investments,
-  });
-
-  factory ApiResponse.fromJson(Map<String, dynamic> json) {
-    return ApiResponse(
-      id: json['user']['id'],
-      firstName: json['user']['firstname'],
-      lastName: json['user']['lastname'],
-      email: json['user']['email'],
-      message: json['message'],
-      token: json['token'],
-      investments: json['investments'],
-    );
-  }
 }
 
 class ApiResult<T> {
