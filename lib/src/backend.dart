@@ -45,7 +45,7 @@ class ApiResponse {
   final String message;
   final String token;
   // create a list of investments
-  List<dynamic> investments = [];
+  List<Investment> investments;
 
   ApiResponse({
     required this.id,
@@ -58,6 +58,10 @@ class ApiResponse {
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
+    var investmentsJson = json['investments'] as List;
+    List<Investment> investmentsList =
+        investmentsJson.map((i) => Investment.fromJson(i)).toList();
+
     return ApiResponse(
       id: json['user']['id'],
       firstName: json['user']['firstname'],
@@ -65,8 +69,84 @@ class ApiResponse {
       email: json['user']['email'],
       message: json['message'],
       token: json['token'],
-      investments: json['investments'],
+      investments: investmentsList,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'message': message,
+      'token': token,
+      'investments': investments.map((i) => i.toJson()).toList(),
+    };
+  }
+
+  int calculateTotalShares() {
+    int totalShares = 0;
+    for (var investment in investments) {
+      totalShares += investment.shares + investment.bonusShares;
+    }
+    return totalShares;
+  }
+}
+
+class Investment {
+  final int id;
+  final double price;
+  final int shares;
+  final DateTime date;
+  final int bonusShares;
+  final String round;
+  final String shareClass;
+  final double effectivePrice;
+  final int userId;
+
+  Investment({
+    required this.id,
+    required this.price,
+    required this.shares,
+    required this.date,
+    required this.bonusShares,
+    required this.round,
+    required this.shareClass,
+    required this.effectivePrice,
+    required this.userId,
+  });
+
+  factory Investment.fromJson(Map<String, dynamic> json) {
+    return Investment(
+      id: json['id'],
+      price: (json['price'] is String)
+          ? double.parse(json['price'])
+          : json['price'].toDouble(),
+      shares: json['shares'],
+      date: DateTime.parse(json['date']),
+      bonusShares: json['bonus_shares'],
+      round: json['round'],
+      shareClass: json['class'],
+      effectivePrice: (json['effective_price'] is String)
+          ? double.parse(json['effective_price'])
+          : json['effective_price'].toDouble(),
+      userId: json['user_id'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'price': price,
+      'shares': shares,
+      'date': date.toIso8601String(),
+      'bonus_shares': bonusShares,
+      'round': round,
+      'class': shareClass,
+      'effective_price': effectivePrice,
+      'user_id': userId,
+    };
   }
 }
 

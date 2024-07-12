@@ -7,6 +7,7 @@ import '../widgets/deal_list.dart';
 import '../widgets/event_list.dart';
 import '../data/globals.dart';
 import '../widgets/ui.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 
 class HomeScreen extends StatefulWidget {
   final ApiResponse? user;
@@ -187,69 +188,82 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class SharesWidget extends StatelessWidget {
+  final ApiResponse? user;
   const SharesWidget({
+    required this.user,
     super.key,
   });
   @override
-  Widget build(BuildContext context) => Card(
-        child:
+  Widget build(BuildContext context) {
+    final totalShares = user?.calculateTotalShares() ?? 0;
+    final formattedShares = NumberFormat('#,###').format(totalShares);
+    return Card(
+      child:
 
-            // Name and address
-            Padding(
-          padding: const EdgeInsets.only(left: 50.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '37,456',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontSize: 60.0),
-              ),
-              Text(
-                'Shares Owned',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
+          // Name and address
+          Padding(
+        padding: const EdgeInsets.only(left: 50.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              formattedShares,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 60.0),
+            ),
+            Text(
+              'Shares Owned',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class SharesWidgetMobile extends StatelessWidget {
+  final ApiResponse? user;
   const SharesWidgetMobile({
+    required this.user,
     super.key,
   });
-  @override
-  Widget build(BuildContext context) => Card(
-        child:
 
-            // Name and address
-            Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '37,456',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontSize: 40.0),
-              ),
-              Text(
-                'Shares Owned',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
+  @override
+  Widget build(BuildContext context) {
+    final totalShares = user?.calculateTotalShares() ?? 0;
+    final formattedShares = NumberFormat('#,###').format(totalShares);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              formattedShares,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontSize: 40.0),
+            ),
+            Text(
+              'Shares Owned',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class ShareClassWidget extends StatelessWidget {
+  final ApiResponse? user;
   const ShareClassWidget({
+    required this.user,
     super.key,
   });
   @override
@@ -288,7 +302,9 @@ class ShareClassWidget extends StatelessWidget {
 }
 
 class ShareClassWidgetMobile extends StatelessWidget {
+  final ApiResponse? user;
   const ShareClassWidgetMobile({
+    required this.user,
     super.key,
   });
   @override
@@ -432,14 +448,14 @@ class ProfileCard extends StatelessWidget {
               const Divider(thickness: borderThickness, color: borderColor),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: const Row(
+                child: Row(
                   children: [
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SharesWidget(),
+                          SharesWidget(user: user),
                         ],
                       ),
                     ),
@@ -448,7 +464,7 @@ class ProfileCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          ShareClassWidget(),
+                          ShareClassWidget(user: user),
                         ],
                       ),
                     ),
@@ -505,14 +521,14 @@ class ProfileCardMobile extends StatelessWidget {
               const Divider(thickness: borderThickness, color: borderColor),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                child: const Row(
+                child: Row(
                   children: [
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SharesWidgetMobile(),
+                          SharesWidgetMobile(user: user),
                         ],
                       ),
                     ),
@@ -521,7 +537,7 @@ class ProfileCardMobile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          ShareClassWidgetMobile(),
+                          ShareClassWidgetMobile(user: user),
                         ],
                       ),
                     ),
