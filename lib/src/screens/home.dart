@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modeinvestorclub/src/backend.dart';
 
-import '../data/deal.dart';
-import '../data/event.dart';
 import '../widgets/deal_list.dart';
 import '../widgets/event_list.dart';
 import '../data/globals.dart';
@@ -19,69 +17,69 @@ class HomeScreen extends StatefulWidget {
 }
 
 // create a temporary list of deals
-List<Deal> deals = [
-  Deal(
-    id: 1,
-    title: 'Great Deal',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    price: 50.0,
-    originalPrice: 99,
-    url: 'https://example.com',
-  ),
-  Deal(
-    id: 2,
-    title: 'Another Great Deal',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    price: 50.0,
-    originalPrice: 499,
-    url: 'https://example.com',
-  ),
-  Deal(
-    id: 3,
-    title: 'Deal 3',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    price: 50.0,
-    originalPrice: 50,
-    url: 'https://example.com',
-  ),
-];
+// List<Deal> deals = [
+//   Deal(
+//     id: 1,
+//     title: 'Great Deal',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     price: 50.0,
+//     originalPrice: 99,
+//     url: 'https://example.com',
+//   ),
+//   Deal(
+//     id: 2,
+//     title: 'Another Great Deal',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     price: 50.0,
+//     originalPrice: 499,
+//     url: 'https://example.com',
+//   ),
+//   Deal(
+//     id: 3,
+//     title: 'Deal 3',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     price: 50.0,
+//     originalPrice: 50,
+//     url: 'https://example.com',
+//   ),
+// ];
 
-// create a list of events
-List<Event> events = [
-  Event(
-    id: 1,
-    title: 'Event 1',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    date: DateTime.now().add(const Duration(days: 10)),
-    time: DateTime.now(),
-    description: 'Description',
-    url: 'https://example.com',
-  ),
-  Event(
-    id: 2,
-    title: 'Event 2',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    date: DateTime.now().add(const Duration(days: 24)),
-    time: DateTime.now(),
-    description: 'Description',
-    url: 'https://example.com',
-  ),
-  Event(
-    id: 3,
-    title: 'Event 3',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    date: DateTime.now().add(const Duration(days: 32)),
-    time: DateTime.now(),
-    description: 'Description',
-    url: 'https://example.com',
-  ),
-];
+// // create a list of events
+// List<Event> events = [
+//   Event(
+//     id: 1,
+//     title: 'Event 1',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     date: DateTime.now().add(const Duration(days: 10)),
+//     time: DateTime.now(),
+//     description: 'Description',
+//     url: 'https://example.com',
+//   ),
+//   Event(
+//     id: 2,
+//     title: 'Event 2',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     date: DateTime.now().add(const Duration(days: 24)),
+//     time: DateTime.now(),
+//     description: 'Description',
+//     url: 'https://example.com',
+//   ),
+//   Event(
+//     id: 3,
+//     title: 'Event 3',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     date: DateTime.now().add(const Duration(days: 32)),
+//     time: DateTime.now(),
+//     description: 'Description',
+//     url: 'https://example.com',
+//   ),
+// ];
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -101,8 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       int numberOfDealsperRow =
                           (constraints.maxWidth / (dealWidth + dealSpacing))
                               .floor();
-                      int numberOfRows =
-                          (deals.length / numberOfDealsperRow).ceil();
+                      int numberOfRows = ((widget.user?.deals.length ?? 0) /
+                              numberOfDealsperRow)
+                          .ceil();
                       double dealTotalHeight =
                           numberOfRows * (dealHeight + dealSpacing);
                       // add the space needed for the header of the deals widget and the footerbar
@@ -132,7 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth,
                                   height: 440,
-                                  child: EventList(events: events),
+                                  child: EventList(
+                                      events: widget.user?.events ?? []),
                                 ),
                               ],
                             ),
@@ -141,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth,
                                   height: dealTotalHeight,
-                                  child: DealList(deals: deals),
+                                  child:
+                                      DealList(deals: widget.user?.deals ?? []),
                                 ),
                               ],
                             ),
@@ -165,14 +166,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth,
                                   height: 440,
-                                  child: EventList(events: events),
+                                  child: EventList(
+                                      events: widget.user?.events ?? []),
                                 ),
                               ],
                             ),
                             SizedBox(height: 8),
                             SizedBox(
                               height: dealTotalHeight,
-                              child: DealList(deals: deals),
+                              child: DealList(deals: widget.user?.deals ?? []),
                             ),
                           ],
                         );
@@ -736,6 +738,8 @@ void main() {
           message: 'Welcome to Mode Investor Club',
           token: 'token',
           investments: [],
+          deals: [],
+          events: [],
         ),
       ),
     ),

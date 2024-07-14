@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modeinvestorclub/src/widgets/ui.dart';
-import '../data/deal.dart';
+import '../backend.dart';
 import '../data/globals.dart';
 
 class DealList extends StatelessWidget {

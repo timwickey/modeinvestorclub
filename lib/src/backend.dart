@@ -44,8 +44,9 @@ class ApiResponse {
   final String email;
   final String message;
   final String token;
-  // create a list of investments
   List<Investment> investments;
+  List<Deal> deals;
+  List<Event> events;
 
   ApiResponse({
     required this.id,
@@ -55,12 +56,20 @@ class ApiResponse {
     required this.message,
     required this.token,
     required this.investments,
+    required this.deals,
+    required this.events,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
     var investmentsJson = json['investments'] as List;
     List<Investment> investmentsList =
         investmentsJson.map((i) => Investment.fromJson(i)).toList();
+
+    var dealsJson = json['deals'] as List;
+    List<Deal> dealsList = dealsJson.map((d) => Deal.fromJson(d)).toList();
+
+    var eventsJson = json['events'] as List;
+    List<Event> eventsList = eventsJson.map((e) => Event.fromJson(e)).toList();
 
     return ApiResponse(
       id: json['user']['id'],
@@ -70,6 +79,8 @@ class ApiResponse {
       message: json['message'],
       token: json['token'],
       investments: investmentsList,
+      deals: dealsList,
+      events: eventsList,
     );
   }
 
@@ -82,6 +93,8 @@ class ApiResponse {
       'message': message,
       'token': token,
       'investments': investments.map((i) => i.toJson()).toList(),
+      'deals': deals.map((d) => d.toJson()).toList(),
+      'events': events.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -146,6 +159,98 @@ class Investment {
       'class': shareClass,
       'effective_price': effectivePrice,
       'user_id': userId,
+    };
+  }
+}
+
+class Deal {
+  final int id;
+  final String title;
+  final String? image;
+  final String partnerName;
+  final double price;
+  final double originalPrice;
+  final String url;
+
+  Deal({
+    required this.id,
+    required this.title,
+    this.image,
+    required this.partnerName,
+    required this.price,
+    required this.originalPrice,
+    required this.url,
+  });
+
+  factory Deal.fromJson(Map<String, dynamic> json) {
+    return Deal(
+      id: json['id'],
+      title: json['title'],
+      image: json['image'],
+      partnerName: json['partner_name'],
+      price: (json['price'] is String)
+          ? double.parse(json['price'])
+          : json['price'].toDouble(),
+      originalPrice: (json['original_price'] is String)
+          ? double.parse(json['original_price'])
+          : json['original_price'].toDouble(),
+      url: json['url'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'image': image,
+      'partner_name': partnerName,
+      'price': price,
+      'original_price': originalPrice,
+      'url': url,
+    };
+  }
+}
+
+class Event {
+  final int id;
+  final String title;
+  final String? image;
+  final String partnerName;
+  final DateTime date;
+  final String description;
+  final String url;
+
+  Event({
+    required this.id,
+    required this.title,
+    this.image,
+    required this.partnerName,
+    required this.date,
+    required this.description,
+    required this.url,
+  });
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      id: json['id'],
+      title: json['title'],
+      image: json['image'],
+      partnerName: json['partner_name'],
+      date: DateTime.parse(json['date']),
+      description: json['description'],
+      url: json['url'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'image': image,
+      'partner_name': partnerName,
+      'date': date.toIso8601String(),
+      'description': description,
+      'url': url,
     };
   }
 }

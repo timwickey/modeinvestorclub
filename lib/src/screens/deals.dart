@@ -1,44 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/link.dart';
-import '../data/deal.dart';
+import '../backend.dart';
 import '../widgets/deal_list.dart';
 import '../data/globals.dart';
 
 import '../auth.dart';
 
-List<Deal> deals = [
-  Deal(
-    id: 1,
-    title: 'Great Deal',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    price: 50.0,
-    originalPrice: 99,
-    url: 'https://example.com',
-  ),
-  Deal(
-    id: 2,
-    title: 'Another Great Deal',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    price: 50.0,
-    originalPrice: 499,
-    url: 'https://example.com',
-  ),
-  Deal(
-    id: 3,
-    title: 'Deal 3',
-    image: null, // Replace with null to test the icon fallback
-    partnerName: 'Partner Name',
-    price: 50.0,
-    originalPrice: 50,
-    url: 'https://example.com',
-  ),
-];
+// List<Deal> deals = [
+//   Deal(
+//     id: 1,
+//     title: 'Great Deal',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     price: 50.0,
+//     originalPrice: 99,
+//     url: 'https://example.com',
+//   ),
+//   Deal(
+//     id: 2,
+//     title: 'Another Great Deal',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     price: 50.0,
+//     originalPrice: 499,
+//     url: 'https://example.com',
+//   ),
+//   Deal(
+//     id: 3,
+//     title: 'Deal 3',
+//     image: null, // Replace with null to test the icon fallback
+//     partnerName: 'Partner Name',
+//     price: 50.0,
+//     originalPrice: 50,
+//     url: 'https://example.com',
+//   ),
+// ];
 
 class DealsScreen extends StatefulWidget {
-  const DealsScreen({super.key});
+  final ApiResponse? user;
+  const DealsScreen({super.key, this.user});
 
   @override
   State<DealsScreen> createState() => _DealsScreenState();
@@ -62,8 +63,9 @@ class _DealsScreenState extends State<DealsScreen> {
                       int numberOfDealsperRow =
                           (constraints.maxWidth / (dealWidth + dealSpacing))
                               .floor();
-                      int numberOfRows =
-                          (deals.length / numberOfDealsperRow).ceil();
+                      int numberOfRows = ((widget.user?.deals.length ?? 0) /
+                              numberOfDealsperRow)
+                          .ceil();
                       double dealTotalHeight =
                           numberOfRows * (dealHeight + dealSpacing);
                       // add the space needed for the header of the deals widget and the footerbar
@@ -76,7 +78,7 @@ class _DealsScreenState extends State<DealsScreen> {
                             SizedBox(
                               width: constraints.maxWidth,
                               height: dealTotalHeight,
-                              child: DealList(deals: deals),
+                              child: DealList(deals: widget.user?.deals ?? []),
                             ),
                           ],
                         );
@@ -87,7 +89,7 @@ class _DealsScreenState extends State<DealsScreen> {
                             SizedBox(height: 8),
                             SizedBox(
                               height: dealTotalHeight,
-                              child: DealList(deals: deals),
+                              child: DealList(deals: widget.user?.deals ?? []),
                             ),
                           ],
                         );

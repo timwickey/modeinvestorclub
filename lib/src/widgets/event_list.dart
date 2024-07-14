@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modeinvestorclub/src/widgets/ui.dart';
-import '../data/event.dart';
+import '../backend.dart';
 import '../data/globals.dart';
 import 'package:intl/intl.dart';
 
