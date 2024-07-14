@@ -133,7 +133,7 @@ class _InvestorClubState extends State<InvestorClub> {
                 pageBuilder: (context, state) {
                   return FadeTransitionPage<dynamic>(
                     key: state.pageKey,
-                    child: const DealsScreen(),
+                    child: DealsScreen(user: auth.user),
                   );
                 },
               ),
@@ -142,7 +142,7 @@ class _InvestorClubState extends State<InvestorClub> {
                 pageBuilder: (context, state) {
                   return FadeTransitionPage<dynamic>(
                     key: state.pageKey,
-                    child: const EventsScreen(),
+                    child: EventsScreen(user: auth.user),
                   );
                 },
               ),
