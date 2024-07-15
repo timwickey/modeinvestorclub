@@ -31,32 +31,35 @@ class ModeInvestorClub extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'A growing community of investors with over',
+                  'A growing community of investors with',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.grey.shade300,
                       ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 12.0),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.orangeAccent, Colors.deepOrange],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [Colors.orangeAccent, Colors.deepOrange],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
                   child: Text(
-                    '26,000 Members',
+                    '26,000+',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.white,
+                          fontSize: 40,
                         ),
                     textAlign: TextAlign.center,
                   ),
+                ),
+                Text(
+                  'members',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.white,
+                      ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
