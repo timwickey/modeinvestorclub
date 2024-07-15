@@ -88,7 +88,8 @@ class ProfileCard extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: Row(
                   children: [
                     ProfileWidget(user: user),
@@ -105,6 +106,17 @@ class ProfileCard extends StatelessWidget {
                       },
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 2.0),
+                child: Text(
+                  'If you have not set up your transfer online account, "123456" is your personal access code. Use it to create your account.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey.shade500,
+                      ),
+                  textAlign: TextAlign.center,
                 ),
               ),
               const Divider(thickness: borderThickness, color: borderColor),
@@ -161,7 +173,7 @@ class ProfileCardMobile extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 8.0),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                 child: Row(
                   children: [
                     ProfileWidget(user: user),
@@ -178,6 +190,17 @@ class ProfileCardMobile extends StatelessWidget {
                       },
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 2.0),
+                child: Text(
+                  'If you have not set up your transfer online account, "123456" is your personal access code. Use it to create your account.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey.shade500,
+                      ),
+                  textAlign: TextAlign.center,
                 ),
               ),
               const Divider(thickness: borderThickness, color: borderColor),
@@ -260,6 +283,8 @@ class SharesWidgetMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     final totalShares = user?.calculateTotalShares() ?? 0;
     final formattedShares = NumberFormat('#,###').format(totalShares);
+    // final estimatedPrice = totalShares * 0.16;
+    // final formattedPrice = NumberFormat.simpleCurrency().format(estimatedPrice);
 
     return Card(
       child: Padding(
