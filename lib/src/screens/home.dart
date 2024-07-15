@@ -44,6 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       // add the space needed for the header of the deals widget and the footerbar
                       dealTotalHeight += 100.0;
 
+                      // calculate space needed for events
+                      double eventTotalHeight =
+                          ((widget.user?.events.length ?? 0) * 100.0) + 140.0;
+
                       if (constraints.maxWidth > 800) {
                         // Wide screen: one card 1/4 width, the other 3/4 width
                         return Column(
@@ -67,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth,
-                                  height: 440,
+                                  height: eventTotalHeight,
                                   child: EventList(
                                       events: widget.user?.events ?? []),
                                 ),
@@ -102,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth,
-                                  height: 440,
+                                  height: eventTotalHeight,
                                   child: EventList(
                                       events: widget.user?.events ?? []),
                                 ),
