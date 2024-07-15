@@ -126,7 +126,7 @@ class EventWidget extends StatelessWidget {
                 color: Colors.white,
               ),
               child: ClipOval(
-                child: event.image != null
+                child: (event.image != null && event.image!.isNotEmpty)
                     ? Image.network(
                         event.image!,
                         width: 60,

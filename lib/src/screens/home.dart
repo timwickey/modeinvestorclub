@@ -4,10 +4,9 @@ import 'package:modeinvestorclub/src/backend.dart';
 import '../widgets/deal_list.dart';
 import '../widgets/event_list.dart';
 import '../data/globals.dart';
-import '../widgets/ui.dart';
 import '../widgets/referral.dart';
 import '../widgets/profile.dart';
-import 'package:intl/intl.dart'; // Import the intl package
+import '../widgets/mode_investor_club.dart';
 
 class HomeScreen extends StatefulWidget {
   final ApiResponse? user;
@@ -64,6 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: constraints.maxWidth * 0.75 - 8,
                                   height: widgetHeight,
                                   child: ProfileCard(user: widget.user),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: constraints.maxWidth * 0.75 - 8,
+                                  height: widgetHeight,
+                                  child: ProfileCard(user: widget.user),
+                                ),
+                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: constraints.maxWidth * 0.25,
+                                  height: widgetHeight,
+                                  child: const ModeInvestorClub(),
                                 ),
                               ],
                             ),

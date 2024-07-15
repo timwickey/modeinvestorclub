@@ -130,7 +130,7 @@ class DealWidget extends StatelessWidget {
                 color: Colors.white,
               ),
               child: ClipOval(
-                child: deal.image != null
+                child: (deal.image != null && deal.image!.isNotEmpty)
                     ? Image.network(
                         deal.image!,
                         width: 60,
