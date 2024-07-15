@@ -7,6 +7,7 @@ import '../data/globals.dart';
 import '../widgets/referral.dart';
 import '../widgets/profile.dart';
 import '../widgets/mode_investor_club.dart';
+import '../widgets/stock_history.dart';
 
 class HomeScreen extends StatefulWidget {
   final ApiResponse? user;
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth * 0.75 - 8,
                                   height: widgetHeight,
-                                  child: ProfileCard(user: widget.user),
+                                  child: StockHistory(),
                                 ),
                                 SizedBox(width: 8),
                                 SizedBox(
