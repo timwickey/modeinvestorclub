@@ -48,7 +48,8 @@ class EventList extends StatelessWidget {
                       children: [
                         const Divider(thickness: 1.0, color: Colors.grey),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0.0),
+                          padding:
+                              const EdgeInsets.only(left: 20.0, right: 20.0),
                           child: Row(
                             children: [
                               Expanded(
