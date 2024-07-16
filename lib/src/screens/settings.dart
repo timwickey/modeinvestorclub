@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modeinvestorclub/src/data/globals.dart';
 import 'package:url_launcher/link.dart';
-
 import '../auth.dart';
+import '../widgets/ui.dart'; // Ensure this import is correct
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -46,11 +47,8 @@ class SettingsContent extends StatelessWidget {
               'Settings',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            FilledButton(
-              onPressed: () {
-                ModeAuth.of(context).signOut();
-              },
-              child: const Text('Signsss out'),
+            SizedBox(
+              height: 16.0,
             ),
             const Text('Example using the Link widget:'),
             Link(
@@ -88,7 +86,18 @@ class SettingsContent extends StatelessWidget {
               ),
             ),
             child: const Text('Show Dialog'),
-          )
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          RoundedButton(
+            onPressed: () {
+              ModeAuth.of(context).signOut();
+            },
+            text: 'Sign Out',
+            color: transparentButton,
+            icon: Icon(Icons.exit_to_app),
+          ),
         ],
       );
 }
