@@ -155,6 +155,7 @@ void main() {
           lastName: 'Doe',
           email: 'john.doe@example.com',
           message: 'Welcome to Mode Investor Club',
+          forcePassChange: false,
           token: 'token',
           investments: [],
           deals: [],

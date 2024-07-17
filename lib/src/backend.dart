@@ -44,6 +44,7 @@ class ApiResponse {
   final String email;
   final String message;
   final String token;
+  final bool forcePassChange;
   List<Investment> investments;
   List<Deal> deals;
   List<Event> events;
@@ -55,6 +56,7 @@ class ApiResponse {
     required this.email,
     required this.message,
     required this.token,
+    required this.forcePassChange,
     required this.investments,
     required this.deals,
     required this.events,
@@ -78,6 +80,7 @@ class ApiResponse {
       email: json['user']['email'],
       message: json['message'],
       token: json['token'],
+      forcePassChange: json['user']['force_pass_change'] ?? false,
       investments: investmentsList,
       deals: dealsList,
       events: eventsList,
@@ -92,6 +95,7 @@ class ApiResponse {
       'email': email,
       'message': message,
       'token': token,
+      'force_pass_change': forcePassChange,
       'investments': investments.map((i) => i.toJson()).toList(),
       'deals': deals.map((d) => d.toJson()).toList(),
       'events': events.map((e) => e.toJson()).toList(),
