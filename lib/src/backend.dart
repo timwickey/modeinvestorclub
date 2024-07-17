@@ -48,6 +48,7 @@ class ApiResponse {
   List<Investment> investments;
   List<Deal> deals;
   List<Event> events;
+  List<Option> options;
 
   ApiResponse({
     required this.id,
@@ -60,6 +61,7 @@ class ApiResponse {
     required this.investments,
     required this.deals,
     required this.events,
+    required this.options,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
@@ -73,6 +75,10 @@ class ApiResponse {
     var eventsJson = json['events'] as List;
     List<Event> eventsList = eventsJson.map((e) => Event.fromJson(e)).toList();
 
+    var optionsJson = json['options'] as List;
+    List<Option> optionsList =
+        optionsJson.map((o) => Option.fromJson(o)).toList();
+
     return ApiResponse(
       id: json['user']['id'],
       firstName: json['user']['firstname'],
@@ -84,6 +90,7 @@ class ApiResponse {
       investments: investmentsList,
       deals: dealsList,
       events: eventsList,
+      options: optionsList,
     );
   }
 
@@ -99,6 +106,7 @@ class ApiResponse {
       'investments': investments.map((i) => i.toJson()).toList(),
       'deals': deals.map((d) => d.toJson()).toList(),
       'events': events.map((e) => e.toJson()).toList(),
+      'options': options.map((o) => o.toJson()).toList(),
     };
   }
 
@@ -255,6 +263,58 @@ class Event {
       'date': date.toIso8601String(),
       'description': description,
       'url': url,
+    };
+  }
+}
+
+class Option {
+  final int id;
+  final int investmentId;
+  final DateTime startDate;
+  final Map<String, dynamic> cliffDuration;
+  final Map<String, dynamic> vestingDuration;
+  final Map<String, dynamic> vestingFrequency;
+  final double cliffAmount;
+  final double monthlyVestingAmount;
+
+  Option({
+    required this.id,
+    required this.investmentId,
+    required this.startDate,
+    required this.cliffDuration,
+    required this.vestingDuration,
+    required this.vestingFrequency,
+    required this.cliffAmount,
+    required this.monthlyVestingAmount,
+  });
+
+  factory Option.fromJson(Map<String, dynamic> json) {
+    return Option(
+      id: json['id'],
+      investmentId: json['investment_id'],
+      startDate: DateTime.parse(json['start_date']),
+      cliffDuration: json['cliff_duration'],
+      vestingDuration: json['vesting_duration'],
+      vestingFrequency: json['vesting_frequency'],
+      cliffAmount: (json['cliff_amount'] is String)
+          ? double.parse(json['cliff_amount'])
+          : json['cliff_amount'].toDouble(),
+      monthlyVestingAmount: (json['monthly_vesting_amount'] is String)
+          ? double.parse(json['monthly_vesting_amount'])
+          : json['monthly_vesting_amount'].toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'investment_id': investmentId,
+      'start_date': startDate.toIso8601String(),
+      'cliff_duration': cliffDuration,
+      'vesting_duration': vestingDuration,
+      'vesting_frequency': vestingFrequency,
+      'cliff_amount': cliffAmount,
+      'monthly_vesting_amount': monthlyVestingAmount,
     };
   }
 }

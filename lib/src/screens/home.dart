@@ -158,6 +158,7 @@ void main() {
           forcePassChange: false,
           token: 'token',
           investments: [],
+          options: [],
           deals: [],
           events: [],
         ),
