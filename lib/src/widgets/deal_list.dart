@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modeinvestorclub/src/widgets/ui.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../backend.dart';
 import '../data/globals.dart';
 
@@ -131,12 +132,33 @@ class DealWidget extends StatelessWidget {
               ),
               child: ClipOval(
                 child: (deal.image != null && deal.image!.isNotEmpty)
-                    ? Image.network(
-                        deal.image!,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      )
+                    ? (deal.image!.endsWith('.svg')
+                        ? SvgPicture.network(
+                            deal.image!,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                            placeholderBuilder: (BuildContext context) =>
+                                const Icon(
+                              Icons.image,
+                              size: 40,
+                              color: Colors.blue,
+                            ),
+                          )
+                        : Image.network(
+                            deal.image!,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return const Icon(
+                                Icons.broken_image,
+                                size: 40,
+                                color: Colors.blue,
+                              );
+                            },
+                          ))
                     : const Icon(
                         Icons.local_offer,
                         size: 40,
