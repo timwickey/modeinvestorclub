@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import 'auth.dart';
 import 'screens/scaffold.dart';
@@ -31,7 +32,6 @@ class _InvestorClubState extends State<InvestorClub> {
   final ModeAuth auth = ModeAuth();
   late BackEnd _backEnd;
   bool _isInitialized = false;
-  ApiResponse? _user;
 
   @override
   void initState() {
@@ -46,18 +46,18 @@ class _InvestorClubState extends State<InvestorClub> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Mode Investor Club',
-      theme: _buildDarkTheme(),
-      darkTheme: _buildDarkTheme(),
-      themeMode: ThemeMode.dark,
-      builder: (context, child) {
-        if (child == null) {
-          throw ('No child in .router constructor builder');
-        }
-        return ModeAuthScope(
-          notifier: auth,
-          child: Stack(
+    return ChangeNotifierProvider(
+      create: (_) => auth,
+      child: MaterialApp.router(
+        title: 'Mode Investor Club',
+        theme: _buildDarkTheme(),
+        darkTheme: _buildDarkTheme(),
+        themeMode: ThemeMode.dark,
+        builder: (context, child) {
+          if (child == null) {
+            throw ('No child in .router constructor builder');
+          }
+          return Stack(
             children: [
               Positioned.fill(
                 child: ColorFiltered(
@@ -82,101 +82,88 @@ class _InvestorClubState extends State<InvestorClub> {
               ),
               child,
             ],
-          ),
-        );
-      },
-      routerConfig: GoRouter(
-        refreshListenable: auth,
-        debugLogDiagnostics: true,
-        initialLocation: '/home',
-        redirect: (context, state) {
-          final signedIn = ModeAuth.of(context).signedIn;
-          if (state.uri.toString() != '/sign-in' && !signedIn) {
-            return '/sign-in';
-          }
-          return null;
-        },
-        errorPageBuilder: (context, state) {
-          return MaterialPage<void>(
-            key: state.pageKey,
-            child: const NotFoundScreen(),
           );
         },
-        routes: [
-          ShellRoute(
-            builder: (context, state, child) {
-              return WebsiteScaffold(
-                selectedIndex: switch (state.uri.path) {
-                  var p when p.startsWith('/home') => 0,
-                  var p when p.startsWith('/deals') => 1,
-                  var p when p.startsWith('/events') => 2,
-                  var p when p.startsWith('/settings') => 3,
-                  _ => 0,
-                },
-                child: child,
-              );
-            },
-            routes: [
-              GoRoute(
-                path: '/home',
-                pageBuilder: (context, state) {
-                  return FadeTransitionPage<dynamic>(
-                    key: state.pageKey,
-                    child: HomeScreen(
-                      user: auth.user,
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: '/deals',
-                pageBuilder: (context, state) {
-                  return FadeTransitionPage<dynamic>(
-                    key: state.pageKey,
-                    child: DealsScreen(user: auth.user),
-                  );
-                },
-              ),
-              GoRoute(
-                path: '/events',
-                pageBuilder: (context, state) {
-                  return FadeTransitionPage<dynamic>(
-                    key: state.pageKey,
-                    child: EventsScreen(user: auth.user),
-                  );
-                },
-              ),
-              GoRoute(
-                path: '/settings',
-                pageBuilder: (context, state) {
-                  return FadeTransitionPage<dynamic>(
-                    key: state.pageKey,
-                    child: const SettingsScreen(),
-                  );
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/sign-in',
-            builder: (context, state) {
-              return Builder(
-                builder: (context) {
-                  return SignInScreen(
-                    onSignIn: (user) async {
-                      final router = GoRouter.of(context);
-                      await ModeAuth.of(context).signIn(user);
-                      setState(() {
-                        _user = user;
-                      });
-                      router.go('/home');
-                    },
-                  );
-                },
-              );
-            },
-          ),
-        ],
+        routerConfig: GoRouter(
+          refreshListenable: auth,
+          debugLogDiagnostics: true,
+          initialLocation: '/home',
+          redirect: (context, state) {
+            final signedIn = context.read<ModeAuth>().signedIn;
+            if (state.uri.toString() != '/sign-in' && !signedIn) {
+              return '/sign-in';
+            }
+            return null;
+          },
+          errorPageBuilder: (context, state) {
+            return MaterialPage<void>(
+              key: state.pageKey,
+              child: const NotFoundScreen(),
+            );
+          },
+          routes: [
+            ShellRoute(
+              builder: (context, state, child) {
+                return WebsiteScaffold(
+                  selectedIndex: switch (state.uri.path) {
+                    var p when p.startsWith('/home') => 0,
+                    var p when p.startsWith('/deals') => 1,
+                    var p when p.startsWith('/events') => 2,
+                    var p when p.startsWith('/settings') => 3,
+                    _ => 0,
+                  },
+                  child: child,
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: '/home',
+                  pageBuilder: (context, state) {
+                    return FadeTransitionPage<dynamic>(
+                      key: state.pageKey,
+                      child: HomeScreen(
+                        user: context.read<ModeAuth>().user,
+                      ),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: '/deals',
+                  pageBuilder: (context, state) {
+                    return FadeTransitionPage<dynamic>(
+                      key: state.pageKey,
+                      child: DealsScreen(user: context.read<ModeAuth>().user),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: '/events',
+                  pageBuilder: (context, state) {
+                    return FadeTransitionPage<dynamic>(
+                      key: state.pageKey,
+                      child: EventsScreen(user: context.read<ModeAuth>().user),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: '/settings',
+                  pageBuilder: (context, state) {
+                    return FadeTransitionPage<dynamic>(
+                      key: state.pageKey,
+                      child: const SettingsScreen(),
+                    );
+                  },
+                ),
+              ],
+            ),
+            GoRoute(
+              path: '/sign-in',
+              builder: (context, state) {
+                return const SignInScreen();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -145,24 +145,24 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      body: HomeScreen(
-        user: ApiResponse(
-          id: 1,
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-          message: 'Welcome to Mode Investor Club',
-          forcePassChange: false,
-          token: 'token',
-          investments: [],
-          options: [],
-          deals: [],
-          events: [],
-        ),
-      ),
-    ),
-  ));
-}
+// void main() {
+//   runApp(MaterialApp(
+//     home: Scaffold(
+//       body: HomeScreen(
+//         user: ApiResponse(
+//           id: 1,
+//           firstName: 'John',
+//           lastName: 'Doe',
+//           email: 'john.doe@example.com',
+//           message: 'Welcome to Mode Investor Club',
+//           forcePassChange: false,
+//           token: 'token',
+//           investments: [],
+//           options: [],
+//           deals: [],
+//           events: [],
+//         ),
+//       ),
+//     ),
+//   ));
+// }

@@ -4,6 +4,7 @@ import 'package:modeinvestorclub/src/data/globals.dart';
 import 'package:url_launcher/link.dart';
 import '../auth.dart';
 import '../widgets/ui.dart'; // Ensure this import is correct
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -91,8 +92,10 @@ class SettingsContent extends StatelessWidget {
             height: 20.0,
           ),
           RoundedButton(
-            onPressed: () {
-              ModeAuth.of(context).signOut();
+            onPressed: () async {
+              final auth = Provider.of<ModeAuth>(context, listen: false);
+              await auth.signOut();
+              GoRouter.of(context).go('/sign-in');
             },
             text: 'Sign Out',
             color: transparentButton,

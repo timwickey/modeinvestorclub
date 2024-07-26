@@ -1,25 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import '../data/globals.dart';
 import '../widgets/ui.dart';
-import '../backend.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-class Credentials {
-  final String email;
-  final String password;
-
-  Credentials(this.email, this.password);
-}
+import 'package:provider/provider.dart';
+import 'package:modeinvestorclub/src/auth.dart';
+import 'package:go_router/go_router.dart';
 
 class SignInScreen extends StatefulWidget {
-  final ValueChanged<ApiResponse> onSignIn;
-
-  const SignInScreen({
-    required this.onSignIn,
-    super.key,
-  });
+  const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -28,7 +16,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false; // To track the loading state
+  bool _isLoading = false;
 
   Future<void> _signIn() async {
     setState(() {
@@ -38,43 +26,21 @@ class _SignInScreenState extends State<SignInScreen> {
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
-    String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
-    Map<String, String> body = {'email': email, 'password': password};
-    // Map<String, String> body = {
-    //   'email': 'tim.wickey@modemobile.com',
-    //   'password': 'ilovet'
-    // };
-
-    ApiResult<ApiResponse> result =
-        await asyncCallApiData(url, method: 'POST', body: body);
-
-    if (!mounted) return;
+    final auth = Provider.of<ModeAuth>(context, listen: false);
+    bool success = await auth.signIn(email, password);
 
     setState(() {
       _isLoading = false;
     });
 
-    if (result.data != null) {
-      // Handle successful response
-      ApiResponse data = result.data!;
-      print('Login successful. Token: ${data.token}');
-      print('User ID: ${data.id}');
-      print('First Name: ${data.firstName}');
-      print('Last Name: ${data.lastName}');
-      print('Email: ${data.email}');
-
-      // Call the onSignIn callback with the credentials
-      widget.onSignIn(data);
-      // Handle success (e.g., navigate to another screen, show success message, etc.)
+    if (success) {
+      GoRouter.of(context).go('/home');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful')),
       );
     } else {
-      // Handle error
-      String error = result.error!;
-      // Handle error (e.g., show error message)
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: $error')),
+        const SnackBar(content: Text('Login failed')),
       );
     }
   }
@@ -90,7 +56,7 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 SvgPicture.asset(
                   'images/mode-investor-club-logo.svg',
-                  height: 100, // Adjust the height as needed
+                  height: 100,
                 ),
                 const SizedBox(height: 32),
                 Container(
@@ -136,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 text: "Sign in",
                                 icon: Icon(Icons.login, color: Colors.white),
                                 color: transparentButton,
-                                onPressed: _signIn, // Call the _signIn method
+                                onPressed: _signIn,
                               ),
                       ],
                     ),
@@ -152,57 +118,4 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       );
-}
-
-class ApiResult<T> {
-  final T? data;
-  final String? error;
-
-  ApiResult({this.data, this.error});
-}
-
-Future<ApiResult<ApiResponse>> asyncCallApiData(String endpointUrl,
-    {String method = 'GET', Map<String, String>? body}) async {
-  // Ensure endpointUrl is a valid String
-  if (endpointUrl.isEmpty) {
-    return ApiResult(error: 'Endpoint URL must be a non-empty string.');
-  }
-
-  // Ensure method is either 'GET' or 'POST'
-  if (method != 'GET' && method != 'POST') {
-    return ApiResult(error: 'Method must be either "GET" or "POST".');
-  }
-
-  Uri uri = Uri.parse(endpointUrl);
-  final client = http.Client();
-  http.Response response;
-
-  try {
-    if (method == 'GET') {
-      response = await client.get(uri);
-    } else {
-      response = await client.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-    }
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-      ApiResponse data = ApiResponse.fromJson(jsonResponse);
-
-      return ApiResult(data: data); // Return the parsed data
-    } else {
-      String errorBody = response.body;
-      return ApiResult(
-          error:
-              'Failed to load data: ${response.reasonPhrase}. Error body: $errorBody');
-    }
-  } catch (e) {
-    return ApiResult(error: 'Failed to load data: $e');
-  } finally {
-    client.close();
-  }
 }
