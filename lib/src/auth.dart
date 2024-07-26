@@ -6,7 +6,7 @@ class ModeAuth extends ChangeNotifier {
   bool _signedIn = false;
 
   bool get signedIn => _signedIn;
-  late ApiResponse? _user;
+  ApiResponse? _user; // Remove 'late'
 
   ApiResponse? get user => _user;
 
