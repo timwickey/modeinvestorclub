@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:modeinvestorclub/src/backend.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ModeAuth extends ChangeNotifier {
   bool _signedIn = false;
@@ -10,10 +11,57 @@ class ModeAuth extends ChangeNotifier {
   bool get signedIn => _signedIn;
   ApiResponse? get user => _user;
 
+  ModeAuth() {
+    _loadUserFromPrefs();
+  }
+
+  Future<void> _loadUserFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+    if (token != null) {
+      bool isValid = await _validateToken(token);
+      if (isValid) {
+        notifyListeners();
+      } else {
+        await _removeUserFromPrefs();
+      }
+    }
+  }
+
+  Future<bool> _validateToken(String token) async {
+    String url =
+        'https://nodejs-serverless-connector.vercel.app/api/validate_token'; // Replace with your actual URL
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'token': token}),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      _user = ApiResponse.fromJson(jsonResponse);
+      _signedIn = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _saveUserToPrefs(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('auth_token', token);
+  }
+
+  Future<void> _removeUserFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('auth_token');
+  }
+
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     _signedIn = false;
     _user = null;
+    await _removeUserFromPrefs();
     notifyListeners();
   }
 
@@ -27,6 +75,7 @@ class ModeAuth extends ChangeNotifier {
     if (result.data != null) {
       _signedIn = true;
       _user = result.data;
+      await _saveUserToPrefs(_user!.token);
       notifyListeners();
       return true;
     } else {
