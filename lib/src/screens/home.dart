@@ -46,11 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       double eventheight = 120;
 
-                      if (constraints.maxWidth < 1200) {
+                      if (constraints.maxWidth < 1200 &&
+                          constraints.maxWidth > 800) {
                         eventheight = 120 + (1200 - constraints.maxWidth) / 6;
+                      } else if (constraints.maxWidth <= 800) {
+                        eventheight = 150;
                       }
-                      print(constraints.maxWidth); //1200
-                      print(eventheight);
 
                       // calculate space needed for events
                       double eventTotalHeight =
@@ -131,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth,
                                   height: eventTotalHeight,
-                                  child: EventList(
+                                  child: EventListMobile(
                                       events: widget.user?.events ?? []),
                                 ),
                               ],

@@ -152,3 +152,133 @@ class EventList extends StatelessWidget {
     );
   }
 }
+
+class EventListMobile extends StatelessWidget {
+  final List<Event> events;
+  final ValueChanged<Event>? onTap;
+
+  const EventListMobile({
+    required this.events,
+    this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.event_available, color: Colors.blue),
+              SizedBox(width: 8),
+              Text(
+                'Upcoming Events',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: events.length + 1, // Adding 1 for the final divider
+            itemBuilder: (context, index) {
+              if (index == events.length) {
+                return const Divider(
+                    thickness: 1.0, color: Colors.grey); // Final divider
+              }
+
+              final event = events[index];
+              return Column(
+                children: [
+                  const Divider(thickness: 1.0, color: Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: ClipOval(
+                                child: (event.image != null &&
+                                        event.image!.isNotEmpty)
+                                    ? Image.network(
+                                        event.image!,
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : const Icon(
+                                        Icons.local_offer,
+                                        size: 40,
+                                        color: Colors.blue,
+                                      ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    event.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    event.partnerName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.w200),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateFormat('yyyy-MM-dd').format(event.date),
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            RoundedButton(
+                              text: "EVENT PAGE",
+                              color: transparentButton,
+                              icon: const Icon(Icons.arrow_forward),
+                              onPressed: () {
+                                onTap?.call(event);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
