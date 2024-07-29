@@ -46,11 +46,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       double eventheight = 120;
 
+                      // profile height
+                      double profileHeight = widgetHeight;
+                      double referralHeight = widgetHeight;
+
                       if (constraints.maxWidth < 1200 &&
                           constraints.maxWidth > 800) {
                         eventheight = 120 + (1200 - constraints.maxWidth) / 6;
                       } else if (constraints.maxWidth <= 800) {
                         eventheight = 150;
+                        profileHeight = widgetHeight - 50;
+                        referralHeight = widgetHeight - 180;
                       }
 
                       // calculate space needed for events
@@ -66,13 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth * 0.25,
-                                  height: widgetHeight,
+                                  height: referralHeight,
                                   child: const ReferralCard(),
                                 ),
                                 SizedBox(width: 8),
                                 SizedBox(
                                   width: constraints.maxWidth * 0.75 - 8,
-                                  height: widgetHeight,
+                                  height: profileHeight,
                                   child: ProfileCard(user: widget.user),
                                 ),
                               ],
@@ -119,12 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Column(
                           children: [
                             SizedBox(
-                              height: widgetHeightMobile,
+                              height: profileHeight,
                               child: ProfileCardMobile(user: widget.user),
                             ),
                             SizedBox(height: 8),
                             SizedBox(
-                              height: widgetHeightMobile,
+                              height: referralHeight,
                               child: const ReferralCardMobile(),
                             ),
                             Row(

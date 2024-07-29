@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const widgetHeight = 350.0;
+const widgetHeight = 370.0;
 const widgetHeightMobile = 250.0;
 const dealWidth = 340.0;
 const dealHeight = 240.0;
