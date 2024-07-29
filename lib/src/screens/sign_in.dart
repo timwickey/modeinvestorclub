@@ -34,7 +34,6 @@ class _SignInScreenState extends State<SignInScreen> {
     });
 
     if (success) {
-      GoRouter.of(context).go('/home');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful')),
       );
