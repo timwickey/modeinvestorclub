@@ -37,135 +37,118 @@ class EventList extends StatelessWidget {
             ],
           ),
         ),
-        Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: pageWidth),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Column(
-                  children: events.map((event) {
-                    return Column(
-                      children: [
-                        const Divider(thickness: 1.0, color: Colors.grey),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 20.0, right: 20.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: EventWidget(event: event),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      DateFormat('yyyy-MM-dd')
-                                          .format(event.date),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
+        Expanded(
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: pageWidth),
+              child: Column(
+                children: [
+                  for (var event in events) ...[
+                    const Divider(thickness: 1.0, color: Colors.grey),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
                                     ),
-                                  ],
-                                ),
+                                    child: ClipOval(
+                                      child: (event.image != null &&
+                                              event.image!.isNotEmpty)
+                                          ? Image.network(
+                                              event.image!,
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : const Icon(
+                                              Icons.local_offer,
+                                              size: 40,
+                                              color: Colors.blue,
+                                            ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      width:
+                                          16), // Add some spacing between the avatar and text
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          event.title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          event.partnerName,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w200),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                  flex: 1,
-                                  child: RoundedButton(
-                                      text: "EVENT PAGE",
-                                      color: transparentButton,
-                                      icon: Icon(Icons.arrow_forward),
-                                      onPressed: () {
-                                        onTap?.call(event);
-                                      })),
-                            ],
+                            ),
                           ),
-                        ),
-                        // const Divider(thickness: 1.0, color: Colors.grey),
-                      ],
-                    );
-                  }).toList()
-                    ..add(const Column(
-                      children: [
-                        Divider(
-                          thickness: 1.0,
-                          color: Colors.grey,
-                        ),
-                      ],
-                    )), // Add the last divider immediately after the rows
-                );
-              },
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  DateFormat('yyyy-MM-dd').format(event.date),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: RoundedButton(
+                              text: "EVENT PAGE",
+                              color: transparentButton,
+                              icon: const Icon(Icons.arrow_forward),
+                              onPressed: () {
+                                onTap?.call(event);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  const Divider(
+                      thickness: 1.0,
+                      color: Colors.grey), // Add the final divider
+                ],
+              ),
             ),
           ),
         ),
       ],
     );
   }
-}
-
-class EventWidget extends StatelessWidget {
-  final Event event;
-  const EventWidget({
-    required this.event,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: ClipOval(
-                child: (event.image != null && event.image!.isNotEmpty)
-                    ? Image.network(
-                        event.image!,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(
-                        Icons.local_offer,
-                        size: 40,
-                        color: Colors.blue,
-                      ),
-              ),
-            ),
-            const SizedBox(
-                width: 16), // Add some spacing between the avatar and text
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    event.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    event.partnerName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w200),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
 }

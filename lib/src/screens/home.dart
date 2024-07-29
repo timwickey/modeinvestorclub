@@ -44,9 +44,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       // add the space needed for the header of the deals widget and the footerbar
                       dealTotalHeight += 100.0;
 
+                      double eventheight = 120;
+
+                      if (constraints.maxWidth < 1200) {
+                        eventheight = 120 + (1200 - constraints.maxWidth) / 6;
+                      }
+                      print(constraints.maxWidth); //1200
+                      print(eventheight);
+
                       // calculate space needed for events
                       double eventTotalHeight =
-                          ((widget.user?.events.length ?? 0) * 100.0) + 140.0;
+                          ((widget.user?.events.length ?? 0) * eventheight) +
+                              140.0;
 
                       if (constraints.maxWidth > 800) {
                         // Wide screen: one card 1/4 width, the other 3/4 width

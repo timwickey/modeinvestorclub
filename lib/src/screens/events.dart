@@ -1,46 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/link.dart';
 
-// import '../data/event.dart';
 import '../widgets/event_list.dart';
 import '../data/globals.dart';
 import '../backend.dart';
-
-import '../auth.dart';
-
-// create a list of events
-// List<Event> events = [
-//   Event(
-//     id: 1,
-//     title: 'Event 1',
-//     image: null, // Replace with null to test the icon fallback
-//     partnerName: 'Partner Name',
-//     date: DateTime.now().add(const Duration(days: 10)),
-//     time: DateTime.now(),
-//     description: 'Description',
-//     url: 'https://example.com',
-//   ),
-//   Event(
-//     id: 2,
-//     title: 'Event 2',
-//     image: null, // Replace with null to test the icon fallback
-//     partnerName: 'Partner Name',
-//     date: DateTime.now().add(const Duration(days: 24)),
-//     time: DateTime.now(),
-//     description: 'Description',
-//     url: 'https://example.com',
-//   ),
-//   Event(
-//     id: 3,
-//     title: 'Event 3',
-//     image: null, // Replace with null to test the icon fallback
-//     partnerName: 'Partner Name',
-//     date: DateTime.now().add(const Duration(days: 32)),
-//     time: DateTime.now(),
-//     description: 'Description',
-//     url: 'https://example.com',
-//   ),
-// ];
 
 class EventsScreen extends StatefulWidget {
   final ApiResponse? user;

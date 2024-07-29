@@ -1,40 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/link.dart';
 import '../backend.dart';
 import '../widgets/deal_list.dart';
 import '../data/globals.dart';
-
-import '../auth.dart';
-
-// List<Deal> deals = [
-//   Deal(
-//     id: 1,
-//     title: 'Great Deal',
-//     image: null, // Replace with null to test the icon fallback
-//     partnerName: 'Partner Name',
-//     price: 50.0,
-//     originalPrice: 99,
-//     url: 'https://example.com',
-//   ),
-//   Deal(
-//     id: 2,
-//     title: 'Another Great Deal',
-//     image: null, // Replace with null to test the icon fallback
-//     partnerName: 'Partner Name',
-//     price: 50.0,
-//     originalPrice: 499,
-//     url: 'https://example.com',
-//   ),
-//   Deal(
-//     id: 3,
-//     title: 'Deal 3',
-//     image: null, // Replace with null to test the icon fallback
-//     partnerName: 'Partner Name',
-//     price: 50.0,
-//     originalPrice: 50,
-//     url: 'https://example.com',
-//   ),
-// ];
 
 class DealsScreen extends StatefulWidget {
   final ApiResponse? user;
