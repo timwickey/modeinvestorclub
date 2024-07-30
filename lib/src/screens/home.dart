@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                       } else {
-                        // Mobile screen: both cards full width
+                        // Mobile screen: ModeInvestorClub and ReferralCardMobile side by side
                         return Column(
                           children: [
                             SizedBox(
@@ -130,9 +130,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 8),
                             SizedBox(
-                              height: referralHeight,
-                              child: const ReferralCardMobile(),
+                              height: profileHeight,
+                              child: StockHistory(),
                             ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: profileHeight,
+                                    child: const ModeInvestorClub(),
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: profileHeight,
+                                    child: const ReferralCardMobile(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
                             Row(
                               children: [
                                 SizedBox(
@@ -160,25 +178,3 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 }
-
-// void main() {
-//   runApp(MaterialApp(
-//     home: Scaffold(
-//       body: HomeScreen(
-//         user: ApiResponse(
-//           id: 1,
-//           firstName: 'John',
-//           lastName: 'Doe',
-//           email: 'john.doe@example.com',
-//           message: 'Welcome to Mode Investor Club',
-//           forcePassChange: false,
-//           token: 'token',
-//           investments: [],
-//           options: [],
-//           deals: [],
-//           events: [],
-//         ),
-//       ),
-//     ),
-//   ));
-// }
