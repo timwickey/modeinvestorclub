@@ -45,7 +45,7 @@ class ModeInvestorClub extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ).createShader(bounds),
                   child: Text(
-                    '100k+',
+                    '25,000+',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,

@@ -93,11 +93,14 @@ class _InvestorClubState extends State<InvestorClub> {
             routerConfig: GoRouter(
               refreshListenable: auth,
               debugLogDiagnostics: true,
-              initialLocation: '/home',
+              initialLocation: '/sign-in',
               redirect: (context, state) {
                 final signedIn = context.read<ModeAuth>().signedIn;
                 if (state.uri.toString() != '/sign-in' && !signedIn) {
                   return '/sign-in';
+                }
+                if (state.uri.toString() == '/sign-in' && signedIn) {
+                  return '/home';
                 }
                 return null;
               },
@@ -169,8 +172,8 @@ class _InvestorClubState extends State<InvestorClub> {
                   builder: (context, state) {
                     // Extract the email query parameter
                     Uri uri = Uri.parse(state.uri.toString());
-
                     String? email = uri.queryParameters['email'];
+                    print('got email: $email');
 
                     return SignInScreen(
                       initialEmail: email,
