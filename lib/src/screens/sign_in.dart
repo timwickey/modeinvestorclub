@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:modeinvestorclub/src/auth.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  final String? initialEmail;
+
+  const SignInScreen({this.initialEmail, super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -17,14 +19,24 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialEmail != null) {
+      _emailController.text = widget.initialEmail!;
+    }
+  }
+
   Future<void> _signIn() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
     final auth = Provider.of<ModeAuth>(context, listen: false);
     bool success = await auth.signIn(email, password);
-
-    if (!mounted) return; // Check if the widget is still mounted
 
     setState(() {
       _isLoading = false;

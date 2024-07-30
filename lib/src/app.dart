@@ -167,7 +167,14 @@ class _InvestorClubState extends State<InvestorClub> {
                 GoRoute(
                   path: '/sign-in',
                   builder: (context, state) {
-                    return const SignInScreen();
+                    // Extract the email query parameter
+                    Uri uri = Uri.parse(state.uri.toString());
+
+                    String? email = uri.queryParameters['email'];
+
+                    return SignInScreen(
+                      initialEmail: email,
+                    );
                   },
                 ),
               ],
