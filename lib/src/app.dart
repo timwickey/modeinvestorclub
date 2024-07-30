@@ -169,7 +169,6 @@ class _InvestorClubState extends State<InvestorClub> {
                     // Extract the email query parameter
                     Uri uri = Uri.parse(state.uri.toString());
                     String? email = uri.queryParameters['email'];
-                    print('got email: $email');
 
                     return SignInScreen(
                       initialEmail: email,

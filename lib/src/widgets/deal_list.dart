@@ -81,7 +81,9 @@ class DealList extends StatelessWidget {
                                     color: borderColor),
                                 const SizedBox(height: 12),
                                 FreeDealWidget(
-                                    originalPrice: deal.originalPrice),
+                                  originalPrice: deal.originalPrice,
+                                  price: deal.price,
+                                ),
                                 Spacer(),
                                 Align(
                                     alignment: Alignment.bottomCenter,
@@ -198,14 +200,22 @@ class DealWidget extends StatelessWidget {
 
 class FreeDealWidget extends StatelessWidget {
   final double originalPrice;
+  final double price;
 
   const FreeDealWidget({
     required this.originalPrice,
+    required this.price,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    String pricetext = "FREE";
+
+    if (price > 0) {
+      pricetext = price.toStringAsFixed(2);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,8 +227,8 @@ class FreeDealWidget extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ).createShader(bounds),
-          child: const Text(
-            'FREE',
+          child: Text(
+            pricetext,
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
