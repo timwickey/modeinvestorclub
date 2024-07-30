@@ -15,16 +15,6 @@ http.Client createHttpClient() {
 class BackEnd {
   // Constructor to initialize with required parameters
   BackEnd();
-
-  // Initialize resources or connections
-  Future<void> init() async {
-    // You could initialize a database connection here
-    await Future.delayed(const Duration(seconds: 1)); // Simulate some delay
-    // Perform any initialization tasks, like opening a database connection
-    print('Backend initialized!');
-  }
-
-  // Any other backend-related methods or properties can be added here
 }
 
 // Define a class to represent the data you expect from the API

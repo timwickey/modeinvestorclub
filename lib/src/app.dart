@@ -35,17 +35,11 @@ ThemeData _buildDarkTheme() {
 
 class _InvestorClubState extends State<InvestorClub> {
   late BackEnd _backEnd;
-  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _backEnd = BackEnd();
-    _backEnd.init().then((_) {
-      setState(() {
-        _isInitialized = true;
-      });
-    });
   }
 
   @override
@@ -92,14 +86,16 @@ class _InvestorClubState extends State<InvestorClub> {
             },
             routerConfig: GoRouter(
               refreshListenable: auth,
-              debugLogDiagnostics: true,
+              debugLogDiagnostics: false,
               initialLocation: '/sign-in',
               redirect: (context, state) {
                 final signedIn = context.read<ModeAuth>().signedIn;
-                if (state.uri.toString() != '/sign-in' && !signedIn) {
+                final isSigningIn = state.fullPath == '/sign-in';
+
+                if (!signedIn && !isSigningIn) {
                   return '/sign-in';
                 }
-                if (state.uri.toString() == '/sign-in' && signedIn) {
+                if (signedIn && isSigningIn) {
                   return '/home';
                 }
                 return null;
