@@ -4,7 +4,6 @@ import '../widgets/ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:modeinvestorclub/src/auth.dart';
-import 'package:go_router/go_router.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -19,15 +18,13 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
 
   Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
-
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
     final auth = Provider.of<ModeAuth>(context, listen: false);
     bool success = await auth.signIn(email, password);
+
+    if (!mounted) return; // Check if the widget is still mounted
 
     setState(() {
       _isLoading = false;

@@ -25,6 +25,11 @@ ThemeData _buildDarkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.transparent,
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: Colors.deepOrange, // Set the background color
+      contentTextStyle: TextStyle(color: Colors.white), // Set the text color
+      actionTextColor: Colors.orangeAccent, // Set the action text color
+    ),
   );
 }
 
