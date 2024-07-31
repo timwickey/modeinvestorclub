@@ -213,7 +213,7 @@ class FreeDealWidget extends StatelessWidget {
     String pricetext = "FREE";
 
     if (price > 0) {
-      pricetext = price.toStringAsFixed(2);
+      pricetext = '\$${price.toStringAsFixed(2)}';
     }
 
     return Row(
