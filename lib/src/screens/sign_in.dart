@@ -4,6 +4,7 @@ import '../widgets/ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:modeinvestorclub/src/auth.dart';
+import '../backend.dart';
 
 class SignInScreen extends StatefulWidget {
   final String? initialEmail;
@@ -18,13 +19,20 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _isPasswordSet = true;
 
   @override
   void initState() {
     super.initState();
     if (widget.initialEmail != null) {
       _emailController.text = widget.initialEmail!;
+      checkPasswordSet(widget.initialEmail!);
     }
+  }
+
+  Future<bool> checkPasswordSet(String email) async {
+    final backend = BackEnd();
+    return await backend.checkPasswordSet(email);
   }
 
   Future<void> _signIn() async {
@@ -91,23 +99,40 @@ class _SignInScreenState extends State<SignInScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('Sign in',
-                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          _isPasswordSet ? 'Sign in' : 'Set Password',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                         TextField(
                           decoration: const InputDecoration(labelText: 'Email'),
                           controller: _emailController,
                         ),
-                        TextField(
-                          decoration:
-                              const InputDecoration(labelText: 'Password'),
-                          obscureText: true,
-                          controller: _passwordController,
-                        ),
+                        if (_isPasswordSet) ...[
+                          TextField(
+                            decoration:
+                                const InputDecoration(labelText: 'Password'),
+                            obscureText: true,
+                            controller: _passwordController,
+                          ),
+                        ] else ...[
+                          TextField(
+                            decoration: const InputDecoration(
+                                labelText: 'New Password'),
+                            obscureText: true,
+                            controller: _passwordController,
+                          ),
+                          TextField(
+                            decoration: const InputDecoration(
+                                labelText: 'Confirm Password'),
+                            obscureText: true,
+                          ),
+                        ],
                         const SizedBox(height: 32),
                         _isLoading
                             ? CircularProgressIndicator()
                             : RoundedButton(
-                                text: "Sign in",
+                                text:
+                                    _isPasswordSet ? "Sign in" : "Set Password",
                                 icon: Icon(Icons.login, color: Colors.white),
                                 color: transparentButton,
                                 onPressed: _signIn,
@@ -118,9 +143,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 const SizedBox(height: 32),
                 Text(
-                    "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, please use those credentials to log in.",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium),
+                  "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, please use those credentials to log in.",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ],
             ),
           ),

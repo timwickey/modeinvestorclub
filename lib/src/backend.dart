@@ -2,6 +2,7 @@ import 'dart:convert'; // For converting JSON data
 import 'package:http/http.dart' as http; // Importing the http package
 import 'package:http/browser_client.dart';
 import 'package:flutter/foundation.dart';
+import '../src/data/globals.dart';
 
 // Conditional HTTP client depending on the platform (web or mobile)
 http.Client createHttpClient() {
@@ -15,6 +16,87 @@ http.Client createHttpClient() {
 class BackEnd {
   // Constructor to initialize with required parameters
   BackEnd();
+
+  Future<bool> checkPasswordSet(String email) async {
+    String url = '${ApiUrl}/check_new_user';
+    bool isPasswordSet = false;
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'email': email}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        isPasswordSet = data['passwordSet'];
+      } else if (response.statusCode == 404) {
+        throw Exception('User not found');
+      } else {
+        throw Exception('Failed to check password');
+      }
+    } catch (error) {
+      print('Error checking if password is set: $error');
+
+      isPasswordSet = false;
+    }
+    return isPasswordSet;
+  }
+
+  Future<ApiResult<ApiResponse>> asyncCallApiData(String endpointUrl,
+      {String method = 'GET', Map<String, String>? body}) async {
+    // Ensure endpointUrl is a valid String
+    if (endpointUrl.isEmpty) {
+      return ApiResult(error: 'Endpoint URL must be a non-empty string.');
+    }
+
+    // Ensure method is either 'GET' or 'POST'
+    if (method != 'GET' && method != 'POST') {
+      return ApiResult(error: 'Method must be either "GET" or "POST".');
+    }
+
+    Uri uri = Uri.parse(endpointUrl);
+    final client = http.Client();
+    http.Response response;
+
+    try {
+      if (method == 'GET') {
+        response = await client.get(uri);
+      } else {
+        response = await client.post(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(body),
+        );
+      }
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+        ApiResponse data = ApiResponse.fromJson(jsonResponse);
+
+        return ApiResult(data: data); // Return the parsed data
+      } else {
+        String errorBody = response.body;
+        return ApiResult(
+            error:
+                'Failed to load data: ${response.reasonPhrase}. Error body: $errorBody');
+      }
+    } catch (e) {
+      return ApiResult(error: 'Failed to load data: $e');
+    } finally {
+      client.close();
+    }
+  }
+}
+
+class ApiResult<T> {
+  final T? data;
+  final String? error;
+
+  ApiResult({this.data, this.error});
 }
 
 // Define a class to represent the data you expect from the API
@@ -297,58 +379,5 @@ class Option {
       'cliff_amount': cliffAmount,
       'monthly_vesting_amount': monthlyVestingAmount,
     };
-  }
-}
-
-class ApiResult<T> {
-  final T? data;
-  final String? error;
-
-  ApiResult({this.data, this.error});
-}
-
-Future<ApiResult<ApiResponse>> asyncCallApiData(String endpointUrl,
-    {String method = 'GET', Map<String, String>? body}) async {
-  // Ensure endpointUrl is a valid String
-  if (endpointUrl.isEmpty) {
-    return ApiResult(error: 'Endpoint URL must be a non-empty string.');
-  }
-
-  // Ensure method is either 'GET' or 'POST'
-  if (method != 'GET' && method != 'POST') {
-    return ApiResult(error: 'Method must be either "GET" or "POST".');
-  }
-
-  Uri uri = Uri.parse(endpointUrl);
-  final client = http.Client();
-  http.Response response;
-
-  try {
-    if (method == 'GET') {
-      response = await client.get(uri);
-    } else {
-      response = await client.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-    }
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-      ApiResponse data = ApiResponse.fromJson(jsonResponse);
-
-      return ApiResult(data: data); // Return the parsed data
-    } else {
-      String errorBody = response.body;
-      return ApiResult(
-          error:
-              'Failed to load data: ${response.reasonPhrase}. Error body: $errorBody');
-    }
-  } catch (e) {
-    return ApiResult(error: 'Failed to load data: $e');
-  } finally {
-    client.close();
   }
 }

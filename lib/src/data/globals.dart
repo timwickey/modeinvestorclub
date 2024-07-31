@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const ApiUrl = 'https://nodejs-serverless-connector.vercel.app/api';
+
 const widgetHeight = 370.0;
 const widgetHeightMobile = 250.0;
 const dealWidth = 340.0;

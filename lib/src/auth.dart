@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:modeinvestorclub/src/backend.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'backend.dart';
+import '../src/data/globals.dart';
 
 class ModeAuth extends ChangeNotifier {
   bool _signedIn = false;
@@ -30,8 +30,7 @@ class ModeAuth extends ChangeNotifier {
   }
 
   Future<bool> _validateToken(String token) async {
-    String url =
-        'https://nodejs-serverless-connector.vercel.app/api/validate_token'; // Replace with your actual URL
+    String url = '${ApiUrl}/validate_token';
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
@@ -67,11 +66,12 @@ class ModeAuth extends ChangeNotifier {
   }
 
   Future<bool> signIn(String email, String password) async {
-    String url = 'https://nodejs-serverless-connector.vercel.app/api/login';
+    final backend = BackEnd();
+    String url = '${ApiUrl}/login';
     Map<String, String> body = {'email': email, 'password': password};
 
     ApiResult<ApiResponse> result =
-        await asyncCallApiData(url, method: 'POST', body: body);
+        await backend.asyncCallApiData(url, method: 'POST', body: body);
 
     if (result.data != null) {
       _signedIn = true;
