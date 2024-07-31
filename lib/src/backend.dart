@@ -17,9 +17,9 @@ class BackEnd {
   // Constructor to initialize with required parameters
   BackEnd();
 
-  Future<bool> checkPasswordSet(String email) async {
+  Future<int> checkPasswordSet(String email) async {
     String url = '${ApiUrl}/check_new_user';
-    bool isPasswordSet = false;
+    int isPasswordSet = 0; // 0 = not set, 1 = set, 2 = user not found.
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -31,16 +31,21 @@ class BackEnd {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        isPasswordSet = data['passwordSet'];
+        if (data['passwordSet'] == false) {
+          isPasswordSet = 0;
+        } else if (data['passwordSet'] == true) {
+          isPasswordSet = 1;
+        }
       } else if (response.statusCode == 404) {
-        throw Exception('User not found');
+        // throw Exception('User not found');
+        isPasswordSet = 2;
       } else {
-        throw Exception('Failed to check password');
+        // throw Exception('Failed to check password');
+        isPasswordSet = 0;
       }
     } catch (error) {
-      print('Error checking if password is set: $error');
-
-      isPasswordSet = false;
+      // print('Error checking if password is set: $error');
+      isPasswordSet = 0;
     }
     return isPasswordSet;
   }

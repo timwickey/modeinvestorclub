@@ -19,7 +19,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _isPasswordSet = true;
+  int _isPasswordSet = 0; // 0 = not set, 1 = set, 2 = user not found.
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  Future<bool> checkPasswordSet(String email) async {
+  Future<int> checkPasswordSet(String email) async {
     final backend = BackEnd();
     return await backend.checkPasswordSet(email);
   }
@@ -100,39 +100,24 @@ class _SignInScreenState extends State<SignInScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          _isPasswordSet ? 'Sign in' : 'Set Password',
+                          'Sign in',
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         TextField(
                           decoration: const InputDecoration(labelText: 'Email'),
                           controller: _emailController,
                         ),
-                        if (_isPasswordSet) ...[
-                          TextField(
-                            decoration:
-                                const InputDecoration(labelText: 'Password'),
-                            obscureText: true,
-                            controller: _passwordController,
-                          ),
-                        ] else ...[
-                          TextField(
-                            decoration: const InputDecoration(
-                                labelText: 'New Password'),
-                            obscureText: true,
-                            controller: _passwordController,
-                          ),
-                          TextField(
-                            decoration: const InputDecoration(
-                                labelText: 'Confirm Password'),
-                            obscureText: true,
-                          ),
-                        ],
+                        TextField(
+                          decoration:
+                              const InputDecoration(labelText: 'Password'),
+                          obscureText: true,
+                          controller: _passwordController,
+                        ),
                         const SizedBox(height: 32),
                         _isLoading
                             ? CircularProgressIndicator()
                             : RoundedButton(
-                                text:
-                                    _isPasswordSet ? "Sign in" : "Set Password",
+                                text: "Sign in",
                                 icon: Icon(Icons.login, color: Colors.white),
                                 color: transparentButton,
                                 onPressed: _signIn,
