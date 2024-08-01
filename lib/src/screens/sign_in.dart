@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../data/globals.dart';
 import '../widgets/ui.dart';
@@ -5,6 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:modeinvestorclub/src/auth.dart';
 import '../backend.dart';
+import 'package:go_router/go_router.dart';
+import 'package:url_launcher/link.dart';
+import 'dart:html' as html;
 
 class SignInScreen extends StatefulWidget {
   final String? initialEmail;
@@ -133,13 +137,35 @@ class _SignInScreenState extends State<SignInScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'Token',
+          'YOU ARE INVITED',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         TextField(
           decoration: InputDecoration(
               labelText: 'Check ${_emailController.value.text}'),
           controller: _tokenController,
+        ),
+        const SizedBox(height: 24),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            text: "Didn't receive your token? Check your trash or Spam. \n",
+            style: TextStyle(color: Colors.grey),
+            children: [
+              TextSpan(
+                text: "Send it again",
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    // reloading this page will trigger the resend token logic
+                    html.window.location.reload();
+                  },
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 32),
         _isLoading
