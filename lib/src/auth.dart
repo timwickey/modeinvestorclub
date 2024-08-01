@@ -30,7 +30,7 @@ class ModeAuth extends ChangeNotifier {
   }
 
   Future<bool> _validateToken(String token) async {
-    String url = '${ApiUrl}/validate_token';
+    String url = '${ApiUrl}/validate_auth_token';
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},

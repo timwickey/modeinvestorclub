@@ -18,21 +18,32 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _tokenController = TextEditingController();
   bool _isLoading = false;
-  int _isPasswordSet = 0; // 0 = not set, 1 = set, 2 = user not found.
+  int _isPasswordSet =
+      -1; // -1 = checking, 0 = not set, 1 = set, 2 = user not found
 
   @override
   void initState() {
     super.initState();
     if (widget.initialEmail != null) {
       _emailController.text = widget.initialEmail!;
-      checkPasswordSet(widget.initialEmail!);
+      _checkPasswordSet(widget.initialEmail!);
+    } else {
+      _isPasswordSet = 1; // if not passed in we asume they can log in
     }
   }
 
-  Future<int> checkPasswordSet(String email) async {
+  Future<void> _checkPasswordSet(String email) async {
+    setState(() {
+      _isLoading = true;
+    });
     final backend = BackEnd();
-    return await backend.checkPasswordSet(email);
+    final result = await backend.checkPasswordSet(email);
+    setState(() {
+      _isPasswordSet = result;
+      _isLoading = false;
+    });
   }
 
   Future<void> _signIn() async {
@@ -59,6 +70,87 @@ class _SignInScreenState extends State<SignInScreen> {
         const SnackBar(content: Text('Login failed')),
       );
     }
+  }
+
+  Future<void> _submitToken() async {
+    // Handle token submission logic here
+  }
+
+  Widget _buildSignInForm() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Sign in',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        TextField(
+          decoration: const InputDecoration(labelText: 'Email'),
+          controller: _emailController,
+        ),
+        TextField(
+          decoration: const InputDecoration(labelText: 'Password'),
+          obscureText: true,
+          controller: _passwordController,
+        ),
+        const SizedBox(height: 32),
+        _isLoading
+            ? CircularProgressIndicator()
+            : RoundedButton(
+                text: "Sign in",
+                icon: Icon(Icons.login, color: Colors.white),
+                color: transparentButton,
+                onPressed: _signIn,
+              ),
+      ],
+    );
+  }
+
+  Widget _buildTokenForm() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Token',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        TextField(
+          decoration: InputDecoration(
+              labelText: 'Check ${_emailController.value.text}'),
+          controller: _tokenController,
+        ),
+        const SizedBox(height: 32),
+        _isLoading
+            ? CircularProgressIndicator()
+            : RoundedButton(
+                text: "Submit",
+                icon: Icon(Icons.check, color: Colors.white),
+                color: transparentButton,
+                onPressed: _submitToken,
+              ),
+      ],
+    );
+  }
+
+  Widget _buildUserNotFound() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'User not found',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 32),
+        Text(
+          "Account not created. Please email invest@modemobile.com for assistance.",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ],
+    );
   }
 
   @override
@@ -95,35 +187,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Container(
                     constraints: BoxConstraints.loose(const Size(600, 600)),
                     padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Sign in',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'Email'),
-                          controller: _emailController,
-                        ),
-                        TextField(
-                          decoration:
-                              const InputDecoration(labelText: 'Password'),
-                          obscureText: true,
-                          controller: _passwordController,
-                        ),
-                        const SizedBox(height: 32),
-                        _isLoading
-                            ? CircularProgressIndicator()
-                            : RoundedButton(
-                                text: "Sign in",
-                                icon: Icon(Icons.login, color: Colors.white),
-                                color: transparentButton,
-                                onPressed: _signIn,
-                              ),
-                      ],
-                    ),
+                    child: _isPasswordSet == -1
+                        ? CircularProgressIndicator()
+                        : _isPasswordSet == 1
+                            ? _buildSignInForm()
+                            : _isPasswordSet == 0
+                                ? _buildTokenForm()
+                                : _buildUserNotFound(),
                   ),
                 ),
                 const SizedBox(height: 32),
