@@ -27,6 +27,7 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     super.initState();
     if (widget.initialEmail != null) {
+      _isLoading = true;
       _emailController.text = widget.initialEmail!;
       _checkPasswordSet(widget.initialEmail!);
     } else {
@@ -35,9 +36,6 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future<void> _checkPasswordSet(String email) async {
-    setState(() {
-      _isLoading = true;
-    });
     final backend = BackEnd();
     final result = await backend.checkPasswordSet(email);
     setState(() {
@@ -209,7 +207,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Container(
                     constraints: BoxConstraints.loose(const Size(600, 600)),
                     padding: const EdgeInsets.all(16),
-                    child: _isPasswordSet == -1
+                    child: _isLoading
                         ? CircularProgressIndicator()
                         : _isPasswordSet == 1
                             ? _buildSignInForm()
