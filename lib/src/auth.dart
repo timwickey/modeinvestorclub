@@ -84,6 +84,29 @@ class ModeAuth extends ChangeNotifier {
     }
   }
 
+  Future<bool> validateTokenSubmission(String email, String token) async {
+    String url = '${ApiUrl}/validate_token';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'token': token}),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final authToken = jsonResponse['token'];
+
+      // Save the token and update the state
+      await _saveUserToPrefs(authToken);
+      _signedIn = true;
+      _user = ApiResponse.fromJson(jsonResponse);
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   bool operator ==(Object other) =>
       other is ModeAuth && other._signedIn == _signedIn;

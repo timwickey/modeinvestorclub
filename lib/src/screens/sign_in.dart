@@ -30,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
       _emailController.text = widget.initialEmail!;
       _checkPasswordSet(widget.initialEmail!);
     } else {
-      _isPasswordSet = 1; // if not passed in we asume they can log in
+      _isPasswordSet = 1; // if not passed in we assume they can log in
     }
   }
 
@@ -73,7 +73,29 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future<void> _submitToken() async {
-    // Handle token submission logic here
+    setState(() {
+      _isLoading = true;
+    });
+
+    final email = _emailController.value.text;
+    final token = _tokenController.value.text;
+
+    final auth = Provider.of<ModeAuth>(context, listen: false);
+    bool success = await auth.validateTokenSubmission(email, token);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Token validated')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid token')),
+      );
+    }
   }
 
   Widget _buildSignInForm() {
