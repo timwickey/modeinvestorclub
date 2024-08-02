@@ -320,6 +320,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
+                const SizedBox(height: 32),
+                TextButton(
+                  onPressed: () {
+                    html.window.location.assign('/#/home');
+                    html.window.location.reload();
+                  },
+                  child: const Text('Go Home'),
+                ),
               ],
             ),
           ),
