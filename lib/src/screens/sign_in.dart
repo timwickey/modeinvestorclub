@@ -26,7 +26,8 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
   bool _isForgotPassword = false;
   int _isPasswordSet =
-      -1; // -1 = checking, 0 = not set, 1 = set, 2 = user not found
+      -1; // -1 = checking, 0 = not set, 1 = set, 2 = user not found, 3 = token log in (manually set below)
+  String tokenLoginTitle = "YOU ARE INVITED";
 
   @override
   void initState() {
@@ -45,6 +46,11 @@ class _SignInScreenState extends State<SignInScreen> {
     final result = await backend.checkPasswordSet(email);
     setState(() {
       _isPasswordSet = result;
+      if (_isPasswordSet == 1) {
+        // if their password is set, we just show them a token log in screen without the "you are invited text"
+        _isPasswordSet = 0;
+        tokenLoginTitle = "LOG IN WITH A TOKEN";
+      }
       _isLoading = false;
     });
   }
@@ -201,7 +207,7 @@ class _SignInScreenState extends State<SignInScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'YOU ARE INVITED',
+          tokenLoginTitle,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         TextField(
