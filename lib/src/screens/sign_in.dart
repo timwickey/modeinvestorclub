@@ -24,6 +24,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   final _tokenController = TextEditingController();
   bool _isLoading = false;
+  bool _isForgotPassword = false;
   int _isPasswordSet =
       -1; // -1 = checking, 0 = not set, 1 = set, 2 = user not found
 
@@ -100,6 +101,12 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+  Future<void> _sendToken(String email) async {
+    // Reload the current page with ?email=email at the end of the URL
+    html.window.location.assign('/#/sign-in?email=$email');
+    html.window.location.reload();
+  }
+
   Widget _buildSignInForm() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -127,6 +134,63 @@ class _SignInScreenState extends State<SignInScreen> {
                 color: transparentButton,
                 onPressed: _signIn,
               ),
+        const SizedBox(height: 16),
+        RichText(
+          text: TextSpan(
+            text: "Forgot your password? ",
+            style: TextStyle(color: Colors.grey),
+            children: [
+              TextSpan(
+                text: "Reset it",
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    setState(() {
+                      _isForgotPassword = true;
+                    });
+                  },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildForgotPasswordForm() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Forgot Password',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        TextField(
+          decoration: const InputDecoration(labelText: 'Enter your email'),
+          controller: _emailController,
+        ),
+        const SizedBox(height: 32),
+        _isLoading
+            ? CircularProgressIndicator()
+            : RoundedButton(
+                text: "Send Token",
+                icon: Icon(Icons.send, color: Colors.white),
+                color: transparentButton,
+                onPressed: () => _sendToken(_emailController.text),
+              ),
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              _isForgotPassword = false;
+            });
+          },
+          child: const Text('Back to Sign In'),
+        ),
       ],
     );
   }
@@ -235,11 +299,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     padding: const EdgeInsets.all(16),
                     child: _isLoading
                         ? CircularProgressIndicator()
-                        : _isPasswordSet == 1
-                            ? _buildSignInForm()
-                            : _isPasswordSet == 0
-                                ? _buildTokenForm()
-                                : _buildUserNotFound(),
+                        : _isForgotPassword
+                            ? _buildForgotPasswordForm()
+                            : _isPasswordSet == 1
+                                ? _buildSignInForm()
+                                : _isPasswordSet == 0
+                                    ? _buildTokenForm()
+                                    : _buildUserNotFound(),
                   ),
                 ),
                 const SizedBox(height: 32),
