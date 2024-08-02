@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _isSubmitting = false;
                 });
 
-                if (result.data == true) {
+                if (result.data.isNotEmpty) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
