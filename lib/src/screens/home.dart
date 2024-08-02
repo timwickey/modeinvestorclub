@@ -45,6 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                side: BorderSide(
+                  color: borderColor,
+                  width: borderThickness,
+                ),
+              ),
               title: Text('Set Your Password'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
