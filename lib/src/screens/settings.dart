@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modeinvestorclub/src/data/globals.dart';
-import 'package:url_launcher/link.dart';
+import 'package:provider/provider.dart';
 import '../auth.dart';
 import '../widgets/ui.dart'; // Ensure this import is correct
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -18,14 +17,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: const Card(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                    child: SettingsContent(),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 20.0), // Add padding to start 20 pixels from the top
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 400),
+                  child: const Card(
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+                      child: SettingsContent(),
+                    ),
                   ),
                 ),
               ),
@@ -41,59 +45,35 @@ class SettingsContent extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    final auth = Provider.of<ModeAuth>(context);
+    final user = auth.user;
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: Column(
         children: [
-          ...[
-            Text(
-              'Settings',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            SizedBox(
-              height: 16.0,
-            ),
-            const Text('Example using the Link widget:'),
-            Link(
-              uri: Uri.parse('/home'),
-              builder: (context, followLink) => TextButton(
-                onPressed: followLink,
-                child: const Text('/home'),
-              ),
-            ),
-            const Text('Example using GoRouter.of(context).go():'),
-            TextButton(
-              child: const Text('/deals'),
-              onPressed: () {
-                GoRouter.of(context).go('/deals');
-              },
-            ),
-          ].map((w) => Padding(padding: const EdgeInsets.all(8), child: w)),
-          const Text('Displays a dialog on the root Navigator:'),
-          TextButton(
-            onPressed: () => showDialog<String>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Alert!'),
-                content: const Text('The alert description goes here.'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            ),
-            child: const Text('Show Dialog'),
+          Text(
+            'Settings',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-          SizedBox(
-            height: 20.0,
+          const SizedBox(height: 16.0),
+          Text('Name: ${user?.firstName ?? ''} ${user?.lastName ?? ''}'),
+          const SizedBox(height: 8.0),
+          Text('Email: ${user?.email ?? ''}'),
+          const SizedBox(height: 26.0),
+          RoundedButton(
+            onPressed: () {
+              auth.setTokenLogin(true);
+              GoRouter.of(context).go('/home');
+            },
+            text: 'Change Password',
+            color: transparentButton,
+            icon: Icon(Icons.lock),
           ),
+          const SizedBox(height: 20.0),
           RoundedButton(
             onPressed: () async {
-              final auth = Provider.of<ModeAuth>(context, listen: false);
               await auth.signOut();
               GoRouter.of(context).go('/sign-in');
             },
@@ -102,5 +82,7 @@ class SettingsContent extends StatelessWidget {
             icon: Icon(Icons.exit_to_app),
           ),
         ],
-      );
+      ),
+    );
+  }
 }

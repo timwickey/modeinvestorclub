@@ -8,12 +8,18 @@ import '../src/data/globals.dart';
 class ModeAuth extends ChangeNotifier {
   bool _signedIn = false;
   ApiResponse? _user;
+  bool _isTokenLogin = false;
 
   bool get signedIn => _signedIn;
   ApiResponse? get user => _user;
+  bool get isTokenLogin => _isTokenLogin;
 
   ModeAuth() {
     _loadUserFromPrefs();
+  }
+
+  void setTokenLogin(bool val) {
+    _isTokenLogin = val;
   }
 
   Future<void> _loadUserFromPrefs() async {
@@ -61,6 +67,7 @@ class ModeAuth extends ChangeNotifier {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     _signedIn = false;
     _user = null;
+    _isTokenLogin = false;
     await _removeUserFromPrefs();
     notifyListeners();
   }
@@ -76,6 +83,7 @@ class ModeAuth extends ChangeNotifier {
     if (result.data != null) {
       _signedIn = true;
       _user = result.data;
+      _isTokenLogin = false;
       await _saveUserToPrefs(_user!.token);
       notifyListeners();
       return true;
@@ -100,6 +108,7 @@ class ModeAuth extends ChangeNotifier {
       await _saveUserToPrefs(authToken);
       _signedIn = true;
       _user = ApiResponse.fromJson(jsonResponse);
+      _isTokenLogin = true;
       notifyListeners();
       return true;
     } else {

@@ -95,6 +95,33 @@ class BackEnd {
       client.close();
     }
   }
+
+  Future<ApiResult> changePassword(
+      String email, String token, String newPassword) async {
+    String url = '${ApiUrl}/change_pword';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+            {'email': email, 'token': token, 'newPassword': newPassword}),
+      );
+
+      if (response.statusCode == 200) {
+        return ApiResult(
+            data: 'Password changed successfully'); // Success message
+      } else {
+        String errorBody = response.body;
+        return ApiResult(
+            error:
+                'Failed to change password: ${response.reasonPhrase}. Error body: $errorBody');
+      }
+    } catch (error) {
+      return ApiResult(error: 'Failed to change password: $error');
+    }
+  }
 }
 
 class ApiResult<T> {

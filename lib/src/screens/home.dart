@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:modeinvestorclub/src/backend.dart';
+import 'package:modeinvestorclub/src/auth.dart';
 
 import '../widgets/deal_list.dart';
 import '../widgets/event_list.dart';
@@ -11,40 +13,47 @@ import '../widgets/stock_history.dart';
 
 class HomeScreen extends StatefulWidget {
   final ApiResponse? user;
-  final bool isTokenLogin;
 
-  const HomeScreen({required this.user, required this.isTokenLogin, super.key});
+  const HomeScreen({required this.user, super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  bool _isSubmitting = false;
+
   @override
   void initState() {
     super.initState();
-    if (widget.isTokenLogin) {
+    final auth = Provider.of<ModeAuth>(context, listen: false);
+    if (auth.isTokenLogin) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showPasswordResetDialog(context);
+        _showPasswordResetDialog(context, auth);
       });
     }
   }
 
-  void _showPasswordResetDialog(BuildContext context) {
+  void _showPasswordResetDialog(BuildContext context, ModeAuth auth) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Set Your Password'),
-          content: const Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text('Please set a new password to continue.'),
               TextField(
+                controller: _newPasswordController,
                 decoration: InputDecoration(labelText: 'New Password'),
                 obscureText: true,
               ),
               TextField(
+                controller: _confirmPasswordController,
                 decoration: InputDecoration(labelText: 'Confirm Password'),
                 obscureText: true,
               ),
@@ -52,11 +61,55 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                // Add your password reset logic here
-                Navigator.of(context).pop();
+              onPressed: () async {
+                final newPassword = _newPasswordController.text;
+                final confirmPassword = _confirmPasswordController.text;
+
+                if (newPassword.isEmpty || confirmPassword.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Both fields are required')),
+                  );
+                  return;
+                }
+
+                if (newPassword != confirmPassword) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Passwords do not match')),
+                  );
+                  return;
+                }
+
+                setState(() {
+                  _isSubmitting = true;
+                });
+
+                final backend = BackEnd();
+                final result = await backend.changePassword(
+                  auth.user!.email,
+                  auth.user!.token,
+                  newPassword,
+                );
+
+                setState(() {
+                  _isSubmitting = false;
+                });
+
+                if (result.data == true) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Password changed successfully')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text(result.error ?? 'Failed to change password')),
+                  );
+                }
               },
-              child: Text('Submit'),
+              child:
+                  _isSubmitting ? CircularProgressIndicator() : Text('Submit'),
             ),
           ],
         );
