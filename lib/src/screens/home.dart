@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   bool _isSubmitting = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -41,77 +42,95 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Set Your Password'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Please set a new password to continue.'),
-              TextField(
-                controller: _newPasswordController,
-                decoration: InputDecoration(labelText: 'New Password'),
-                obscureText: true,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Set Your Password'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Please set a new password to continue.'),
+                  TextField(
+                    controller: _newPasswordController,
+                    decoration: InputDecoration(labelText: 'New Password'),
+                    obscureText: true,
+                  ),
+                  TextField(
+                    controller: _confirmPasswordController,
+                    decoration: InputDecoration(labelText: 'Confirm Password'),
+                    obscureText: true,
+                  ),
+                  if (_errorMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        _errorMessage!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                ],
               ),
-              TextField(
-                controller: _confirmPasswordController,
-                decoration: InputDecoration(labelText: 'Confirm Password'),
-                obscureText: true,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                final newPassword = _newPasswordController.text;
-                final confirmPassword = _confirmPasswordController.text;
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    final newPassword = _newPasswordController.text;
+                    final confirmPassword = _confirmPasswordController.text;
 
-                if (newPassword.isEmpty || confirmPassword.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Both fields are required')),
-                  );
-                  return;
-                }
+                    if (newPassword.isEmpty || confirmPassword.isEmpty) {
+                      setState(() {
+                        _errorMessage = 'Both fields are required';
+                      });
+                      return;
+                    }
 
-                if (newPassword != confirmPassword) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Passwords do not match')),
-                  );
-                  return;
-                }
+                    if (newPassword != confirmPassword) {
+                      setState(() {
+                        _errorMessage = 'Passwords do not match';
+                      });
+                      return;
+                    }
 
-                setState(() {
-                  _isSubmitting = true;
-                });
+                    setState(() {
+                      _isSubmitting = true;
+                      _errorMessage = null;
+                    });
 
-                final backend = BackEnd();
-                final result = await backend.changePassword(
-                  auth.user!.email,
-                  auth.user!.token,
-                  newPassword,
-                );
+                    final backend = BackEnd();
+                    final result = await backend.changePassword(
+                      auth.user!.email,
+                      auth.user!.token,
+                      newPassword,
+                    );
 
-                setState(() {
-                  _isSubmitting = false;
-                });
+                    setState(() {
+                      _isSubmitting = false;
+                    });
 
-                if (result.data.isNotEmpty) {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Password changed successfully')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content:
-                            Text(result.error ?? 'Failed to change password')),
-                  );
-                }
-              },
-              child:
-                  _isSubmitting ? CircularProgressIndicator() : Text('Submit'),
-            ),
-          ],
+                    if (result.data.isNotEmpty) {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Password changed successfully')),
+                      );
+                    } else {
+                      setState(() {
+                        _errorMessage =
+                            result.error ?? 'Failed to change password';
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(
+                                result.error ?? 'Failed to change password')),
+                      );
+                    }
+                  },
+                  child: _isSubmitting
+                      ? CircularProgressIndicator()
+                      : Text('Submit'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
