@@ -11,14 +11,59 @@ import '../widgets/stock_history.dart';
 
 class HomeScreen extends StatefulWidget {
   final ApiResponse? user;
+  final bool isTokenLogin;
 
-  const HomeScreen({required this.user, super.key});
+  const HomeScreen({required this.user, required this.isTokenLogin, super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isTokenLogin) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showPasswordResetDialog(context);
+      });
+    }
+  }
+
+  void _showPasswordResetDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Set Your Password'),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Please set a new password to continue.'),
+              TextField(
+                decoration: InputDecoration(labelText: 'New Password'),
+                obscureText: true,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Confirm Password'),
+                obscureText: true,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Add your password reset logic here
+                Navigator.of(context).pop();
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
