@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (auth.isTokenLogin) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showPasswordResetDialog(context, auth);
+        auth.setTokenLogin(false);
       });
     }
   }
