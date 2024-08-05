@@ -3,6 +3,7 @@ import 'package:modeinvestorclub/src/widgets/ui.dart';
 import '../backend.dart';
 import '../data/globals.dart';
 import 'package:intl/intl.dart'; // Import the intl package
+import 'package:go_router/go_router.dart';
 
 class ProfileWidget extends StatelessWidget {
   final ApiResponse? user;
@@ -98,11 +99,7 @@ class ProfileCard extends StatelessWidget {
                       text: "VIEW SHARES",
                       icon: const Icon(Icons.arrow_right_alt),
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('View Shares Button pressed'),
-                          ),
-                        );
+                        GoRouter.of(context).go('/investment');
                       },
                     ),
                   ],
@@ -182,11 +179,7 @@ class ProfileCardMobile extends StatelessWidget {
                       text: "VIEW SHARES",
                       icon: const Icon(Icons.arrow_right_alt),
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('View Shares Button pressed'),
-                          ),
-                        );
+                        GoRouter.of(context).go('/investment');
                       },
                     ),
                   ],

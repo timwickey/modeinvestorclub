@@ -6,8 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:modeinvestorclub/src/auth.dart';
 import '../backend.dart';
-import 'package:go_router/go_router.dart';
-import 'package:url_launcher/link.dart';
 import 'dart:html' as html;
 
 class SignInScreen extends StatefulWidget {

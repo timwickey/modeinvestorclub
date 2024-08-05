@@ -22,14 +22,19 @@ class WebsiteScaffold extends StatelessWidget {
         body: child,
         onDestinationSelected: (idx) {
           if (idx == 0) goRouter.go('/home');
-          if (idx == 1) goRouter.go('/deals');
-          if (idx == 2) goRouter.go('/events');
-          if (idx == 3) goRouter.go('/settings');
+          if (idx == 1) goRouter.go('/investment');
+          if (idx == 2) goRouter.go('/deals');
+          if (idx == 3) goRouter.go('/events');
+          if (idx == 4) goRouter.go('/settings');
         },
         destinations: const [
           AdaptiveScaffoldDestination(
             title: 'Home',
-            icon: Icons.book,
+            icon: Icons.home,
+          ),
+          AdaptiveScaffoldDestination(
+            title: 'Investment',
+            icon: Icons.monetization_on,
           ),
           AdaptiveScaffoldDestination(
             title: 'Deals',

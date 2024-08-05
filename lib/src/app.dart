@@ -9,6 +9,7 @@ import 'screens/home.dart';
 import 'screens/deals.dart';
 import 'screens/events.dart';
 import 'screens/settings.dart';
+import 'screens/investment.dart';
 import 'screens/sign_in.dart';
 import 'screens/not_found.dart';
 import 'widgets/fade_transition_page.dart';
@@ -112,9 +113,10 @@ class _InvestorClubState extends State<InvestorClub> {
                     return WebsiteScaffold(
                       selectedIndex: switch (state.uri.path) {
                         var p when p.startsWith('/home') => 0,
-                        var p when p.startsWith('/deals') => 1,
-                        var p when p.startsWith('/events') => 2,
-                        var p when p.startsWith('/settings') => 3,
+                        var p when p.startsWith('/investment') => 1,
+                        var p when p.startsWith('/deals') => 2,
+                        var p when p.startsWith('/events') => 3,
+                        var p when p.startsWith('/settings') => 4,
                         _ => 0,
                       },
                       child: child,
@@ -129,6 +131,16 @@ class _InvestorClubState extends State<InvestorClub> {
                           child: HomeScreen(
                             user: context.read<ModeAuth>().user,
                           ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: '/investment',
+                      pageBuilder: (context, state) {
+                        return FadeTransitionPage<dynamic>(
+                          key: state.pageKey,
+                          child: InvestmentScreen(
+                              user: context.read<ModeAuth>().user),
                         );
                       },
                     ),
