@@ -105,17 +105,6 @@ class ProfileCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 2.0),
-                child: Text(
-                  'If you have not set up your transfer online account, "123456" is your personal access code. Use it to create your account.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey.shade500,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
               const Divider(thickness: borderThickness, color: borderColor),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -185,17 +174,6 @@ class ProfileCardMobile extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 2.0),
-                child: Text(
-                  'If you have not set up your transfer online account, "123456" is your personal access code. Use it to create your account.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey.shade500,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
               const Divider(thickness: borderThickness, color: borderColor),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -258,6 +236,14 @@ class SharesWidget extends StatelessWidget {
               'Shares Owned',
               style: Theme.of(context).textTheme.titleLarge,
             ),
+            SizedBox(height: 10.0),
+            Text(
+              'Mode Mobile, INC',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(color: Colors.grey.shade400),
+            ),
           ],
         ),
       ),
@@ -295,6 +281,14 @@ class SharesWidgetMobile extends StatelessWidget {
             Text(
               'Shares Owned',
               style: Theme.of(context).textTheme.titleLarge,
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              'Mode Mobile, INC',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(color: Colors.grey.shade400),
             ),
           ],
         ),
