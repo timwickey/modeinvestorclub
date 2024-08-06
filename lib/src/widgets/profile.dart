@@ -108,27 +108,8 @@ class ProfileCard extends StatelessWidget {
               const Divider(thickness: borderThickness, color: borderColor),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SharesWidget(user: user),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ShareClassWidget(user: user),
-                        ],
-                      ),
-                    ),
-                  ],
+                child: Center(
+                  child: PortfolioValueWidget(user: user),
                 ),
               ),
             ],
@@ -176,28 +157,9 @@ class ProfileCardMobile extends StatelessWidget {
               ),
               const Divider(thickness: borderThickness, color: borderColor),
               Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SharesWidgetMobile(user: user),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ShareClassWidgetMobile(user: user),
-                        ],
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: PortfolioValueMobileWidget(user: user),
                 ),
               ),
             ],
@@ -206,54 +168,10 @@ class ProfileCardMobile extends StatelessWidget {
       );
 }
 
-class SharesWidget extends StatelessWidget {
+class PortfolioValueWidget extends StatelessWidget {
   final ApiResponse? user;
-  const SharesWidget({
-    required this.user,
-    super.key,
-  });
-  @override
-  Widget build(BuildContext context) {
-    final totalShares = user?.calculateTotalShares() ?? 0;
-    final formattedShares = NumberFormat('#,###').format(totalShares);
-    return Card(
-      child:
 
-          // Name and address
-          Padding(
-        padding: const EdgeInsets.only(left: 50.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              formattedShares,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontSize: 60.0),
-            ),
-            Text(
-              'Shares Owned',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              'Mode Mobile, INC',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: Colors.grey.shade400),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SharesWidgetMobile extends StatelessWidget {
-  final ApiResponse? user;
-  const SharesWidgetMobile({
+  const PortfolioValueWidget({
     required this.user,
     super.key,
   });
@@ -261,34 +179,65 @@ class SharesWidgetMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalShares = user?.calculateTotalShares() ?? 0;
-    final formattedShares = NumberFormat('#,###').format(totalShares);
-    // final estimatedPrice = totalShares * 0.16;
-    // final formattedPrice = NumberFormat.simpleCurrency().format(estimatedPrice);
+    final portfolioValue =
+        totalShares * 0.16; // Assuming price per share is 0.16
+    final previousValue = totalShares *
+        0.15; // Assuming previous price per share is 0.15 for gains calculation
+    final gainValue = portfolioValue - previousValue;
+    final formattedValue = NumberFormat.simpleCurrency().format(portfolioValue);
+    final formattedGain = NumberFormat.simpleCurrency().format(gainValue);
 
     return Card(
       child: Padding(
         padding: const EdgeInsets.only(left: 30.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              formattedShares,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontSize: 40.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  formattedValue,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontSize: 60.0),
+                ),
+                SizedBox(width: 8.0),
+              ],
             ),
-            Text(
-              'Shares Owned',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  gainValue > 0 ? Icons.arrow_upward : Icons.horizontal_rule,
+                  color: gainValue > 0 ? Colors.green : Colors.grey,
+                  size: 24.0,
+                ),
+                SizedBox(width: 4.0),
+                Text(
+                  formattedGain,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: gainValue > 0 ? Colors.green : Colors.grey,
+                      ),
+                ),
+              ],
             ),
-            SizedBox(height: 10.0),
-            Text(
-              'Mode Mobile, INC',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: Colors.grey.shade400),
+            SizedBox(height: 30.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 34.0),
+                  child: Text(
+                    'Mode Mobile, INC',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: Colors.grey.shade400),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -297,84 +246,80 @@ class SharesWidgetMobile extends StatelessWidget {
   }
 }
 
-class ShareClassWidget extends StatelessWidget {
+class PortfolioValueMobileWidget extends StatelessWidget {
   final ApiResponse? user;
-  const ShareClassWidget({
+
+  const PortfolioValueMobileWidget({
     required this.user,
     super.key,
   });
-  @override
-  Widget build(BuildContext context) => Card(
-        child:
 
-            // Name and address
-            Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  @override
+  Widget build(BuildContext context) {
+    final totalShares = user?.calculateTotalShares() ?? 0;
+    final portfolioValue =
+        totalShares * 0.16; // Assuming price per share is 0.16
+    final previousValue = totalShares *
+        0.15; // Assuming previous price per share is 0.15 for gains calculation
+    final gainValue = portfolioValue - previousValue;
+    final formattedValue = NumberFormat.simpleCurrency().format(portfolioValue);
+    final formattedGain = NumberFormat.simpleCurrency().format(gainValue);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 60),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Mode Mobile, INC',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(color: Colors.grey.shade400),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  formattedValue,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontSize: 40.0),
+                ),
+                // SizedBox(width: 8.0),
+              ],
             ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Class AAA Common Stock',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.grey.shade400),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  gainValue > 0 ? Icons.arrow_upward : Icons.horizontal_rule,
+                  color: gainValue > 0 ? Colors.green : Colors.grey,
+                  size: 20.0,
+                ),
+                // SizedBox(width: 4.0),
+                Text(
+                  formattedGain,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: gainValue > 0 ? Colors.green : Colors.grey,
+                      ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 34.0),
+                  child: Text(
+                    'Mode Mobile, INC',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: Colors.grey.shade400),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      );
-}
-
-class ShareClassWidgetMobile extends StatelessWidget {
-  final ApiResponse? user;
-  const ShareClassWidgetMobile({
-    required this.user,
-    super.key,
-  });
-  @override
-  Widget build(BuildContext context) => Card(
-        child:
-
-            // Name and address
-            Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 30),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Mode Mobile, INC',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(color: Colors.grey.shade400),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Class AAA Common Stock',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.grey.shade400),
-              ),
-            ),
-          ],
-        ),
-      );
+      ),
+    );
+  }
 }
