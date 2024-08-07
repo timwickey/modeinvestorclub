@@ -55,6 +55,7 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
 }
 
 class InvestmentSummaryCard extends StatelessWidget {
+  const InvestmentSummaryCard({super.key});
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<ModeAuth>(context);
