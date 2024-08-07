@@ -336,6 +336,7 @@ class Event {
   final DateTime date;
   final String description;
   final String url;
+  final bool active;
 
   Event({
     required this.id,
@@ -345,6 +346,7 @@ class Event {
     required this.date,
     required this.description,
     required this.url,
+    required this.active,
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -356,6 +358,7 @@ class Event {
       date: DateTime.parse(json['date']),
       description: json['description'],
       url: json['url'],
+      active: json['active'],
     );
   }
 
@@ -368,6 +371,7 @@ class Event {
       'date': date.toIso8601String(),
       'description': description,
       'url': url,
+      'active': active,
     };
   }
 }

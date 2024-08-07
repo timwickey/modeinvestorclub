@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../backend.dart'; // Make sure to adjust the import path as needed
 import 'package:url_launcher/url_launcher.dart';
+import '../data/globals.dart';
 
 class EventDetailScreen extends StatelessWidget {
   final Event event;
@@ -56,8 +57,11 @@ class EventDetailScreen extends StatelessWidget {
                     const SizedBox(height: 20.0),
                     ElevatedButton(
                       onPressed: () {
-                        // Open the event URL
-                        _launchInBrowser(Uri.parse(event.url));
+                        if (event.active) {
+                          _launchInBrowser(Uri.parse(event.url));
+                        } else {
+                          _showInactiveDialog(context);
+                        }
                       },
                       child: const Text('Learn More'),
                     ),
@@ -78,5 +82,32 @@ class EventDetailScreen extends StatelessWidget {
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void _showInactiveDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: BorderSide(
+              color: borderColor,
+              width: borderThickness,
+            ),
+          ),
+          title: const Text('Event Not Yet Active'),
+          content: const Text('Check back soon to sign up for this event!'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
