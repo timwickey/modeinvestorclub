@@ -8,6 +8,34 @@ class ReferralCard extends StatelessWidget {
     super.key,
   });
 
+  void showComingSoonDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: BorderSide(
+              color: borderColor,
+              width: borderThickness,
+            ),
+          ),
+          title: Text('Coming Soon'),
+          content:
+              Text('Referrals are on the way...! Stayed tuned for updates!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -76,10 +104,7 @@ class ReferralCard extends StatelessWidget {
                       icon: Icon(Icons.group_add, color: Colors.white),
                       color: colorButton,
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Invite + Earn Button Pressed')),
-                        );
+                        showComingSoonDialog(context);
                       },
                     )),
                 const SizedBox(height: 25),
@@ -94,6 +119,26 @@ class ReferralCardMobile extends StatelessWidget {
   const ReferralCardMobile({
     super.key,
   });
+
+  void showComingSoonDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Coming Soon'),
+          content: Text('Referrals coming soon...!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -163,10 +208,7 @@ class ReferralCardMobile extends StatelessWidget {
                       icon: Icon(Icons.group_add, color: Colors.white),
                       color: colorButton,
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Invite + Earn Button Pressed')),
-                        );
+                        showComingSoonDialog(context);
                       },
                     )),
                 const SizedBox(height: 10),
