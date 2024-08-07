@@ -1,64 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-
-class StockEvent {
-  final String title;
-  final double price;
-  final DateTime displayDate;
-  final DateTime actualDate;
-
-  StockEvent({
-    required this.title,
-    required this.price,
-    required this.displayDate,
-    required this.actualDate,
-  });
-}
+import '../backend.dart';
 
 class StockHistory extends StatelessWidget {
-  final List<StockEvent> events;
+  final ApiResponse? user;
 
-  StockHistory({
-    List<StockEvent>? events,
+  const StockHistory({
+    this.user,
     super.key,
-  }) : events = (events ??
-            [
-              StockEvent(
-                  title: 'REG CF',
-                  price: 0.08,
-                  displayDate: DateTime(2022, 10),
-                  actualDate: DateTime(2022, 10)),
-              StockEvent(
-                  title: 'REG D',
-                  price: 0.16,
-                  displayDate: DateTime(2023, 10),
-                  actualDate: DateTime(2023, 10)),
-              StockEvent(
-                  title: 'REG A',
-                  price: 0.25,
-                  displayDate: DateTime(2024, 8),
-                  actualDate: DateTime(2024, 8)),
-              StockEvent(
-                  title: 'Republic REG D',
-                  price: 0.16,
-                  displayDate: DateTime(2024, 4, 8),
-                  actualDate: DateTime(2024, 4, 8)),
-              StockEvent(
-                  title: 'Seedrs REG S',
-                  price: 0.16,
-                  displayDate: DateTime(2024, 5, 3),
-                  actualDate: DateTime(2024, 5, 3)),
-              StockEvent(
-                  title: 'FrontFundr REG CF',
-                  price: 0.16,
-                  displayDate: DateTime(2024, 4, 5),
-                  actualDate: DateTime(2024, 3)),
-            ])
-          ..sort((a, b) => a.actualDate.compareTo(b.actualDate));
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (user == null || user!.stockPriceHistory.isEmpty) {
+      return Center(child: Text('No stock price history available'));
+    }
+
+    final events = user!.stockPriceHistory
+      ..sort((a, b) => a.actualDate.compareTo(b.actualDate));
+
     final DateTime firstDate = events.first.actualDate;
     final List<FlSpot> spots = events
         .map(
@@ -109,7 +70,8 @@ class StockHistory extends StatelessWidget {
                             firstDate.add(Duration(days: value.toInt()));
                         final event = events.firstWhere(
                             (event) => event.actualDate == date,
-                            orElse: () => StockEvent(
+                            orElse: () => StockPriceHistory(
+                                id: 0,
                                 title: '',
                                 price: 0,
                                 displayDate: date,

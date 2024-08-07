@@ -144,6 +144,7 @@ class ApiResponse {
   List<Deal> deals;
   List<Event> events;
   List<Option> options;
+  List<StockPriceHistory> stockPriceHistory;
 
   ApiResponse({
     required this.id,
@@ -157,6 +158,7 @@ class ApiResponse {
     required this.deals,
     required this.events,
     required this.options,
+    required this.stockPriceHistory,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
@@ -174,6 +176,11 @@ class ApiResponse {
     List<Option> optionsList =
         optionsJson.map((o) => Option.fromJson(o)).toList();
 
+    var stockPriceHistoryJson = json['stockPriceHistory'] as List;
+    List<StockPriceHistory> stockPriceHistoryList = stockPriceHistoryJson
+        .map((sph) => StockPriceHistory.fromJson(sph))
+        .toList();
+
     return ApiResponse(
       id: json['user']['id'],
       firstName: json['user']['firstname'],
@@ -186,6 +193,7 @@ class ApiResponse {
       deals: dealsList,
       events: eventsList,
       options: optionsList,
+      stockPriceHistory: stockPriceHistoryList,
     );
   }
 
@@ -202,6 +210,8 @@ class ApiResponse {
       'deals': deals.map((d) => d.toJson()).toList(),
       'events': events.map((e) => e.toJson()).toList(),
       'options': options.map((o) => o.toJson()).toList(),
+      'stockPriceHistory':
+          stockPriceHistory.map((sph) => sph.toJson()).toList(),
     };
   }
 
@@ -410,6 +420,44 @@ class Option {
       'vesting_frequency': vestingFrequency,
       'cliff_amount': cliffAmount,
       'monthly_vesting_amount': monthlyVestingAmount,
+    };
+  }
+}
+
+class StockPriceHistory {
+  final int id;
+  final String title;
+  final double price;
+  final DateTime displayDate;
+  final DateTime actualDate;
+
+  StockPriceHistory({
+    required this.id,
+    required this.title,
+    required this.price,
+    required this.displayDate,
+    required this.actualDate,
+  });
+
+  factory StockPriceHistory.fromJson(Map<String, dynamic> json) {
+    return StockPriceHistory(
+      id: json['id'],
+      title: json['title'],
+      price: (json['price'] is String)
+          ? double.parse(json['price'])
+          : json['price'].toDouble(),
+      displayDate: DateTime.parse(json['display_date']),
+      actualDate: DateTime.parse(json['actual_date']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'price': price,
+      'display_date': displayDate.toIso8601String(),
+      'actual_date': actualDate.toIso8601String(),
     };
   }
 }

@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: constraints.maxWidth * 0.75 - 8,
                                   height: widgetHeight,
-                                  child: StockHistory(),
+                                  child: StockHistory(user: widget.user),
                                 ),
                                 SizedBox(width: 8),
                                 SizedBox(
@@ -256,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(height: 8),
                             SizedBox(
                               height: profileHeight,
-                              child: StockHistory(),
+                              child: StockHistory(user: widget.user),
                             ),
                             Row(
                               children: [
