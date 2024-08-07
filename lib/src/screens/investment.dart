@@ -25,24 +25,23 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: pageWidth),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                        height: 20.0), // Start 20 pixels from the top
-                    const Text(
+                    SizedBox(height: 20.0), // Start 20 pixels from the top
+                    Text(
                       'Your Investments in Mode Mobile, INC',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20.0),
+                    SizedBox(height: 20.0),
 
                     InvestmentSummaryCard(),
-                    const Divider(thickness: 1.0),
-                    const SizedBox(height: 20.0),
-                    const InvestmentList(),
+                    Divider(thickness: 1.0),
+                    SizedBox(height: 20.0),
+                    InvestmentList(),
                   ],
                 ),
               ),
