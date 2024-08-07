@@ -26,7 +26,7 @@ class EventList extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Icon(Icons.event_available, color: Colors.blue),
+              Icon(Icons.event_available, color: Colors.deepOrange),
               SizedBox(width: 8),
               Text(
                 'Upcoming Events',
@@ -69,19 +69,11 @@ class EventList extends StatelessWidget {
                                               color: Colors.white,
                                             ),
                                             child: ClipOval(
-                                              child: (event.image != null &&
-                                                      event.image!.isNotEmpty)
-                                                  ? Image.network(
-                                                      event.image!,
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : const Icon(
-                                                      Icons.local_offer,
-                                                      size: 40,
-                                                      color: Colors.blue,
-                                                    ),
+                                              child: const Icon(
+                                                Icons.calendar_month,
+                                                size: 40,
+                                                color: Colors.deepOrange,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(width: 16),
@@ -129,7 +121,7 @@ class EventList extends StatelessWidget {
                                               .format(event.date),
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyMedium,
+                                              .titleMedium,
                                         ),
                                       ],
                                     ),
@@ -186,19 +178,11 @@ class EventList extends StatelessWidget {
                                             color: Colors.white,
                                           ),
                                           child: ClipOval(
-                                            child: (event.image != null &&
-                                                    event.image!.isNotEmpty)
-                                                ? Image.network(
-                                                    event.image!,
-                                                    width: 60,
-                                                    height: 60,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : const Icon(
-                                                    Icons.local_offer,
-                                                    size: 40,
-                                                    color: Colors.blue,
-                                                  ),
+                                            child: const Icon(
+                                              Icons.calendar_month,
+                                              size: 40,
+                                              color: Colors.deepOrange,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(width: 16),
@@ -246,7 +230,7 @@ class EventList extends StatelessWidget {
                                             .format(event.date),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyMedium,
+                                            .titleMedium,
                                       ),
                                     ],
                                   ),
@@ -348,19 +332,11 @@ class EventListMobile extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                     child: ClipOval(
-                                      child: (event.image != null &&
-                                              event.image!.isNotEmpty)
-                                          ? Image.network(
-                                              event.image!,
-                                              width: 60,
-                                              height: 60,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : const Icon(
-                                              Icons.local_offer,
-                                              size: 40,
-                                              color: Colors.blue,
-                                            ),
+                                      child: const Icon(
+                                        Icons.calendar_month,
+                                        size: 40,
+                                        color: Colors.deepOrange,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 16),
@@ -399,7 +375,7 @@ class EventListMobile extends StatelessWidget {
                                   Text(
                                     DateFormat('yyyy-MM-dd').format(event.date),
                                     style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                   RoundedButton(
                                     text: "EVENT PAGE",
@@ -475,19 +451,11 @@ class EventListMobile extends StatelessWidget {
                                     color: Colors.white,
                                   ),
                                   child: ClipOval(
-                                    child: (event.image != null &&
-                                            event.image!.isNotEmpty)
-                                        ? Image.network(
-                                            event.image!,
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : const Icon(
-                                            Icons.local_offer,
-                                            size: 40,
-                                            color: Colors.blue,
-                                          ),
+                                    child: const Icon(
+                                      Icons.calendar_month,
+                                      size: 40,
+                                      color: Colors.deepOrange,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -524,7 +492,8 @@ class EventListMobile extends StatelessWidget {
                               children: [
                                 Text(
                                   DateFormat('yyyy-MM-dd').format(event.date),
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                                 RoundedButton(
                                   text: "EVENT PAGE",

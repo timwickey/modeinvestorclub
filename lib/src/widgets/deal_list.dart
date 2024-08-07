@@ -34,7 +34,7 @@ class DealList extends StatelessWidget {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.local_offer, color: Colors.blue),
+              Icon(Icons.local_offer, color: Colors.deepOrange),
               SizedBox(width: 8),
               Text(
                 'Available Partner Perks',
@@ -154,7 +154,7 @@ class DealWidget extends StatelessWidget {
                                 const Icon(
                               Icons.image,
                               size: 40,
-                              color: Colors.blue,
+                              color: Colors.deepOrange,
                             ),
                           )
                         : Image.network(
@@ -167,14 +167,14 @@ class DealWidget extends StatelessWidget {
                               return const Icon(
                                 Icons.broken_image,
                                 size: 40,
-                                color: Colors.blue,
+                                color: Colors.deepOrange,
                               );
                             },
                           ))
                     : const Icon(
                         Icons.local_offer,
                         size: 40,
-                        color: Colors.blue,
+                        color: Colors.deepOrange,
                       ),
               ),
             ),

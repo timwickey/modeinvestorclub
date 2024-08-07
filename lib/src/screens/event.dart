@@ -14,7 +14,7 @@ class EventDetailScreen extends StatelessWidget {
     final dateFormat = DateFormat.yMMMMd();
     return Scaffold(
       appBar: AppBar(
-        title: Text(event.title),
+        title: Text("EVENT"),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -27,7 +27,7 @@ class EventDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (event.image != null)
+                    if (event.image != null && event.image!.isNotEmpty)
                       Image.network(
                         event.image!,
                         width: double.infinity,
