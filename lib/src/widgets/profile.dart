@@ -145,13 +145,6 @@ class ProfileCardMobile extends StatelessWidget {
                   children: [
                     ProfileWidget(user: user),
                     Spacer(),
-                    SquaredButton(
-                      text: "VIEW SHARES",
-                      icon: const Icon(Icons.arrow_right_alt),
-                      onPressed: () {
-                        GoRouter.of(context).go('/investment');
-                      },
-                    ),
                   ],
                 ),
               ),

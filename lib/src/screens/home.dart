@@ -178,8 +178,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (constraints.maxWidth < 1200 &&
                           constraints.maxWidth > 800) {
                         eventheight = 120 + (1200 - constraints.maxWidth) / 6;
-                      } else if (constraints.maxWidth <= 800) {
+                      } else if (constraints.maxWidth <= 800 &&
+                          constraints.maxWidth > 600) {
                         eventheight = 150;
+                        profileHeight = widgetHeight - 50;
+                        referralHeight = widgetHeight - 180;
+                      } else if (constraints.maxWidth <= 600) {
+                        eventheight = 180;
                         profileHeight = widgetHeight - 50;
                         referralHeight = widgetHeight - 180;
                       }
@@ -229,7 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: constraints.maxWidth,
                                   height: eventTotalHeight,
                                   child: EventList(
-                                      events: widget.user?.events ?? []),
+                                    events: widget.user?.events ?? [],
+                                    scroller: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -263,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Expanded(
                                   child: SizedBox(
                                     height: profileHeight,
-                                    child: const ModeInvestorClub(),
+                                    child: const ModeInvestorClubMobile(),
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -282,7 +289,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: constraints.maxWidth,
                                   height: eventTotalHeight,
                                   child: EventListMobile(
-                                      events: widget.user?.events ?? []),
+                                    events: widget.user?.events ?? [],
+                                    scroller: true,
+                                  ),
                                 ),
                               ],
                             ),

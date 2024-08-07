@@ -271,62 +271,64 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'images/mode-investor-club-logo.svg',
-                  height: 100,
-                ),
-                const SizedBox(height: 32),
-                Container(
-                  constraints: BoxConstraints.loose(const Size(600, 600)),
-                  child: Text(
-                    "Welcome to the Mode Investor Club Portal! Discover exclusive events, special deals, and real-time investment tracking all in one place.",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'images/mode-investor-club-logo.svg',
+                    height: 100,
                   ),
-                ),
-                const SizedBox(height: 32),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    side: BorderSide(
-                      color: borderColor,
-                      width: borderThickness,
+                  const SizedBox(height: 32),
+                  Container(
+                    constraints: BoxConstraints.loose(const Size(600, 600)),
+                    child: Text(
+                      "Welcome to the Mode Investor Club Portal! Discover exclusive events, special deals, and real-time investment tracking all in one place.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
-                  child: Container(
-                    constraints: BoxConstraints.loose(const Size(600, 600)),
-                    padding: const EdgeInsets.all(16),
-                    child: _isLoading
-                        ? CircularProgressIndicator()
-                        : _isForgotPassword
-                            ? _buildForgotPasswordForm()
-                            : _isPasswordSet == 1
-                                ? _buildSignInForm()
-                                : _isPasswordSet == 0
-                                    ? _buildTokenForm()
-                                    : _buildUserNotFound(),
+                  const SizedBox(height: 32),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      side: BorderSide(
+                        color: borderColor,
+                        width: borderThickness,
+                      ),
+                    ),
+                    child: Container(
+                      constraints: BoxConstraints.loose(const Size(600, 600)),
+                      padding: const EdgeInsets.all(16),
+                      child: _isLoading
+                          ? CircularProgressIndicator()
+                          : _isForgotPassword
+                              ? _buildForgotPasswordForm()
+                              : _isPasswordSet == 1
+                                  ? _buildSignInForm()
+                                  : _isPasswordSet == 0
+                                      ? _buildTokenForm()
+                                      : _buildUserNotFound(),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, please use those credentials to log in.",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 32),
-                TextButton(
-                  onPressed: () {
-                    html.window.location.assign('/#/home');
-                    html.window.location.reload();
-                  },
-                  child: const Text('Go Home'),
-                ),
-              ],
+                  const SizedBox(height: 32),
+                  Text(
+                    "Mode Investor Club is currently in beta launch.\nIf you received an invitation via email, please use those credentials to log in.",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 32),
+                  TextButton(
+                    onPressed: () {
+                      html.window.location.assign('/#/home');
+                      html.window.location.reload();
+                    },
+                    child: const Text('Go Home'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
