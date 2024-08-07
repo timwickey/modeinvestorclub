@@ -4,13 +4,13 @@ import '../backend.dart';
 import '../data/globals.dart';
 import 'package:intl/intl.dart';
 
+import '../screens/event.dart'; // Adjust the import path as needed
+
 class EventList extends StatelessWidget {
   final List<Event> events;
-  final ValueChanged<Event>? onTap;
 
   const EventList({
     required this.events,
-    this.onTap,
     super.key,
   });
 
@@ -132,7 +132,13 @@ class EventList extends StatelessWidget {
                               color: transparentButton,
                               icon: const Icon(Icons.arrow_forward),
                               onPressed: () {
-                                onTap?.call(event);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailScreen(event: event),
+                                  ),
+                                );
                               },
                             ),
                           ),
@@ -155,11 +161,9 @@ class EventList extends StatelessWidget {
 
 class EventListMobile extends StatelessWidget {
   final List<Event> events;
-  final ValueChanged<Event>? onTap;
 
   const EventListMobile({
     required this.events,
-    this.onTap,
     super.key,
   });
 
@@ -265,7 +269,13 @@ class EventListMobile extends StatelessWidget {
                               color: transparentButton,
                               icon: const Icon(Icons.arrow_forward),
                               onPressed: () {
-                                onTap?.call(event);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailScreen(event: event),
+                                  ),
+                                );
                               },
                             ),
                           ],

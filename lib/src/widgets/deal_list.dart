@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modeinvestorclub/src/widgets/ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../backend.dart';
 import '../data/globals.dart';
 
@@ -13,6 +14,15 @@ class DealList extends StatelessWidget {
     this.onTap,
     super.key,
   });
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +102,7 @@ class DealList extends StatelessWidget {
                                         color: transparentButton,
                                         icon: Icon(Icons.add),
                                         onPressed: () {
-                                          onTap?.call(deal);
+                                          _launchInBrowser(Uri.parse(deal.url));
                                         })),
                                 const SizedBox(height: 12),
                               ],
