@@ -66,7 +66,7 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                     children: const [
                       SizedBox(height: 20.0), // Start 20 pixels from the top
                       Text(
-                        'Your Investments in Mode Mobile, INC',
+                        'Portfolio',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -228,6 +228,7 @@ class TransferOnlineWidget extends StatelessWidget {
 
 class InvestmentList extends StatelessWidget {
   const InvestmentList({super.key});
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<ModeAuth>(context);
@@ -235,8 +236,17 @@ class InvestmentList extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children:
-          investments.map((investment) => InvestmentCard(investment)).toList(),
+      children: [
+        const Text(
+          'Your Investments in Mode Mobile, INC',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20.0),
+        ...investments.map((investment) => InvestmentCard(investment)),
+      ],
     );
   }
 }
