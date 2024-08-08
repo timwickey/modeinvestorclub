@@ -9,10 +9,12 @@ class ModeAuth extends ChangeNotifier {
   bool _signedIn = false;
   ApiResponse? _user;
   bool _isTokenLogin = false;
+  String? _token;
 
   bool get signedIn => _signedIn;
   ApiResponse? get user => _user;
   bool get isTokenLogin => _isTokenLogin;
+  String? get token => _token;
 
   ModeAuth() {
     _loadUserFromPrefs();
@@ -24,9 +26,9 @@ class ModeAuth extends ChangeNotifier {
 
   Future<void> _loadUserFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('auth_token');
-    if (token != null) {
-      bool isValid = await _validateToken(token);
+    _token = prefs.getString('auth_token');
+    if (_token != null) {
+      bool isValid = await _validateToken(_token!);
       if (isValid) {
         notifyListeners();
       } else {
@@ -56,11 +58,13 @@ class ModeAuth extends ChangeNotifier {
   Future<void> _saveUserToPrefs(String token) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('auth_token', token);
+    _token = token;
   }
 
   Future<void> _removeUserFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('auth_token');
+    _token = null;
   }
 
   Future<void> signOut() async {
