@@ -145,6 +145,7 @@ class ApiResponse {
   final String toRegisterUrl;
   final String toUrl;
   final String address;
+  final bool admin;
   List<Investment> investments;
   List<Deal> deals;
   List<Event> events;
@@ -165,6 +166,7 @@ class ApiResponse {
     required this.toRegisterUrl,
     required this.toUrl,
     required this.address,
+    required this.admin,
     required this.investments,
     required this.deals,
     required this.events,
@@ -206,6 +208,7 @@ class ApiResponse {
       toRegisterUrl: json['user']['to_register_url'] ?? '',
       toUrl: json['user']['to_url'] ?? '',
       address: json['user']['address'] ?? '',
+      admin: json['user']['admin'] ?? false,
       investments: investmentsList,
       deals: dealsList,
       events: eventsList,
@@ -229,6 +232,7 @@ class ApiResponse {
       'to_register_url': toRegisterUrl,
       'to_url': toUrl,
       'address': address,
+      'admin': admin,
       'investments': investments.map((i) => i.toJson()).toList(),
       'deals': deals.map((d) => d.toJson()).toList(),
       'events': events.map((e) => e.toJson()).toList(),

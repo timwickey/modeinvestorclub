@@ -169,7 +169,8 @@ class _InvestorClubState extends State<InvestorClub> {
                       pageBuilder: (context, state) {
                         return FadeTransitionPage<dynamic>(
                           key: state.pageKey,
-                          child: const SettingsScreen(),
+                          child: SettingsScreen(
+                              user: context.read<ModeAuth>().user),
                         );
                       },
                     ),

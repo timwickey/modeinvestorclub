@@ -3,10 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:modeinvestorclub/src/data/globals.dart';
 import 'package:provider/provider.dart';
 import '../auth.dart';
+import '../backend.dart';
 import '../widgets/ui.dart'; // Ensure this import is correct
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final ApiResponse? user;
+  const SettingsScreen({super.key, this.user});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
