@@ -26,12 +26,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 400),
-                  child: const Card(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-                      child: SettingsContent(),
-                    ),
+                  child: Column(
+                    children: [
+                      const Card(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 18, horizontal: 12),
+                          child: SettingsContent(),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      const AdminSection(),
+                    ],
                   ),
                 ),
               ),
@@ -85,6 +91,52 @@ class SettingsContent extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AdminSection extends StatelessWidget {
+  const AdminSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final auth = Provider.of<ModeAuth>(context);
+    final user = auth.user;
+
+    if (user == null || !user.admin) {
+      return Container();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(thickness: 1.0),
+        const Text(
+          'ADMIN',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20.0),
+        TextField(
+          decoration: InputDecoration(
+            labelText: 'Search',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        RoundedButton(
+          onPressed: () {
+            // Add search functionality here
+          },
+          text: 'Search',
+          color: transparentButton,
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 }
