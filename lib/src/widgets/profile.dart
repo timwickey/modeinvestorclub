@@ -171,12 +171,8 @@ class PortfolioValueWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalShares = user?.calculateTotalShares() ?? 0;
-    final portfolioValue =
-        totalShares * 0.16; // Assuming price per share is 0.16
-    final previousValue = totalShares *
-        0.15; // Assuming previous price per share is 0.15 for gains calculation
-    final gainValue = portfolioValue - previousValue;
+    final portfolioValue = user?.getPortfolioValue() ?? 0;
+    final gainValue = user?.getGain() ?? 0;
     final formattedValue = NumberFormat.simpleCurrency().format(portfolioValue);
     final formattedGain = NumberFormat.simpleCurrency().format(gainValue);
 
@@ -249,12 +245,8 @@ class PortfolioValueMobileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalShares = user?.calculateTotalShares() ?? 0;
-    final portfolioValue =
-        totalShares * 0.16; // Assuming price per share is 0.16
-    final previousValue = totalShares *
-        0.15; // Assuming previous price per share is 0.15 for gains calculation
-    final gainValue = portfolioValue - previousValue;
+    final portfolioValue = user?.getPortfolioValue() ?? 0;
+    final gainValue = user?.getGain() ?? 0;
     final formattedValue = NumberFormat.simpleCurrency().format(portfolioValue);
     final formattedGain = NumberFormat.simpleCurrency().format(gainValue);
 

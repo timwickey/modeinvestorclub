@@ -131,7 +131,6 @@ class ApiResult<T> {
   ApiResult({this.data, this.error});
 }
 
-// Define a class to represent the data you expect from the API
 class ApiResponse {
   final int id;
   final String firstName;
@@ -240,11 +239,61 @@ class ApiResponse {
   }
 
   int calculateTotalShares() {
-    int totalShares = 0;
-    for (var investment in investments) {
-      totalShares += investment.shares + investment.bonusShares;
+    return investments.fold(
+        0,
+        (total, investment) =>
+            total + investment.shares + investment.bonusShares);
+  }
+
+  double getSharePrice() {
+    if (stockPriceHistory.isNotEmpty) {
+      var sortedStockPriceHistory =
+          List<StockPriceHistory>.from(stockPriceHistory);
+      sortedStockPriceHistory
+          .sort((a, b) => a.actualDate.compareTo(b.actualDate));
+      return sortedStockPriceHistory.last.price;
     }
-    return totalShares;
+    return 0.0;
+  }
+
+  double getPortfolioValue() {
+    int totalShares = calculateTotalShares();
+    double sharePrice = getSharePrice();
+    return totalShares * sharePrice;
+  }
+
+  double getCost() {
+    return investments.fold(0.0,
+        (total, investment) => total + (investment.price * investment.shares));
+  }
+
+  int getBonusShares() {
+    return investments.fold(
+        0, (total, investment) => total + investment.bonusShares);
+  }
+
+  double getPricePerShareWithBonus() {
+    int totalSharesWithBonus = calculateTotalShares();
+    if (totalSharesWithBonus == 0) return 0.0;
+    double totalCostWithBonus = investments.fold(
+        0.0,
+        (total, investment) =>
+            total +
+            (investment.price * (investment.shares + investment.bonusShares)));
+    return totalCostWithBonus / totalSharesWithBonus;
+  }
+
+  double getPricePerShareWithoutBonus() {
+    int totalShares =
+        investments.fold(0, (total, investment) => total + investment.shares);
+    if (totalShares == 0) return 0.0;
+    double totalCost = investments.fold(0.0,
+        (total, investment) => total + (investment.price * investment.shares));
+    return totalCost / totalShares;
+  }
+
+  double getGain() {
+    return getPortfolioValue() - getCost();
   }
 }
 
