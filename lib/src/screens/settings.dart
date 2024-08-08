@@ -106,7 +106,7 @@ class AdminSection extends StatefulWidget {
 
 class _AdminSectionState extends State<AdminSection> {
   final TextEditingController _searchController = TextEditingController();
-  List<ApiResponse> _searchResults = [];
+  List<UserSearchResult> _searchResults = [];
   bool _isLoading = false;
   String _errorMessage = '';
 
@@ -136,10 +136,11 @@ class _AdminSectionState extends State<AdminSection> {
       );
 
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.decode(response.body);
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        List<dynamic> usersJson = jsonResponse['users'];
         setState(() {
           _searchResults =
-              jsonResponse.map((data) => ApiResponse.fromJson(data)).toList();
+              usersJson.map((data) => UserSearchResult.fromJson(data)).toList();
           _isLoading = false;
         });
       } else {
@@ -213,6 +214,29 @@ class _AdminSectionState extends State<AdminSection> {
             },
           ),
       ],
+    );
+  }
+}
+
+class UserSearchResult {
+  final int id;
+  final String firstName;
+  final String lastName;
+  final String email;
+
+  UserSearchResult({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+  });
+
+  factory UserSearchResult.fromJson(Map<String, dynamic> json) {
+    return UserSearchResult(
+      id: json['id'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      email: json['email'],
     );
   }
 }
