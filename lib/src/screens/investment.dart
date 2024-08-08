@@ -31,20 +31,37 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                     alignment: Alignment.topCenter,
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: pageWidth),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                               height: 20.0), // Start 20 pixels from the top
-                          Text(
-                            'Portfolio',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Consumer<ModeAuth>(
+                            builder: (context, auth, _) {
+                              final latestPrice =
+                                  auth.user?.getSharePrice() ?? 0.0;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Mode Mobile, INC',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Share price: \$${latestPrice.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
-                          SizedBox(height: 20.0),
-                          Row(
+                          const SizedBox(height: 20.0),
+                          const Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(child: InvestmentSummaryCard()),
@@ -52,9 +69,9 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                               Expanded(child: TransferOnlineWidget()),
                             ],
                           ),
-                          Divider(thickness: 1.0),
-                          SizedBox(height: 20.0),
-                          InvestmentList(),
+                          const Divider(thickness: 1.0),
+                          const SizedBox(height: 20.0),
+                          const InvestmentList(),
                         ],
                       ),
                     ),
@@ -63,22 +80,40 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                   // Mobile View
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      SizedBox(height: 20.0), // Start 20 pixels from the top
-                      Text(
-                        'Portfolio',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    children: [
+                      const SizedBox(
+                          height: 20.0), // Start 20 pixels from the top
+                      Consumer<ModeAuth>(
+                        builder: (context, auth, _) {
+                          final latestPrice = auth.user?.getSharePrice() ?? 0.0;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Mode Mobile, INC',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Share price: \$${latestPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                      SizedBox(height: 20.0),
-                      InvestmentSummaryCard(),
-                      SizedBox(height: 20.0),
-                      TransferOnlineWidget(),
-                      Divider(thickness: 1.0),
-                      SizedBox(height: 20.0),
-                      InvestmentList(),
+
+                      const SizedBox(height: 20.0),
+                      const InvestmentSummaryCard(),
+                      const SizedBox(height: 20.0),
+                      const TransferOnlineWidget(),
+                      const Divider(thickness: 1.0),
+                      const SizedBox(height: 20.0),
+                      const InvestmentList(),
                     ],
                   );
                 }
@@ -100,13 +135,13 @@ class InvestmentSummaryCard extends StatelessWidget {
     if (user == null) return Container();
 
     final totalShares = user.calculateTotalShares();
-    final latestPrice = user.getSharePrice();
     final totalValuation = user.getPortfolioValue();
     final totalCost = user.getCost();
     final bonusShares = user.getBonusShares();
     final pricePerShareWithBonus = user.getPricePerShareWithBonus();
     final pricePerShareWithoutBonus = user.getPricePerShareWithoutBonus();
     final gain = user.getGain();
+    final gainPercentage = (totalCost > 0) ? (gain / totalCost) * 100 : 0.0;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -142,6 +177,24 @@ class InvestmentSummaryCard extends StatelessWidget {
                 'Total Valuation at Current Price: \$${totalValuation.toStringAsFixed(2)}'),
             Text('Total Cost: \$${totalCost.toStringAsFixed(2)}'),
             Text('Gain: \$${gain.toStringAsFixed(2)}'),
+            Row(
+              children: [
+                const Text('Percentage Gain: '),
+                Text(
+                  '${gainPercentage.toStringAsFixed(2)}%',
+                  style: TextStyle(
+                    color: gainPercentage >= 0 ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Icon(
+                  gainPercentage >= 0
+                      ? Icons.arrow_upward
+                      : Icons.arrow_downward,
+                  color: gainPercentage >= 0 ? Colors.green : Colors.red,
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -229,7 +282,7 @@ class InvestmentList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Your Investments in Mode Mobile, INC',
+          'Your Investments',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
