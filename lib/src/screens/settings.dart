@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modeinvestorclub/src/data/globals.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert'; // For converting JSON data
+import 'package:http/http.dart' as http; // Importing the http package
 import '../auth.dart';
 import '../backend.dart';
 import '../widgets/ui.dart'; // Ensure this import is correct
@@ -95,8 +97,64 @@ class SettingsContent extends StatelessWidget {
   }
 }
 
-class AdminSection extends StatelessWidget {
+class AdminSection extends StatefulWidget {
   const AdminSection({super.key});
+
+  @override
+  _AdminSectionState createState() => _AdminSectionState();
+}
+
+class _AdminSectionState extends State<AdminSection> {
+  final TextEditingController _searchController = TextEditingController();
+  List<ApiResponse> _searchResults = [];
+  bool _isLoading = false;
+  String _errorMessage = '';
+
+  Future<void> _searchUsers(String query) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    final auth = Provider.of<ModeAuth>(context, listen: false);
+    final token = auth.token;
+
+    if (token == null) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Token is not available';
+      });
+      return;
+    }
+
+    String url = '${ApiUrl}/admin_search';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'query': query, 'token': token}),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        setState(() {
+          _searchResults =
+              jsonResponse.map((data) => ApiResponse.fromJson(data)).toList();
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _errorMessage = 'Failed to load search results';
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      setState(() {
+        _errorMessage = 'Failed to load search results: $error';
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +178,7 @@ class AdminSection extends StatelessWidget {
         ),
         const SizedBox(height: 20.0),
         TextField(
+          controller: _searchController,
           decoration: InputDecoration(
             labelText: 'Search',
             border: OutlineInputBorder(
@@ -129,13 +188,30 @@ class AdminSection extends StatelessWidget {
         ),
         const SizedBox(height: 16.0),
         RoundedButton(
-          onPressed: () {
-            // Add search functionality here
-          },
+          onPressed: () => _searchUsers(_searchController.text),
           text: 'Search',
           color: transparentButton,
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
         ),
+        const SizedBox(height: 20.0),
+        if (_isLoading) const CircularProgressIndicator(),
+        if (_errorMessage.isNotEmpty)
+          Text(
+            _errorMessage,
+            style: const TextStyle(color: Colors.red),
+          ),
+        if (_searchResults.isNotEmpty)
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _searchResults.length,
+            itemBuilder: (context, index) {
+              final user = _searchResults[index];
+              return ListTile(
+                title: Text('${user.firstName} ${user.lastName}'),
+                subtitle: Text(user.email),
+              );
+            },
+          ),
       ],
     );
   }
