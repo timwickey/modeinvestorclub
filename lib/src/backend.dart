@@ -140,6 +140,12 @@ class ApiResponse {
   final String message;
   final String token;
   final bool forcePassChange;
+  final String toShareholderId;
+  final String toAccessCode;
+  final bool toRegistered;
+  final String toRegisterUrl;
+  final String toUrl;
+  final String address;
   List<Investment> investments;
   List<Deal> deals;
   List<Event> events;
@@ -154,6 +160,12 @@ class ApiResponse {
     required this.message,
     required this.token,
     required this.forcePassChange,
+    required this.toShareholderId,
+    required this.toAccessCode,
+    required this.toRegistered,
+    required this.toRegisterUrl,
+    required this.toUrl,
+    required this.address,
     required this.investments,
     required this.deals,
     required this.events,
@@ -183,12 +195,18 @@ class ApiResponse {
 
     return ApiResponse(
       id: json['user']['id'],
-      firstName: json['user']['firstname'],
-      lastName: json['user']['lastname'],
+      firstName: json['user']['first_name'],
+      lastName: json['user']['last_name'],
       email: json['user']['email'],
       message: json['message'],
       token: json['token'],
       forcePassChange: json['user']['force_pass_change'] ?? false,
+      toShareholderId: json['user']['to_shareholder_id'] ?? '',
+      toAccessCode: json['user']['to_access_code'] ?? '',
+      toRegistered: json['user']['to_registered'] ?? false,
+      toRegisterUrl: json['user']['to_register_url'] ?? '',
+      toUrl: json['user']['to_url'] ?? '',
+      address: json['user']['address'] ?? '',
       investments: investmentsList,
       deals: dealsList,
       events: eventsList,
@@ -200,12 +218,18 @@ class ApiResponse {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
+      'first_name': firstName,
+      'last_name': lastName,
       'email': email,
       'message': message,
       'token': token,
       'force_pass_change': forcePassChange,
+      'to_shareholder_id': toShareholderId,
+      'to_access_code': toAccessCode,
+      'to_registered': toRegistered,
+      'to_register_url': toRegisterUrl,
+      'to_url': toUrl,
+      'address': address,
       'investments': investments.map((i) => i.toJson()).toList(),
       'deals': deals.map((d) => d.toJson()).toList(),
       'events': events.map((e) => e.toJson()).toList(),

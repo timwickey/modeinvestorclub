@@ -53,7 +53,7 @@ class ProfileWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Your Address',
+                    '${user?.address}',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
