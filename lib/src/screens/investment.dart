@@ -37,7 +37,7 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                           SizedBox(
                               height: 20.0), // Start 20 pixels from the top
                           Text(
-                            'Your Investments in Mode Mobile, INC',
+                            'Portfolio',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -96,28 +96,17 @@ class InvestmentSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<ModeAuth>(context);
-    final investments = auth.user?.investments ?? [];
-    final stockPriceHistory = auth.user?.stockPriceHistory ?? [];
-    final latestPrice =
-        stockPriceHistory.isNotEmpty ? stockPriceHistory.last.price : 0.0;
+    final user = auth.user;
+    if (user == null) return Container();
 
-    final totalShares =
-        investments.fold<int>(0, (sum, investment) => sum + investment.shares);
-    final bonusShares = investments.fold<int>(
-        0, (sum, investment) => sum + investment.bonusShares);
-    final totalSharesWithBonus = totalShares + bonusShares;
-    final totalValuation = totalSharesWithBonus * latestPrice;
-
-    final effectivePriceWithoutBonus = investments.fold<double>(0.0,
-            (sum, investment) => sum + (investment.price * investment.shares)) /
-        totalShares;
-    final effectivePriceWithBonus = investments.fold<double>(
-            0.0,
-            (sum, investment) =>
-                sum +
-                (investment.price *
-                    (investment.shares + investment.bonusShares))) /
-        totalSharesWithBonus;
+    final totalShares = user.calculateTotalShares();
+    final latestPrice = user.getSharePrice();
+    final totalValuation = user.getPortfolioValue();
+    final totalCost = user.getCost();
+    final bonusShares = user.getBonusShares();
+    final pricePerShareWithBonus = user.getPricePerShareWithBonus();
+    final pricePerShareWithoutBonus = user.getPricePerShareWithoutBonus();
+    final gain = user.getGain();
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -142,15 +131,17 @@ class InvestmentSummaryCard extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text('Bonus Shares: $bonusShares'),
-            Text('Total Shares with Bonus: $totalSharesWithBonus'),
+            Text('Total Shares with Bonus: ${totalShares + bonusShares}'),
             const SizedBox(height: 8.0),
             Text(
-                'Effective Price per Share (without bonuses): \$${effectivePriceWithoutBonus.toStringAsFixed(2)}'),
+                'Effective Price per Share (without bonuses): \$${pricePerShareWithoutBonus.toStringAsFixed(2)}'),
             Text(
-                'Effective Price per Share (with bonuses): \$${effectivePriceWithBonus.toStringAsFixed(2)}'),
+                'Effective Price per Share (with bonuses): \$${pricePerShareWithBonus.toStringAsFixed(2)}'),
             const SizedBox(height: 8.0),
             Text(
                 'Total Valuation at Current Price: \$${totalValuation.toStringAsFixed(2)}'),
+            Text('Total Cost: \$${totalCost.toStringAsFixed(2)}'),
+            Text('Gain: \$${gain.toStringAsFixed(2)}'),
           ],
         ),
       ),
@@ -280,7 +271,7 @@ class InvestmentCard extends StatelessWidget {
             Text(
                 'Effective Price: \$${investment.effectivePrice.toStringAsFixed(2)}'),
             Text('Class: ${investment.shareClass}'),
-            Text('Date: ${dateFormat.format(investment.date)}'),
+            Text('Date Purchased: ${dateFormat.format(investment.date)}'),
           ],
         ),
       ),
