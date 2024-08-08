@@ -21,30 +21,57 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: pageWidth),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20.0), // Start 20 pixels from the top
-                    Text(
-                      'Your Investments in Mode Mobile, INC',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth > 800) {
+                  // Desktop View
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: pageWidth),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          SizedBox(
+                              height: 20.0), // Start 20 pixels from the top
+                          Text(
+                            'Your Investments in Mode Mobile, INC',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 20.0),
+                          InvestmentSummaryCard(),
+                          Divider(thickness: 1.0),
+                          SizedBox(height: 20.0),
+                          InvestmentList(),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 20.0),
-
-                    InvestmentSummaryCard(),
-                    Divider(thickness: 1.0),
-                    SizedBox(height: 20.0),
-                    InvestmentList(),
-                  ],
-                ),
-              ),
+                  );
+                } else {
+                  // Mobile View
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(height: 20.0), // Start 20 pixels from the top
+                      Text(
+                        'Your Investments in Mode Mobile, INC',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      InvestmentSummaryCard(),
+                      Divider(thickness: 1.0),
+                      SizedBox(height: 20.0),
+                      InvestmentList(),
+                    ],
+                  );
+                }
+              },
             ),
           ),
         ),
