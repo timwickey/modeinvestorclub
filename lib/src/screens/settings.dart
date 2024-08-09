@@ -39,7 +39,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       SizedBox(height: 20.0),
-                      AdminSection(),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: AdminSection(),
+                      ),
                     ],
                   ),
                 ),
@@ -108,13 +111,13 @@ class AdminSection extends StatefulWidget {
 class _AdminSectionState extends State<AdminSection> {
   final TextEditingController _searchController = TextEditingController();
   List<UserSearchResult> _searchResults = [];
+  Map<int, bool> _profileLoading = {}; // Map to track loading state per user
   bool _isLoading = false;
-  bool _isProfileLoading = false; // New loading state for profile fetching
   String _errorMessage = '';
 
-  Future<void> _getUserProfile(String email) async {
+  Future<void> _getUserProfile(String email, int userId) async {
     setState(() {
-      _isProfileLoading = true; // Show loading spinner
+      _profileLoading[userId] = true; // Set loading state for this user
       _errorMessage = '';
     });
 
@@ -124,7 +127,7 @@ class _AdminSectionState extends State<AdminSection> {
     if (token == null) {
       setState(() {
         _errorMessage = 'Token is not available';
-        _isProfileLoading = false; // Stop loading spinner
+        _profileLoading[userId] = false; // Stop loading spinner for this user
       });
       return;
     }
@@ -144,7 +147,7 @@ class _AdminSectionState extends State<AdminSection> {
         final ApiResponse userProfile = ApiResponse.fromJson(jsonResponse);
 
         setState(() {
-          _isProfileLoading = false; // Stop loading spinner
+          _profileLoading[userId] = false; // Stop loading spinner for this user
         });
 
         // Navigate to the InvestmentScreen with the retrieved user data
@@ -158,13 +161,13 @@ class _AdminSectionState extends State<AdminSection> {
       } else {
         setState(() {
           _errorMessage = 'Failed to load user profile';
-          _isProfileLoading = false; // Stop loading spinner
+          _profileLoading[userId] = false; // Stop loading spinner for this user
         });
       }
     } catch (error) {
       setState(() {
         _errorMessage = 'Failed to load user profile: $error';
-        _isProfileLoading = false; // Stop loading spinner
+        _profileLoading[userId] = false; // Stop loading spinner for this user
       });
     }
   }
@@ -201,6 +204,7 @@ class _AdminSectionState extends State<AdminSection> {
           _searchResults =
               usersJson.map((data) => UserSearchResult.fromJson(data)).toList();
           _isLoading = false;
+          _profileLoading.clear(); // Reset profile loading state
         });
       } else {
         setState(() {
@@ -269,10 +273,10 @@ class _AdminSectionState extends State<AdminSection> {
               return ListTile(
                 title: Text('${user.firstName} ${user.lastName}'),
                 subtitle: Text(user.email),
-                trailing: _isProfileLoading
-                    ? const CircularProgressIndicator() // Show spinner when loading profile
+                trailing: _profileLoading[user.id] == true
+                    ? const CircularProgressIndicator() // Show spinner only for the specific user
                     : ElevatedButton(
-                        onPressed: () => _getUserProfile(user.email),
+                        onPressed: () => _getUserProfile(user.email, user.id),
                         child: const Text('View Profile'),
                       ),
               );

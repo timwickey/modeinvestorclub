@@ -24,8 +24,7 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
     return Scaffold(
       appBar: widget.showAppBar // Conditionally render the AppBar
           ? AppBar(
-              title:
-                  Text('ADMIN VIEW FOR (${user?.firstName} ${user?.lastName})'),
+              title: Text('${user?.firstName} ${user?.lastName}'),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
