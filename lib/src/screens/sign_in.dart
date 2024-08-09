@@ -43,11 +43,20 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _checkPasswordSet(String email) async {
     final backend = BackEnd();
+
+    // Start a delayed future for 5 seconds
+    final delay = Future.delayed(Duration(seconds: 5));
+
+    // Make the backend call
     final result = await backend.checkPasswordSet(email);
+
+    // Wait until both the backend call and the delay are complete
+    await delay;
+
     setState(() {
       _isPasswordSet = result;
       if (_isPasswordSet == 1) {
-        // if their password is set, we just show them a token log in screen without the "you are invited text"
+        // If their password is set, we just show them a token login screen without the "you are invited" text
         _isPasswordSet = 0;
         tokenLoginTitle = "LOG IN WITH A TOKEN";
       }
