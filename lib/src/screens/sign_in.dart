@@ -33,6 +33,7 @@ class _SignInScreenState extends State<SignInScreen> {
     super.initState();
     if (widget.initialEmail != null) {
       _isLoading = true;
+      _tokenSpinner = true;
       _emailController.text = widget.initialEmail!;
       _checkPasswordSet(widget.initialEmail!);
     } else {
@@ -57,6 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _signIn() async {
     setState(() {
       _isLoading = true;
+      _tokenSpinner = false;
     });
 
     final email = _emailController.value.text;
@@ -83,6 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _submitToken() async {
     setState(() {
       _isLoading = true;
+      _tokenSpinner = false;
     });
 
     final email = _emailController.value.text;
