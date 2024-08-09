@@ -7,7 +7,10 @@ import 'package:url_launcher/url_launcher.dart'; // Add this import to handle UR
 
 class InvestmentScreen extends StatefulWidget {
   final ApiResponse? user;
-  const InvestmentScreen({super.key, this.user});
+  final bool showAppBar; // New parameter for showing the AppBar
+
+  const InvestmentScreen(
+      {super.key, this.user, this.showAppBar = false}); // Default is false
 
   @override
   State<InvestmentScreen> createState() => _InvestmentScreenState();
@@ -19,6 +22,18 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
     final user = widget.user; // Use the passed-in user here
 
     return Scaffold(
+      appBar: widget.showAppBar // Conditionally render the AppBar
+          ? AppBar(
+              title:
+                  Text('ADMIN VIEW FOR (${user?.firstName} ${user?.lastName})'),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context); // Go back to the previous screen
+                },
+              ),
+            )
+          : null,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

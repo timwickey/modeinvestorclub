@@ -140,7 +140,8 @@ class _AdminSectionState extends State<AdminSection> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => InvestmentScreen(user: userProfile),
+            builder: (context) =>
+                InvestmentScreen(user: userProfile, showAppBar: true),
           ),
         );
       } else {
