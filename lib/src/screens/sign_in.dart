@@ -210,14 +210,16 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         TextField(
           decoration: InputDecoration(
-              labelText: 'Check ${_emailController.value.text}'),
+            labelText: 'Insert your token',
+          ),
           controller: _tokenController,
         ),
         const SizedBox(height: 24),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            text: "Didn't receive your token? Check your trash or Spam. \n",
+            text:
+                "Didn't receive your token? Check your trash or Spam for ${_emailController.value.text}. \n",
             style: TextStyle(color: Colors.grey),
             children: [
               TextSpan(
