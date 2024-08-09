@@ -157,6 +157,52 @@ class _AdminSectionState extends State<AdminSection> {
     }
   }
 
+  Future<void> _getUserProfile(String email) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    final auth = Provider.of<ModeAuth>(context, listen: false);
+    final token = auth.token;
+
+    if (token == null) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Token is not available';
+      });
+      return;
+    }
+
+    String url = '${ApiUrl}/admin_get_user';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'token': token}),
+      );
+
+      if (response.statusCode == 200) {
+        final userProfile = json.decode(response.body);
+        // Handle user profile data here
+        print(userProfile);
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _errorMessage = 'Failed to load user profile';
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      setState(() {
+        _errorMessage = 'Failed to load user profile: $error';
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<ModeAuth>(context);
@@ -210,6 +256,10 @@ class _AdminSectionState extends State<AdminSection> {
               return ListTile(
                 title: Text('${user.firstName} ${user.lastName}'),
                 subtitle: Text(user.email),
+                trailing: ElevatedButton(
+                  onPressed: () => _getUserProfile(user.email),
+                  child: const Text('View Profile'),
+                ),
               );
             },
           ),
