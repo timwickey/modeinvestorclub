@@ -97,6 +97,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                       return;
                     }
+                    if (newPassword.length < 6) {
+                      setState(() {
+                        _errorMessage =
+                            'Password is not long enough. Please try again.';
+                      });
+                      return;
+                    }
 
                     setState(() {
                       _isSubmitting = true;
