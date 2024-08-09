@@ -28,17 +28,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 400),
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Card(
+                      Card(
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 18, horizontal: 12),
                           child: SettingsContent(),
                         ),
                       ),
-                      const SizedBox(height: 20.0),
-                      const AdminSection(),
+                      SizedBox(height: 20.0),
+                      AdminSection(),
                     ],
                   ),
                 ),
@@ -157,21 +157,15 @@ class _AdminSectionState extends State<AdminSection> {
     }
   }
 
-  Future<void> _getUserProfile(String email) async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = '';
-    });
-
+  Future<ApiResponse?> _getUserProfile(String email) async {
     final auth = Provider.of<ModeAuth>(context, listen: false);
     final token = auth.token;
 
     if (token == null) {
       setState(() {
-        _isLoading = false;
         _errorMessage = 'Token is not available';
       });
-      return;
+      return null;
     }
 
     String url = '${ApiUrl}/admin_get_user';
@@ -183,23 +177,19 @@ class _AdminSectionState extends State<AdminSection> {
       );
 
       if (response.statusCode == 200) {
-        final userProfile = json.decode(response.body);
-        // Handle user profile data here
-        print(userProfile);
-        setState(() {
-          _isLoading = false;
-        });
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        return ApiResponse.fromJson(jsonResponse);
       } else {
         setState(() {
           _errorMessage = 'Failed to load user profile';
-          _isLoading = false;
         });
+        return null;
       }
     } catch (error) {
       setState(() {
         _errorMessage = 'Failed to load user profile: $error';
-        _isLoading = false;
       });
+      return null;
     }
   }
 
