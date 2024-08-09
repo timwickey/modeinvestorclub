@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http; // Importing the http package
 import '../auth.dart';
 import '../backend.dart';
 import '../widgets/ui.dart'; // Ensure this import is correct
+import '../screens/investment.dart';
 
 class SettingsScreen extends StatefulWidget {
   final ApiResponse? user;
@@ -110,6 +111,50 @@ class _AdminSectionState extends State<AdminSection> {
   bool _isLoading = false;
   String _errorMessage = '';
 
+  Future<void> _getUserProfile(String email) async {
+    final auth = Provider.of<ModeAuth>(context, listen: false);
+    final token = auth.token;
+
+    if (token == null) {
+      setState(() {
+        _errorMessage = 'Token is not available';
+      });
+      return;
+    }
+
+    String url = '${ApiUrl}/admin_get_user';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'token': token}),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+        // Assuming ApiResponse is your data model class
+        final ApiResponse userProfile = ApiResponse.fromJson(jsonResponse);
+
+        // Navigate to the InvestmentScreen with the retrieved user data
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InvestmentScreen(user: userProfile),
+          ),
+        );
+      } else {
+        setState(() {
+          _errorMessage = 'Failed to load user profile';
+        });
+      }
+    } catch (error) {
+      setState(() {
+        _errorMessage = 'Failed to load user profile: $error';
+      });
+    }
+  }
+
   Future<void> _searchUsers(String query) async {
     setState(() {
       _isLoading = true;
@@ -154,42 +199,6 @@ class _AdminSectionState extends State<AdminSection> {
         _errorMessage = 'Failed to load search results: $error';
         _isLoading = false;
       });
-    }
-  }
-
-  Future<ApiResponse?> _getUserProfile(String email) async {
-    final auth = Provider.of<ModeAuth>(context, listen: false);
-    final token = auth.token;
-
-    if (token == null) {
-      setState(() {
-        _errorMessage = 'Token is not available';
-      });
-      return null;
-    }
-
-    String url = '${ApiUrl}/admin_get_user';
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'token': token}),
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonResponse = json.decode(response.body);
-        return ApiResponse.fromJson(jsonResponse);
-      } else {
-        setState(() {
-          _errorMessage = 'Failed to load user profile';
-        });
-        return null;
-      }
-    } catch (error) {
-      setState(() {
-        _errorMessage = 'Failed to load user profile: $error';
-      });
-      return null;
     }
   }
 
