@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../widgets/ui.dart';
 import '../backend.dart';
-import '../auth.dart';
 import '../data/globals.dart'; // Ensure this import is correct for pageWidth
 import 'package:url_launcher/url_launcher.dart'; // Add this import to handle URL launching
 
@@ -18,6 +16,8 @@ class InvestmentScreen extends StatefulWidget {
 class _InvestmentScreenState extends State<InvestmentScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = widget.user; // Use the passed-in user here
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,42 +36,37 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                         children: [
                           const SizedBox(
                               height: 20.0), // Start 20 pixels from the top
-                          Consumer<ModeAuth>(
-                            builder: (context, auth, _) {
-                              final latestPrice =
-                                  auth.user?.getSharePrice() ?? 0.0;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Mode Mobile, INC',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Share price: \$${latestPrice.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 20.0),
-                          const Row(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(child: InvestmentSummaryCard()),
-                              SizedBox(width: 20.0),
-                              Expanded(child: TransferOnlineWidget()),
+                              const Text(
+                                'Mode Mobile, INC',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Share price: \$${user?.getSharePrice().toStringAsFixed(2) ?? 'N/A'}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                  child: InvestmentSummaryCard(user: user)),
+                              const SizedBox(width: 20.0),
+                              Expanded(child: TransferOnlineWidget(user: user)),
                             ],
                           ),
                           const Divider(thickness: 1.0),
                           const SizedBox(height: 20.0),
-                          const InvestmentList(),
+                          InvestmentList(user: user),
                         ],
                       ),
                     ),
@@ -83,37 +78,31 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
                     children: [
                       const SizedBox(
                           height: 20.0), // Start 20 pixels from the top
-                      Consumer<ModeAuth>(
-                        builder: (context, auth, _) {
-                          final latestPrice = auth.user?.getSharePrice() ?? 0.0;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Mode Mobile, INC',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Share price: \$${latestPrice.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Mode Mobile, INC',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Share price: \$${user?.getSharePrice().toStringAsFixed(2) ?? 'N/A'}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
                       ),
-
                       const SizedBox(height: 20.0),
-                      const InvestmentSummaryCard(),
+                      InvestmentSummaryCard(user: user),
                       const SizedBox(height: 20.0),
-                      const TransferOnlineWidget(),
+                      TransferOnlineWidget(user: user),
                       const Divider(thickness: 1.0),
                       const SizedBox(height: 20.0),
-                      const InvestmentList(),
+                      InvestmentList(user: user),
                     ],
                   );
                 }
@@ -127,20 +116,20 @@ class _InvestmentScreenState extends State<InvestmentScreen> {
 }
 
 class InvestmentSummaryCard extends StatelessWidget {
-  const InvestmentSummaryCard({super.key});
+  final ApiResponse? user;
+  const InvestmentSummaryCard({super.key, required this.user});
+
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<ModeAuth>(context);
-    final user = auth.user;
     if (user == null) return Container();
 
-    final totalShares = user.calculateTotalShares();
-    final totalValuation = user.getPortfolioValue();
-    final totalCost = user.getCost();
-    final bonusShares = user.getBonusShares();
-    final pricePerShareWithBonus = user.getPricePerShareWithBonus();
-    final pricePerShareWithoutBonus = user.getPricePerShareWithoutBonus();
-    final gain = user.getGain();
+    final totalShares = user!.calculateTotalShares();
+    final totalValuation = user!.getPortfolioValue();
+    final totalCost = user!.getCost();
+    final bonusShares = user!.getBonusShares();
+    final pricePerShareWithBonus = user!.getPricePerShareWithBonus();
+    final pricePerShareWithoutBonus = user!.getPricePerShareWithoutBonus();
+    final gain = user!.getGain();
     final gainPercentage = (totalCost > 0) ? (gain / totalCost) * 100 : 0.0;
 
     return Card(
@@ -212,22 +201,20 @@ Future<void> _launchInBrowser(Uri url) async {
 }
 
 class TransferOnlineWidget extends StatelessWidget {
-  const TransferOnlineWidget({super.key});
+  final ApiResponse? user;
+  const TransferOnlineWidget({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<ModeAuth>(context);
-    final user = auth.user;
-
     if (user == null) {
       return Container();
     }
 
-    final String shareholderId = user.toShareholderId;
-    final String accessCode = user.toAccessCode;
-    final bool isRegistered = user.toRegistered;
+    final String shareholderId = user!.toShareholderId;
+    final String accessCode = user!.toAccessCode;
+    final bool isRegistered = user!.toRegistered;
     final String buttonText = isRegistered ? 'View Shares' : 'Register';
-    final String url = isRegistered ? user.toRegisterUrl : user.toUrl;
+    final String url = isRegistered ? user!.toRegisterUrl : user!.toUrl;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -271,12 +258,12 @@ class TransferOnlineWidget extends StatelessWidget {
 }
 
 class InvestmentList extends StatelessWidget {
-  const InvestmentList({super.key});
+  final ApiResponse? user;
+  const InvestmentList({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<ModeAuth>(context);
-    final investments = auth.user?.investments ?? [];
+    final investments = user?.investments ?? [];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
