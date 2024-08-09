@@ -109,15 +109,22 @@ class _AdminSectionState extends State<AdminSection> {
   final TextEditingController _searchController = TextEditingController();
   List<UserSearchResult> _searchResults = [];
   bool _isLoading = false;
+  bool _isProfileLoading = false; // New loading state for profile fetching
   String _errorMessage = '';
 
   Future<void> _getUserProfile(String email) async {
+    setState(() {
+      _isProfileLoading = true; // Show loading spinner
+      _errorMessage = '';
+    });
+
     final auth = Provider.of<ModeAuth>(context, listen: false);
     final token = auth.token;
 
     if (token == null) {
       setState(() {
         _errorMessage = 'Token is not available';
+        _isProfileLoading = false; // Stop loading spinner
       });
       return;
     }
@@ -136,6 +143,10 @@ class _AdminSectionState extends State<AdminSection> {
         // Assuming ApiResponse is your data model class
         final ApiResponse userProfile = ApiResponse.fromJson(jsonResponse);
 
+        setState(() {
+          _isProfileLoading = false; // Stop loading spinner
+        });
+
         // Navigate to the InvestmentScreen with the retrieved user data
         Navigator.push(
           context,
@@ -147,11 +158,13 @@ class _AdminSectionState extends State<AdminSection> {
       } else {
         setState(() {
           _errorMessage = 'Failed to load user profile';
+          _isProfileLoading = false; // Stop loading spinner
         });
       }
     } catch (error) {
       setState(() {
         _errorMessage = 'Failed to load user profile: $error';
+        _isProfileLoading = false; // Stop loading spinner
       });
     }
   }
@@ -256,10 +269,12 @@ class _AdminSectionState extends State<AdminSection> {
               return ListTile(
                 title: Text('${user.firstName} ${user.lastName}'),
                 subtitle: Text(user.email),
-                trailing: ElevatedButton(
-                  onPressed: () => _getUserProfile(user.email),
-                  child: const Text('View Profile'),
-                ),
+                trailing: _isProfileLoading
+                    ? const CircularProgressIndicator() // Show spinner when loading profile
+                    : ElevatedButton(
+                        onPressed: () => _getUserProfile(user.email),
+                        child: const Text('View Profile'),
+                      ),
               );
             },
           ),
