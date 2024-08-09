@@ -65,13 +65,31 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future<void> _signIn() async {
+    final email = _emailController.value.text;
+    final password = _passwordController.value.text;
+
+    // Regular expression for validating email format
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+
+    if (email.length < 3 || !emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address.')),
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Password is not long enough. Please try again.')),
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _tokenSpinner = false;
     });
-
-    final email = _emailController.value.text;
-    final password = _passwordController.value.text;
 
     final auth = Provider.of<ModeAuth>(context, listen: false);
     bool success = await auth.signIn(email, password);
@@ -92,13 +110,30 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future<void> _submitToken() async {
+    final email = _emailController.value.text;
+    final token = _tokenController.value.text;
+
+    // Regular expression for validating email format
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+
+    if (email.length < 3 || !emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address.')),
+      );
+      return;
+    }
+
+    if (token.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Token must be at least 6 characters long.')),
+      );
+      return;
+    }
     setState(() {
       _isLoading = true;
       _tokenSpinner = false;
     });
-
-    final email = _emailController.value.text;
-    final token = _tokenController.value.text;
 
     final auth = Provider.of<ModeAuth>(context, listen: false);
 
@@ -130,6 +165,16 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future<void> _sendToken(String email) async {
+    // Regular expression for validating email format
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+
+    if (email.length < 6 || !emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address.')),
+      );
+      return;
+    }
+
     // Reload the current page with ?email=email at the end of the URL
     html.window.location.assign('/#/sign-in?email=$email');
     html.window.location.reload();
