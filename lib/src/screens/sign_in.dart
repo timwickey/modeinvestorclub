@@ -22,6 +22,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   final _tokenController = TextEditingController();
   bool _isLoading = false;
+  bool _tokenSpinner = false; // for token login else normal spinner
   bool _isForgotPassword = false;
   int _isPasswordSet =
       -1; // -1 = checking, 0 = not set, 1 = set, 2 = user not found, 3 = token log in (manually set below)
@@ -88,7 +89,18 @@ class _SignInScreenState extends State<SignInScreen> {
     final token = _tokenController.value.text;
 
     final auth = Provider.of<ModeAuth>(context, listen: false);
-    bool success = await auth.validateTokenSubmission(email, token);
+
+    // Create a future that completes after 5 seconds
+    final minLoadingTime = Future.delayed(const Duration(seconds: 5));
+
+    // Validate the token submission
+    final tokenSubmission = auth.validateTokenSubmission(email, token);
+
+    // Wait for both the token submission and the minimum loading time to complete
+    final results = await Future.wait([minLoadingTime, tokenSubmission]);
+
+    // Get the result of the token submission
+    bool success = results[1] as bool;
 
     setState(() {
       _isLoading = false;
@@ -130,14 +142,12 @@ class _SignInScreenState extends State<SignInScreen> {
           controller: _passwordController,
         ),
         const SizedBox(height: 32),
-        _isLoading
-            ? CircularProgressIndicator()
-            : RoundedButton(
-                text: "Sign in",
-                icon: Icon(Icons.login, color: Colors.white),
-                color: transparentButton,
-                onPressed: _signIn,
-              ),
+        RoundedButton(
+          text: "Sign in",
+          icon: Icon(Icons.login, color: Colors.white),
+          color: transparentButton,
+          onPressed: _signIn,
+        ),
         const SizedBox(height: 16),
         RichText(
           text: TextSpan(
@@ -178,14 +188,12 @@ class _SignInScreenState extends State<SignInScreen> {
           controller: _emailController,
         ),
         const SizedBox(height: 32),
-        _isLoading
-            ? CircularProgressIndicator()
-            : RoundedButton(
-                text: "Send Token",
-                icon: Icon(Icons.send, color: Colors.white),
-                color: transparentButton,
-                onPressed: () => _sendToken(_emailController.text),
-              ),
+        RoundedButton(
+          text: "Send Token",
+          icon: Icon(Icons.send, color: Colors.white),
+          color: transparentButton,
+          onPressed: () => _sendToken(_emailController.text),
+        ),
         const SizedBox(height: 16),
         TextButton(
           onPressed: () {
@@ -196,6 +204,27 @@ class _SignInScreenState extends State<SignInScreen> {
           child: const Text('Back to Sign In'),
         ),
       ],
+    );
+  }
+
+  Widget _buildTokenEmailSpinner() {
+    return SizedBox(
+      height: 300,
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            'images/mode_logo.svg', // Replace with your animation asset
+            height: 100,
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Sending your token via email...',
+            style: TextStyle(fontSize: 18),
+          ),
+          const SizedBox(height: 20),
+          CircularProgressIndicator(),
+        ],
+      ),
     );
   }
 
@@ -238,14 +267,12 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
         const SizedBox(height: 32),
-        _isLoading
-            ? CircularProgressIndicator()
-            : RoundedButton(
-                text: "Submit",
-                icon: Icon(Icons.check, color: Colors.white),
-                color: transparentButton,
-                onPressed: _submitToken,
-              ),
+        RoundedButton(
+          text: "Submit",
+          icon: Icon(Icons.check, color: Colors.white),
+          color: transparentButton,
+          onPressed: _submitToken,
+        ),
       ],
     );
   }
@@ -305,7 +332,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       constraints: BoxConstraints.loose(const Size(600, 600)),
                       padding: const EdgeInsets.all(16),
                       child: _isLoading
-                          ? CircularProgressIndicator()
+                          ? (_tokenSpinner
+                              ? _buildTokenEmailSpinner() // Custom spinner for token-related actions
+                              : CircularProgressIndicator()) // Default spinner
                           : _isForgotPassword
                               ? _buildForgotPasswordForm()
                               : _isPasswordSet == 1
